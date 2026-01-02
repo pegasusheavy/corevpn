@@ -166,8 +166,8 @@ pub fn create_server_config(
     key: PrivateKeyDer<'static>,
     client_cert_verifier: Option<Arc<dyn rustls::server::danger::ClientCertVerifier>>,
 ) -> Result<Arc<ServerConfig>> {
-    
-    
+
+
 
     let config = if let Some(verifier) = client_cert_verifier {
         ServerConfig::builder()
