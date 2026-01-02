@@ -1,0 +1,40 @@
+# CoreVPN Code Owners
+# These users/teams will be automatically requested for review on PRs
+
+# Default owners for everything
+* @PegasusHeavyIndustries/corevpn-maintainers
+
+# Core VPN components
+/crates/corevpn-server/ @PegasusHeavyIndustries/corevpn-core
+/crates/corevpn-core/ @PegasusHeavyIndustries/corevpn-core
+/crates/corevpn-protocol/ @PegasusHeavyIndustries/corevpn-core
+
+# Cryptography - requires security review
+/crates/corevpn-crypto/ @PegasusHeavyIndustries/security-team
+
+# Authentication
+/crates/corevpn-auth/ @PegasusHeavyIndustries/corevpn-core @PegasusHeavyIndustries/security-team
+
+# Configuration
+/crates/corevpn-config/ @PegasusHeavyIndustries/corevpn-maintainers
+
+# CLI
+/crates/corevpn-cli/ @PegasusHeavyIndustries/corevpn-maintainers
+
+# UI
+/crates/corevpn-ui/ @PegasusHeavyIndustries/corevpn-maintainers
+
+# Deployment and packaging
+/deploy/ @PegasusHeavyIndustries/devops
+/packaging/ @PegasusHeavyIndustries/devops
+/Dockerfile @PegasusHeavyIndustries/devops
+
+# CI/CD workflows
+/.github/workflows/ @PegasusHeavyIndustries/devops
+
+# Documentation
+*.md @PegasusHeavyIndustries/corevpn-maintainers
+
+# Security-sensitive files
+/SECURITY.md @PegasusHeavyIndustries/security-team
+/.github/ISSUE_TEMPLATE/security_vulnerability.yml @PegasusHeavyIndustries/security-team

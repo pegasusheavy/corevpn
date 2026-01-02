@@ -1,0 +1,28 @@
+[package]
+name = "corevpn-config"
+description = "Configuration management for CoreVPN"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+corevpn-crypto = { workspace = true }
+corevpn-core = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Networking
+ipnet = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"

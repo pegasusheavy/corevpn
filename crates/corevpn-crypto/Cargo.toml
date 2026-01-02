@@ -1,0 +1,47 @@
+[package]
+name = "corevpn-crypto"
+description = "Cryptographic primitives for CoreVPN"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+# Core crypto
+ring = { workspace = true }
+chacha20poly1305 = { workspace = true }
+aes-gcm = { workspace = true }
+x25519-dalek = { workspace = true }
+ed25519-dalek = { workspace = true }
+sha2 = { workspace = true }
+hmac = { workspace = true }
+hkdf = { workspace = true }
+
+# Secure memory
+zeroize = { workspace = true }
+secrecy = { workspace = true }
+
+# RNG
+rand = { workspace = true }
+rand_core = { workspace = true }
+
+# Certificates
+x509-cert = { workspace = true }
+rcgen = { workspace = true }
+pem = { workspace = true }
+
+# Utilities
+base64 = { workspace = true }
+thiserror = { workspace = true }
+subtle = { workspace = true }
+chrono = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }
+criterion = { workspace = true }
+
+[[bench]]
+name = "crypto_benchmarks"
+harness = false

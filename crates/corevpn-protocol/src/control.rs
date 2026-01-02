@@ -1,0 +1,450 @@
+//! Control Channel Message Types
+
+use bytes::{Bytes, BytesMut, BufMut};
+use serde::{Deserialize, Serialize};
+
+use crate::{ProtocolError, Result};
+
+/// Control channel message types
+#[derive(Debug, Clone)]
+pub enum ControlMessage {
+    /// TLS data (wrapped in control channel)
+    TlsData(Bytes),
+    /// Push request from client
+    PushRequest,
+    /// Push reply from server
+    PushReply(PushReply),
+    /// Authentication data
+    Auth(AuthMessage),
+    /// Info message (version, etc.)
+    Info(String),
+    /// Exit/shutdown
+    Exit,
+}
+
+/// Control packet for the reliable transport layer
+#[derive(Debug, Clone)]
+pub struct ControlPacket {
+    /// Packet ID for reliability
+    pub packet_id: u32,
+    /// Message content
+    pub message: ControlMessage,
+}
+
+impl ControlPacket {
+    /// Create a new control packet
+    pub fn new(packet_id: u32, message: ControlMessage) -> Self {
+        Self { packet_id, message }
+    }
+}
+
+/// Push reply containing VPN configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PushReply {
+    /// Routes to push
+    pub routes: Vec<PushRoute>,
+    /// IPv4 address and netmask
+    pub ifconfig: Option<(String, String)>,
+    /// IPv6 address
+    pub ifconfig_ipv6: Option<String>,
+    /// DNS servers
+    pub dns: Vec<String>,
+    /// Search domains
+    pub dns_search: Vec<String>,
+    /// Redirect gateway (full tunnel)
+    pub redirect_gateway: bool,
+    /// Topology type
+    pub topology: Topology,
+    /// Ping interval
+    pub ping: u32,
+    /// Ping restart timeout
+    pub ping_restart: u32,
+    /// Additional options
+    pub options: Vec<String>,
+}
+
+impl Default for PushReply {
+    fn default() -> Self {
+        Self {
+            routes: vec![],
+            ifconfig: None,
+            ifconfig_ipv6: None,
+            dns: vec![],
+            dns_search: vec![],
+            redirect_gateway: false,
+            topology: Topology::Subnet,
+            ping: 10,
+            ping_restart: 60,
+            options: vec![],
+        }
+    }
+}
+
+impl PushReply {
+    /// Encode as OpenVPN push reply string
+    pub fn encode(&self) -> String {
+        let mut parts = vec!["PUSH_REPLY".to_string()];
+
+        // Topology
+        parts.push(format!("topology {}", self.topology.as_str()));
+
+        // ifconfig
+        if let Some((ip, mask)) = &self.ifconfig {
+            parts.push(format!("ifconfig {} {}", ip, mask));
+        }
+
+        // ifconfig-ipv6
+        if let Some(ipv6) = &self.ifconfig_ipv6 {
+            parts.push(format!("ifconfig-ipv6 {}", ipv6));
+        }
+
+        // Routes
+        for route in &self.routes {
+            parts.push(route.encode());
+        }
+
+        // Redirect gateway
+        if self.redirect_gateway {
+            parts.push("redirect-gateway def1".to_string());
+        }
+
+        // DNS
+        for (i, dns) in self.dns.iter().enumerate() {
+            parts.push(format!("dhcp-option DNS {}", dns));
+        }
+
+        // DNS search domains
+        for domain in &self.dns_search {
+            parts.push(format!("dhcp-option DOMAIN {}", domain));
+        }
+
+        // Ping settings
+        parts.push(format!("ping {}", self.ping));
+        parts.push(format!("ping-restart {}", self.ping_restart));
+
+        // Additional options
+        for opt in &self.options {
+            parts.push(opt.clone());
+        }
+
+        parts.join(",")
+    }
+
+    /// Parse from OpenVPN push reply string
+    pub fn parse(s: &str) -> Result<Self> {
+        let mut reply = Self::default();
+
+        // Remove PUSH_REPLY prefix if present
+        let s = s.strip_prefix("PUSH_REPLY,").unwrap_or(s);
+
+        for part in s.split(',') {
+            let part = part.trim();
+            if part.is_empty() {
+                continue;
+            }
+
+            let mut tokens = part.split_whitespace();
+            match tokens.next() {
+                Some("topology") => {
+                    if let Some(topo) = tokens.next() {
+                        reply.topology = Topology::from_str(topo);
+                    }
+                }
+                Some("ifconfig") => {
+                    let ip = tokens.next().unwrap_or("").to_string();
+                    let mask = tokens.next().unwrap_or("").to_string();
+                    reply.ifconfig = Some((ip, mask));
+                }
+                Some("ifconfig-ipv6") => {
+                    if let Some(ipv6) = tokens.next() {
+                        reply.ifconfig_ipv6 = Some(ipv6.to_string());
+                    }
+                }
+                Some("route") => {
+                    if let Ok(route) = PushRoute::parse(part) {
+                        reply.routes.push(route);
+                    }
+                }
+                Some("redirect-gateway") => {
+                    reply.redirect_gateway = true;
+                }
+                Some("dhcp-option") => {
+                    match tokens.next() {
+                        Some("DNS") => {
+                            if let Some(dns) = tokens.next() {
+                                reply.dns.push(dns.to_string());
+                            }
+                        }
+                        Some("DOMAIN") => {
+                            if let Some(domain) = tokens.next() {
+                                reply.dns_search.push(domain.to_string());
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                Some("ping") => {
+                    if let Some(Ok(p)) = tokens.next().map(|s| s.parse()) {
+                        reply.ping = p;
+                    }
+                }
+                Some("ping-restart") => {
+                    if let Some(Ok(p)) = tokens.next().map(|s| s.parse()) {
+                        reply.ping_restart = p;
+                    }
+                }
+                _ => {
+                    reply.options.push(part.to_string());
+                }
+            }
+        }
+
+        Ok(reply)
+    }
+}
+
+/// Route to push to client
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PushRoute {
+    /// Network address
+    pub network: String,
+    /// Netmask
+    pub netmask: String,
+    /// Gateway (optional, vpn_gateway used if not set)
+    pub gateway: Option<String>,
+    /// Metric
+    pub metric: Option<u32>,
+}
+
+impl PushRoute {
+    /// Create a new route
+    pub fn new(network: &str, netmask: &str) -> Self {
+        Self {
+            network: network.to_string(),
+            netmask: netmask.to_string(),
+            gateway: None,
+            metric: None,
+        }
+    }
+
+    /// Encode as OpenVPN route directive
+    pub fn encode(&self) -> String {
+        let mut s = format!("route {} {}", self.network, self.netmask);
+        if let Some(gw) = &self.gateway {
+            s.push_str(&format!(" {}", gw));
+        } else {
+            s.push_str(" vpn_gateway");
+        }
+        if let Some(metric) = self.metric {
+            s.push_str(&format!(" {}", metric));
+        }
+        s
+    }
+
+    /// Parse from OpenVPN route directive
+    pub fn parse(s: &str) -> Result<Self> {
+        let mut tokens = s.split_whitespace();
+        tokens.next(); // skip "route"
+
+        let network = tokens
+            .next()
+            .ok_or_else(|| ProtocolError::InvalidPacket("missing network in route".into()))?
+            .to_string();
+
+        let netmask = tokens
+            .next()
+            .ok_or_else(|| ProtocolError::InvalidPacket("missing netmask in route".into()))?
+            .to_string();
+
+        let gateway = tokens.next().and_then(|g| {
+            if g == "vpn_gateway" {
+                None
+            } else {
+                Some(g.to_string())
+            }
+        });
+
+        let metric = tokens.next().and_then(|m| m.parse().ok());
+
+        Ok(Self {
+            network,
+            netmask,
+            gateway,
+            metric,
+        })
+    }
+}
+
+/// Network topology type
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum Topology {
+    /// Point-to-point (net30)
+    Net30,
+    /// Point-to-point (p2p)
+    P2P,
+    /// Subnet mode (recommended)
+    #[default]
+    Subnet,
+}
+
+impl Topology {
+    /// Parse from string
+    pub fn from_str(s: &str) -> Self {
+        match s.to_lowercase().as_str() {
+            "net30" => Topology::Net30,
+            "p2p" => Topology::P2P,
+            "subnet" => Topology::Subnet,
+            _ => Topology::Subnet,
+        }
+    }
+
+    /// Convert to string
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Topology::Net30 => "net30",
+            Topology::P2P => "p2p",
+            Topology::Subnet => "subnet",
+        }
+    }
+}
+
+/// Authentication message from client
+#[derive(Debug, Clone)]
+pub struct AuthMessage {
+    /// Username
+    pub username: String,
+    /// Password
+    pub password: String,
+}
+
+impl AuthMessage {
+    /// Parse from OpenVPN auth data
+    pub fn parse(data: &[u8]) -> Result<Self> {
+        // Format: username\0password\0
+        let s = std::str::from_utf8(data)
+            .map_err(|_| ProtocolError::InvalidPacket("invalid UTF-8 in auth".into()))?;
+
+        let parts: Vec<&str> = s.split('\0').collect();
+        if parts.len() < 2 {
+            return Err(ProtocolError::InvalidPacket("missing auth fields".into()));
+        }
+
+        Ok(Self {
+            username: parts[0].to_string(),
+            password: parts[1].to_string(),
+        })
+    }
+
+    /// Encode to OpenVPN auth format
+    pub fn encode(&self) -> Vec<u8> {
+        let mut data = Vec::new();
+        data.extend_from_slice(self.username.as_bytes());
+        data.push(0);
+        data.extend_from_slice(self.password.as_bytes());
+        data.push(0);
+        data
+    }
+}
+
+/// Key method v2 data (exchanged during TLS handshake)
+#[derive(Debug, Clone)]
+pub struct KeyMethodV2 {
+    /// Pre-master secret (48 bytes)
+    pub pre_master: [u8; 48],
+    /// Random data (32 bytes)
+    pub random: [u8; 32],
+    /// Options string
+    pub options: String,
+    /// Username (if using auth)
+    pub username: Option<String>,
+    /// Password (if using auth)
+    pub password: Option<String>,
+    /// Peer info
+    pub peer_info: Option<String>,
+}
+
+impl KeyMethodV2 {
+    /// Encode to bytes
+    pub fn encode(&self) -> Vec<u8> {
+        let mut buf = Vec::new();
+
+        // Literal 0
+        buf.extend_from_slice(&[0u8; 4]);
+
+        // Key method (2)
+        buf.push(2);
+
+        // Pre-master secret
+        buf.extend_from_slice(&self.pre_master);
+
+        // Random
+        buf.extend_from_slice(&self.random);
+
+        // Options string length + string
+        let opts_bytes = self.options.as_bytes();
+        buf.extend_from_slice(&(opts_bytes.len() as u16).to_be_bytes());
+        buf.extend_from_slice(opts_bytes);
+
+        // Username (optional)
+        if let Some(username) = &self.username {
+            let username_bytes = username.as_bytes();
+            buf.extend_from_slice(&(username_bytes.len() as u16).to_be_bytes());
+            buf.extend_from_slice(username_bytes);
+        } else {
+            buf.extend_from_slice(&0u16.to_be_bytes());
+        }
+
+        // Password (optional)
+        if let Some(password) = &self.password {
+            let password_bytes = password.as_bytes();
+            buf.extend_from_slice(&(password_bytes.len() as u16).to_be_bytes());
+            buf.extend_from_slice(password_bytes);
+        } else {
+            buf.extend_from_slice(&0u16.to_be_bytes());
+        }
+
+        // Peer info (optional)
+        if let Some(peer_info) = &self.peer_info {
+            let peer_info_bytes = peer_info.as_bytes();
+            buf.extend_from_slice(&(peer_info_bytes.len() as u16).to_be_bytes());
+            buf.extend_from_slice(peer_info_bytes);
+        }
+
+        buf
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_push_reply_roundtrip() {
+        let mut reply = PushReply::default();
+        reply.ifconfig = Some(("10.8.0.2".to_string(), "255.255.255.0".to_string()));
+        reply.dns.push("1.1.1.1".to_string());
+        reply.routes.push(PushRoute::new("192.168.1.0", "255.255.255.0"));
+        reply.redirect_gateway = true;
+
+        let encoded = reply.encode();
+        let parsed = PushReply::parse(&encoded).unwrap();
+
+        assert_eq!(parsed.ifconfig, reply.ifconfig);
+        assert_eq!(parsed.dns, reply.dns);
+        assert!(parsed.redirect_gateway);
+    }
+
+    #[test]
+    fn test_auth_message() {
+        let auth = AuthMessage {
+            username: "user".to_string(),
+            password: "pass".to_string(),
+        };
+
+        let encoded = auth.encode();
+        let parsed = AuthMessage::parse(&encoded).unwrap();
+
+        assert_eq!(parsed.username, "user");
+        assert_eq!(parsed.password, "pass");
+    }
+}

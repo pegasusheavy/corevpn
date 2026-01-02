@@ -1,0 +1,38 @@
+[package]
+name = "corevpn-cli"
+description = "CoreVPN command-line interface"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "corevpn"
+path = "src/main.rs"
+
+[dependencies]
+corevpn-crypto = { workspace = true }
+corevpn-core = { workspace = true }
+corevpn-config = { workspace = true }
+corevpn-auth = { workspace = true }
+
+# Async
+tokio = { workspace = true }
+
+# CLI
+clap = { workspace = true }
+dialoguer = { workspace = true }
+indicatif = { workspace = true }
+console = { workspace = true }
+ratatui = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }

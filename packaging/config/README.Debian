@@ -1,0 +1,121 @@
+CoreVPN for Debian
+==================
+
+Quick Start
+-----------
+
+1. Edit the configuration file:
+
+   sudo nano /etc/corevpn/config.toml
+
+   At minimum, set your server's public hostname:
+
+   public_host = "your-server.example.com"
+
+2. Initialize the PKI (certificates and keys):
+
+   sudo corevpn-server setup --data-dir /var/lib/corevpn
+
+3. Set the admin password for the web UI:
+
+   echo "COREVPN_ADMIN_PASSWORD=$(openssl rand -base64 32)" | sudo tee -a /etc/corevpn/environment
+   sudo chmod 600 /etc/corevpn/environment
+
+4. Start the server:
+
+   sudo systemctl enable --now corevpn-server
+
+5. (Optional) Start the web admin interface:
+
+   sudo systemctl enable --now corevpn-web
+
+   Access at: http://127.0.0.1:8080 (localhost only by default)
+
+Ghost Mode (Zero Logging)
+-------------------------
+
+For maximum privacy, CoreVPN supports "ghost mode" which completely disables
+all connection logging. No connection data is stored in memory, files, or
+databases.
+
+To enable ghost mode, either:
+
+1. Edit /etc/corevpn/config.toml:
+
+   [logging]
+   connection_mode = "none"
+
+2. Or add to /etc/corevpn/environment:
+
+   COREVPN_GHOST_MODE=true
+
+3. Or create a systemd override:
+
+   sudo systemctl edit corevpn-server
+
+   Add:
+   [Service]
+   ExecStart=
+   ExecStart=/usr/bin/corevpn-server run --ghost --config /etc/corevpn/config.toml
+
+Generating Client Configurations
+--------------------------------
+
+To generate a client .ovpn file:
+
+   sudo corevpn-server client --user username@example.com
+
+Or use the web admin interface.
+
+Multiple Instances
+------------------
+
+To run multiple VPN instances (e.g., different ports or subnets):
+
+1. Create instance configuration:
+
+   sudo mkdir /etc/corevpn/instance1
+   sudo cp /etc/corevpn/config.toml /etc/corevpn/instance1/
+
+2. Edit the instance configuration with different settings
+
+3. Start the instance:
+
+   sudo systemctl enable --now corevpn-server@instance1
+
+Firewall Configuration
+----------------------
+
+Allow VPN traffic through your firewall:
+
+   # UFW
+   sudo ufw allow 1194/udp
+
+   # iptables
+   sudo iptables -A INPUT -p udp --dport 1194 -j ACCEPT
+
+   # nftables
+   nft add rule inet filter input udp dport 1194 accept
+
+For full tunnel mode, enable IP forwarding and NAT:
+
+   # Enable IP forwarding
+   echo 'net.ipv4.ip_forward = 1' | sudo tee /etc/sysctl.d/99-corevpn.conf
+   sudo sysctl -p /etc/sysctl.d/99-corevpn.conf
+
+   # Add NAT rule (replace eth0 with your interface)
+   sudo iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+
+Troubleshooting
+---------------
+
+Check server status:
+
+   sudo systemctl status corevpn-server
+   sudo journalctl -u corevpn-server -f
+
+Run diagnostics:
+
+   sudo corevpn-server doctor --config /etc/corevpn/config.toml
+
+ -- Pegasus Heavy Industries <support@pegasusheavyindustries.com>

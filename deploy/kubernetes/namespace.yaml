@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: corevpn
+  labels:
+    app.kubernetes.io/name: corevpn
+    app.kubernetes.io/component: vpn

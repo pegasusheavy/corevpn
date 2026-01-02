@@ -1,0 +1,142 @@
+{{- if .Values.server.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "corevpn.fullname" . }}-server
+  labels:
+    {{- include "corevpn.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "corevpn.serverSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "corevpn.serverSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "corevpn.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+
+      initContainers:
+        - name: init-tun
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /dev/net
+              if [ ! -c /dev/net/tun ]; then
+                mknod /dev/net/tun c 10 200
+              fi
+              chmod 666 /dev/net/tun
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: dev-net
+              mountPath: /dev/net
+
+      containers:
+        - name: server
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - run
+            - --config
+            - /etc/corevpn/config.toml
+            {{- if .Values.server.ghostMode }}
+            - --ghost
+            {{- end }}
+          env:
+            - name: RUST_LOG
+              value: {{ .Values.logging.level }}
+            - name: COREVPN_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "corevpn.secretName" . }}
+                  key: {{ .Values.secrets.existingSecretKey | default "admin-password" }}
+          ports:
+            - name: vpn-udp
+              containerPort: {{ .Values.server.port }}
+              protocol: UDP
+            {{- if .Values.server.tcpEnabled }}
+            - name: vpn-tcp
+              containerPort: {{ .Values.server.tcpPort }}
+              protocol: TCP
+            {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/corevpn
+              readOnly: true
+            - name: pki
+              mountPath: /var/lib/corevpn
+              readOnly: true
+            - name: dev-net
+              mountPath: /dev/net
+            - name: run
+              mountPath: /run/corevpn
+            - name: tmp
+              mountPath: /tmp
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "pgrep corevpn-server"
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "pgrep corevpn-server"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "corevpn.fullname" . }}-config
+        - name: pki
+          secret:
+            secretName: {{ include "corevpn.pkiSecretName" . }}
+            defaultMode: 0400
+        - name: dev-net
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

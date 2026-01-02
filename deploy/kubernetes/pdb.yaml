@@ -1,0 +1,25 @@
+---
+# Pod Disruption Budget for controlled rollouts
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: corevpn-server
+  namespace: corevpn
+spec:
+  maxUnavailable: 0  # VPN server should always be available
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: corevpn
+      app.kubernetes.io/component: server
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: corevpn-web
+  namespace: corevpn
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: corevpn
+      app.kubernetes.io/component: web

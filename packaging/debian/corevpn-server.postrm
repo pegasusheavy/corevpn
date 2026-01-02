@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    purge)
+        # Remove user and group
+        if getent passwd corevpn >/dev/null; then
+            deluser --quiet --system corevpn || true
+        fi
+
+        if getent group corevpn >/dev/null; then
+            delgroup --quiet --system corevpn || true
+        fi
+
+        # Remove data directories (user must explicitly confirm)
+        echo ""
+        echo "CoreVPN data directories NOT removed automatically:"
+        echo "  /var/lib/corevpn (certificates, state)"
+        echo "  /var/log/corevpn (logs)"
+        echo "  /etc/corevpn (configuration)"
+        echo ""
+        echo "To completely remove, run:"
+        echo "  rm -rf /var/lib/corevpn /var/log/corevpn /etc/corevpn"
+        echo ""
+        ;;
+
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

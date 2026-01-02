@@ -1,0 +1,42 @@
+[package]
+name = "corevpn-protocol"
+description = "OpenVPN protocol implementation for CoreVPN"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+corevpn-crypto = { workspace = true }
+corevpn-core = { workspace = true }
+
+# Async
+tokio = { workspace = true }
+futures = { workspace = true }
+
+# TLS
+rustls = { workspace = true }
+tokio-rustls = { workspace = true }
+rustls-pemfile = "2"
+
+# Networking
+socket2 = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Utilities
+bytes = "1"
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[[bench]]
+name = "protocol_benchmarks"
+harness = false

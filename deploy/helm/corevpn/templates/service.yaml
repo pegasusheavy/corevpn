@@ -1,0 +1,60 @@
+{{- if .Values.server.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "corevpn.fullname" . }}-server
+  labels:
+    {{- include "corevpn.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  ports:
+    - name: vpn-udp
+      port: {{ .Values.server.port }}
+      targetPort: vpn-udp
+      protocol: UDP
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+    {{- if .Values.server.tcpEnabled }}
+    - name: vpn-tcp
+      port: {{ .Values.server.tcpPort }}
+      targetPort: vpn-tcp
+      protocol: TCP
+    {{- end }}
+  selector:
+    {{- include "corevpn.serverSelectorLabels" . | nindent 4 }}
+{{- end }}
+---
+{{- if .Values.web.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "corevpn.fullname" . }}-web
+  labels:
+    {{- include "corevpn.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "corevpn.webSelectorLabels" . | nindent 4 }}
+{{- end }}

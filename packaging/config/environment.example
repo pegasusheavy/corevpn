@@ -1,0 +1,14 @@
+# CoreVPN Environment Configuration
+# This file contains sensitive settings that should not be in the main config
+
+# REQUIRED: Admin password for web UI
+# Generate a strong password and set it here
+# Example: openssl rand -base64 32
+COREVPN_ADMIN_PASSWORD=
+
+# Log level override (optional)
+# RUST_LOG=info
+
+# Ghost mode - disable all connection logging (optional)
+# Uncomment to enable - no connection data will be stored
+# COREVPN_GHOST_MODE=true

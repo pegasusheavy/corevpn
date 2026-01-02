@@ -1,0 +1,31 @@
+{{- if .Values.podDisruptionBudget.enabled }}
+{{- if .Values.server.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "corevpn.fullname" . }}-server
+  labels:
+    {{- include "corevpn.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+spec:
+  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "corevpn.serverSelectorLabels" . | nindent 6 }}
+{{- end }}
+---
+{{- if .Values.web.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "corevpn.fullname" . }}-web
+  labels:
+    {{- include "corevpn.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      {{- include "corevpn.webSelectorLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

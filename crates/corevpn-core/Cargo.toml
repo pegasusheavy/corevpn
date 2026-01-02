@@ -1,0 +1,37 @@
+[package]
+name = "corevpn-core"
+description = "Core types and utilities for CoreVPN"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+corevpn-crypto = { workspace = true }
+
+# Async
+tokio = { workspace = true }
+futures = { workspace = true }
+async-trait = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Networking
+ipnet = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Time
+chrono = { workspace = true }
+
+# UUID
+uuid = { workspace = true }
+
+# Concurrency
+parking_lot = { workspace = true }

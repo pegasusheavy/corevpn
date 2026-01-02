@@ -1,0 +1,48 @@
+[package]
+name = "corevpn-auth"
+description = "Authentication and authorization for CoreVPN"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+corevpn-crypto = { workspace = true }
+corevpn-core = { workspace = true }
+
+# Async
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# OAuth2/OIDC
+openidconnect = { workspace = true }
+oauth2 = { workspace = true }
+
+# HTTP
+reqwest = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Time
+chrono = { workspace = true }
+
+# UUID
+uuid = { workspace = true }
+
+# Secure storage
+secrecy = { workspace = true }
+zeroize = { workspace = true }
+
+# Additional
+sha2 = { workspace = true }
+base64 = { workspace = true }
+parking_lot = { workspace = true }
+urlencoding = "2"

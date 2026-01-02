@@ -1,0 +1,153 @@
+# CoreVPN Server Configuration
+# See https://github.com/PegasusHeavyIndustries/corevpn for documentation
+
+[server]
+# Address to listen on for VPN connections (UDP)
+listen_addr = "0.0.0.0:1194"
+
+# Optional TCP fallback
+# tcp_listen_addr = "0.0.0.0:443"
+
+# Public hostname or IP for client configurations
+# CHANGE THIS to your server's public address
+public_host = "vpn.example.com"
+
+# Protocol: udp, tcp, or both
+protocol = "udp"
+
+# Maximum concurrent clients
+max_clients = 100
+
+# Data directory for certificates, keys, and state
+data_dir = "/var/lib/corevpn"
+
+[network]
+# VPN subnet (clients will be assigned IPs from this range)
+subnet = "10.8.0.0/24"
+
+# Optional IPv6 subnet
+# subnet_v6 = "fd00:vpn::/64"
+
+# DNS servers to push to clients
+dns = ["1.1.1.1", "1.0.0.1"]
+
+# DNS search domains
+# dns_search = ["internal.example.com"]
+
+# Routes to push to clients (split tunnel)
+# push_routes = ["192.168.1.0/24", "10.0.0.0/8"]
+
+# Enable full tunnel (redirect all traffic through VPN)
+redirect_gateway = true
+
+# MTU setting
+mtu = 1420
+
+[security]
+# Cipher suite: chacha20-poly1305 (recommended) or aes-256-gcm
+cipher = "chacha20-poly1305"
+
+# Minimum TLS version
+tls_min_version = "1.3"
+
+# Enable tls-auth (HMAC authentication)
+tls_auth = true
+
+# Enable tls-crypt (encryption + authentication, stronger than tls-auth)
+tls_crypt = false
+
+# CA certificate lifetime in days
+cert_lifetime_days = 3650
+
+# Client certificate lifetime in days
+client_cert_lifetime_days = 90
+
+# Key renegotiation interval in seconds
+reneg_sec = 3600
+
+# Perfect forward secrecy
+pfs = true
+
+[logging]
+# Log level: trace, debug, info, warn, error
+level = "info"
+
+# Log format: pretty or json
+format = "pretty"
+
+# Application log file (none for stdout)
+# file = "/var/log/corevpn/server.log"
+
+# === Connection Logging ===
+# Mode: none (ghost mode), memory, file, database, or both
+# Set to "none" for ZERO connection logging
+connection_mode = "memory"
+
+# Path for connection log file (when mode is file or both)
+# connection_log_file = "/var/log/corevpn/connections.log"
+
+# Path for connection log database (when mode is database or both)
+# connection_log_db = "/var/lib/corevpn/connections.db"
+
+[logging.connection_events]
+# What events to log
+attempts = false
+connects = true
+disconnects = true
+auth_events = false
+transfer_stats = false
+ip_changes = false
+renegotiations = false
+
+[logging.anonymization]
+# Privacy options for logged data
+hash_client_ips = false
+truncate_client_ips = false
+hash_usernames = false
+round_timestamps = false
+aggregate_transfer_stats = false
+
+[logging.retention]
+# Days to keep connection logs (0 = forever)
+days = 7
+# Maximum log file size in MB before rotation
+max_file_size_mb = 100
+# Number of rotated log files to keep
+max_files = 5
+# Automatically purge old logs
+auto_purge = true
+# Secure deletion (3-pass overwrite before delete)
+secure_delete = false
+
+# === OAuth2/OIDC Configuration (Optional) ===
+# Uncomment to enable OAuth2 authentication
+
+# [oauth]
+# enabled = true
+# provider = "google"  # google, microsoft, okta, or generic
+# client_id = "your-client-id"
+# client_secret = "your-client-secret"
+#
+# # For Microsoft/Azure AD
+# # tenant_id = "your-tenant-id"
+#
+# # For Okta
+# # domain = "your-org.okta.com"
+#
+# # For generic OIDC
+# # issuer_url = "https://your-idp.com"
+#
+# # Restrict to specific domains
+# # allowed_domains = ["example.com", "corp.example.com"]
+#
+# # Require membership in specific groups
+# # required_groups = ["vpn-users"]
+
+# === Admin API (Optional) ===
+# Uncomment to enable admin API
+
+# [admin]
+# enabled = true
+# listen_addr = "127.0.0.1:8443"
+# # Allowed IP addresses for admin API
+# allowed_ips = ["127.0.0.1"]

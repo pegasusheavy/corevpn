@@ -1,0 +1,102 @@
+CoreVPN for RHEL/Fedora/CentOS
+==============================
+
+Quick Start
+-----------
+
+1. Edit the configuration file:
+
+   sudo nano /etc/corevpn/config.toml
+
+   At minimum, set your server's public hostname:
+
+   public_host = "your-server.example.com"
+
+2. Initialize the PKI (certificates and keys):
+
+   sudo corevpn-server setup --data-dir /var/lib/corevpn
+
+3. Set the admin password for the web UI:
+
+   echo "COREVPN_ADMIN_PASSWORD=$(openssl rand -base64 32)" | sudo tee -a /etc/corevpn/environment
+   sudo chmod 600 /etc/corevpn/environment
+
+4. Start the server:
+
+   sudo systemctl enable --now corevpn-server
+
+5. (Optional) Start the web admin interface:
+
+   sudo systemctl enable --now corevpn-web
+
+   Access at: http://127.0.0.1:8080 (localhost only by default)
+
+SELinux Notes
+-------------
+
+If SELinux is enforcing, you may need to create a policy module:
+
+   # Allow corevpn to bind to VPN port
+   sudo semanage port -a -t openvpn_port_t -p udp 1194
+
+   # Or run in permissive mode for the service
+   sudo semanage permissive -a corevpn_t
+
+Ghost Mode (Zero Logging)
+-------------------------
+
+For maximum privacy, CoreVPN supports "ghost mode" which completely disables
+all connection logging.
+
+To enable:
+
+1. Edit /etc/corevpn/config.toml:
+
+   [logging]
+   connection_mode = "none"
+
+2. Or create a systemd override:
+
+   sudo systemctl edit corevpn-server
+
+   Add:
+   [Service]
+   ExecStart=
+   ExecStart=/usr/bin/corevpn-server run --ghost --config /etc/corevpn/config.toml
+
+Firewall Configuration
+----------------------
+
+# firewalld
+sudo firewall-cmd --permanent --add-port=1194/udp
+sudo firewall-cmd --reload
+
+# Or create a service
+sudo firewall-cmd --permanent --new-service=corevpn
+sudo firewall-cmd --permanent --service=corevpn --add-port=1194/udp
+sudo firewall-cmd --permanent --add-service=corevpn
+sudo firewall-cmd --reload
+
+For full tunnel mode, enable IP forwarding and masquerading:
+
+   # Enable IP forwarding
+   echo 'net.ipv4.ip_forward = 1' | sudo tee /etc/sysctl.d/99-corevpn.conf
+   sudo sysctl -p /etc/sysctl.d/99-corevpn.conf
+
+   # Enable masquerading
+   sudo firewall-cmd --permanent --add-masquerade
+   sudo firewall-cmd --reload
+
+Troubleshooting
+---------------
+
+Check server status:
+
+   sudo systemctl status corevpn-server
+   sudo journalctl -u corevpn-server -f
+
+Run diagnostics:
+
+   sudo corevpn-server doctor --config /etc/corevpn/config.toml
+
+ -- Pegasus Heavy Industries <support@pegasusheavyindustries.com>

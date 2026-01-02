@@ -1,0 +1,82 @@
+🔐 CoreVPN has been deployed!
+
+{{- if .Values.server.enabled }}
+
+=== VPN Server ===
+
+{{- if eq .Values.service.type "LoadBalancer" }}
+Get the external IP address:
+  kubectl get svc {{ include "corevpn.fullname" . }}-server -n {{ .Release.Namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+
+Connect using:
+  Server: <EXTERNAL-IP>:{{ .Values.server.port }}
+  Protocol: UDP
+{{- else if eq .Values.service.type "NodePort" }}
+Get the NodePort:
+  export NODE_PORT=$(kubectl get svc {{ include "corevpn.fullname" . }}-server -n {{ .Release.Namespace }} -o jsonpath='{.spec.ports[0].nodePort}')
+  export NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+  echo "Connect to: $NODE_IP:$NODE_PORT"
+{{- end }}
+
+{{- if .Values.server.ghostMode }}
+
+⚠️  GHOST MODE ENABLED
+   No connection logging is active. All connections are completely ephemeral.
+{{- end }}
+{{- end }}
+
+{{- if .Values.web.enabled }}
+
+=== Web Admin Interface ===
+
+{{- if .Values.ingress.enabled }}
+Access the web UI at:
+{{- range $host := .Values.ingress.hosts }}
+  https://{{ $host.host }}
+{{- end }}
+{{- else }}
+Access the web UI via port-forward:
+  kubectl port-forward svc/{{ include "corevpn.fullname" . }}-web -n {{ .Release.Namespace }} 8080:80
+
+  Then open: http://localhost:8080
+{{- end }}
+
+Login credentials:
+  Username: admin
+  Password: <from secret {{ include "corevpn.secretName" . }}>
+
+Get password:
+  kubectl get secret {{ include "corevpn.secretName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.data.admin-password}' | base64 -d
+{{- end }}
+
+=== Generate Client Config ===
+
+1. Access the web UI and use the "Generate Client" feature, or
+
+2. Run the CLI:
+   kubectl exec -it deploy/{{ include "corevpn.fullname" . }}-server -n {{ .Release.Namespace }} -- \
+     corevpn-server client --user user@example.com
+
+=== PKI Setup ===
+
+{{- if not .Values.pki.existingSecret }}
+⚠️  PKI certificates not configured!
+
+Generate certificates:
+  1. Run locally: corevpn-server setup --data-dir /tmp/pki
+  2. Create the secret:
+     kubectl create secret generic {{ include "corevpn.fullname" . }}-pki \
+       --from-file=ca.crt=/tmp/pki/ca.crt \
+       --from-file=ca.key=/tmp/pki/ca.key \
+       --from-file=server.crt=/tmp/pki/server.crt \
+       --from-file=server.key=/tmp/pki/server.key \
+       --from-file=ta.key=/tmp/pki/ta.key \
+       -n {{ .Release.Namespace }}
+  3. Restart the deployment:
+     kubectl rollout restart deploy/{{ include "corevpn.fullname" . }}-server -n {{ .Release.Namespace }}
+{{- end }}
+
+=== Documentation ===
+
+For more information, visit:
+  https://github.com/PegasusHeavyIndustries/corevpn

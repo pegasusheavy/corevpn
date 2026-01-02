@@ -1,0 +1,68 @@
+[package]
+name = "corevpn-server"
+description = "CoreVPN server binary"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "corevpn-server"
+path = "src/main.rs"
+
+[dependencies]
+corevpn-crypto = { workspace = true }
+corevpn-core = { workspace = true }
+corevpn-protocol = { workspace = true }
+corevpn-auth = { workspace = true }
+corevpn-config = { workspace = true }
+
+# Async
+tokio = { workspace = true }
+futures = { workspace = true }
+async-trait = "0.1"
+
+# TUN device
+tun = { workspace = true }
+
+# Web server (for config portal & admin)
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+
+# Database
+sqlx = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# CLI
+clap = { workspace = true }
+dialoguer = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+
+# Concurrency
+parking_lot = { workspace = true }
+
+# Utilities
+bytes = "1"
+chrono = { workspace = true }
+ipnet = { workspace = true }
+console = "0.15"
+base64 = { workspace = true }
+subtle = { workspace = true }
+
+# HTTP Client
+reqwest = { workspace = true }
+
+# TLS
+rustls = { workspace = true }
+
+# UUID
+uuid = { workspace = true }

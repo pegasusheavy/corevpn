@@ -1,0 +1,98 @@
+# Production Values
+# Recommended settings for production deployments
+
+# Use specific image tag, not latest
+image:
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+server:
+  # Set your actual public hostname
+  publicHost: "vpn.yourcompany.com"
+  maxClients: 500
+
+# Enhanced security settings
+security:
+  cipher: "chacha20-poly1305"
+  tlsMinVersion: "1.3"
+  tlsAuth: true
+  tlsCrypt: false
+  clientCertLifetimeDays: 30  # Shorter lifetime in production
+
+# Production logging - database for queries
+logging:
+  level: "info"
+  format: "json"
+  connectionMode: "database"
+
+  events:
+    attempts: true
+    connects: true
+    disconnects: true
+    authEvents: true
+    transferStats: true
+
+  anonymization:
+    hashClientIps: true  # GDPR compliance
+    roundTimestamps: true
+
+  retention:
+    days: 90
+    autoPurge: true
+
+# Production resources
+resources:
+  requests:
+    cpu: 500m
+    memory: 256Mi
+  limits:
+    cpu: 2000m
+    memory: 1Gi
+
+# Enable PDB
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 0
+
+# Enable network policies
+networkPolicy:
+  enabled: true
+
+# Web UI with ingress
+web:
+  enabled: true
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: vpn-admin.yourcompany.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: corevpn-web-tls
+      hosts:
+        - vpn-admin.yourcompany.com
+
+# Affinity for HA
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: corevpn
+          topologyKey: kubernetes.io/hostname

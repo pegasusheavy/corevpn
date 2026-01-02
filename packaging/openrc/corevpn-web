@@ -1,0 +1,55 @@
+#!/sbin/openrc-run
+# CoreVPN Web Admin Interface - OpenRC init script
+
+name="CoreVPN Web Admin"
+description="Web-based administration interface for CoreVPN"
+
+command="/usr/bin/corevpn-server"
+command_args="web --config ${COREVPN_CONFIG:-/etc/corevpn/config.toml} --listen ${COREVPN_WEB_LISTEN:-127.0.0.1:8080}"
+command_user="${COREVPN_USER:-corevpn}:${COREVPN_GROUP:-corevpn}"
+command_background=true
+
+pidfile="/run/corevpn/corevpn-web.pid"
+output_log="/var/log/corevpn/web.log"
+error_log="/var/log/corevpn/web.err"
+
+# Additional options
+extra_started_commands="reload"
+
+depend() {
+    need net corevpn-server
+    use logger
+}
+
+start_pre() {
+    # Create necessary directories
+    checkpath -d -m 0750 -o ${command_user} /run/corevpn
+    checkpath -d -m 0750 -o ${command_user} /var/log/corevpn
+
+    # Check for admin password
+    if [ -z "${COREVPN_ADMIN_PASSWORD}" ]; then
+        if [ -f /etc/corevpn/environment ]; then
+            . /etc/corevpn/environment
+        fi
+    fi
+
+    if [ -z "${COREVPN_ADMIN_PASSWORD}" ]; then
+        eerror "COREVPN_ADMIN_PASSWORD not set"
+        eerror "Set it in /etc/corevpn/environment or as environment variable"
+        return 1
+    fi
+
+    export COREVPN_ADMIN_PASSWORD
+
+    return 0
+}
+
+reload() {
+    ebegin "Reloading ${name}"
+    start-stop-daemon --signal HUP --pidfile "${pidfile}"
+    eend $?
+}
+
+stop_post() {
+    rm -f "${pidfile}"
+}

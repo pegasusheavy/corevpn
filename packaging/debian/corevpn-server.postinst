@@ -1,0 +1,75 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        # Create corevpn user and group
+        if ! getent group corevpn >/dev/null; then
+            addgroup --system corevpn
+        fi
+
+        if ! getent passwd corevpn >/dev/null; then
+            adduser --system --ingroup corevpn --home /var/lib/corevpn \
+                    --no-create-home --shell /usr/sbin/nologin \
+                    --gecos "CoreVPN Server" corevpn
+        fi
+
+        # Create directories
+        install -d -m 0750 -o corevpn -g corevpn /var/lib/corevpn
+        install -d -m 0750 -o corevpn -g corevpn /var/log/corevpn
+        install -d -m 0750 -o root -g corevpn /etc/corevpn
+
+        # Set permissions on config directory
+        chmod 0750 /etc/corevpn
+        chown root:corevpn /etc/corevpn
+
+        # Create default config if it doesn't exist
+        if [ ! -f /etc/corevpn/config.toml ]; then
+            if [ -f /etc/corevpn/config.toml.example ]; then
+                echo "Creating default configuration from example..."
+                cp /etc/corevpn/config.toml.example /etc/corevpn/config.toml
+                chmod 0640 /etc/corevpn/config.toml
+                chown root:corevpn /etc/corevpn/config.toml
+                echo "Please edit /etc/corevpn/config.toml and run 'corevpn-server setup'"
+            fi
+        fi
+
+        # Create environment file if it doesn't exist
+        if [ ! -f /etc/corevpn/environment ]; then
+            if [ -f /etc/corevpn/environment.example ]; then
+                cp /etc/corevpn/environment.example /etc/corevpn/environment
+                chmod 0600 /etc/corevpn/environment
+                chown root:root /etc/corevpn/environment
+            fi
+        fi
+
+        # Ensure TUN module is available
+        if [ ! -c /dev/net/tun ]; then
+            modprobe tun 2>/dev/null || true
+        fi
+
+        echo ""
+        echo "CoreVPN Server installed successfully!"
+        echo ""
+        echo "Quick start:"
+        echo "  1. Edit /etc/corevpn/config.toml"
+        echo "  2. Run: sudo corevpn-server setup --data-dir /var/lib/corevpn"
+        echo "  3. Set admin password: echo 'COREVPN_ADMIN_PASSWORD=your-password' >> /etc/corevpn/environment"
+        echo "  4. Enable and start: sudo systemctl enable --now corevpn-server"
+        echo ""
+        echo "For ghost mode (no logging): Add '--ghost' to ExecStart in service file"
+        echo ""
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

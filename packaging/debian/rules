@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export CARGO_HOME = $(CURDIR)/debian/.cargo
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	cargo build --release --locked
+
+override_dh_auto_install:
+	# Install binaries
+	install -D -m 0755 target/release/corevpn-server $(CURDIR)/debian/corevpn-server/usr/bin/corevpn-server
+	install -D -m 0755 target/release/corevpn-cli $(CURDIR)/debian/corevpn-cli/usr/bin/corevpn-cli
+
+	# Install systemd units
+	install -D -m 0644 packaging/systemd/corevpn-server.service $(CURDIR)/debian/corevpn-server/lib/systemd/system/corevpn-server.service
+	install -D -m 0644 packaging/systemd/corevpn-server@.service $(CURDIR)/debian/corevpn-server/lib/systemd/system/corevpn-server@.service
+	install -D -m 0644 packaging/systemd/corevpn-web.service $(CURDIR)/debian/corevpn-server/lib/systemd/system/corevpn-web.service
+
+	# Install default configuration
+	install -D -m 0644 packaging/config/config.toml.example $(CURDIR)/debian/corevpn-server/etc/corevpn/config.toml.example
+	install -D -m 0640 packaging/config/environment.example $(CURDIR)/debian/corevpn-server/etc/corevpn/environment.example
+
+	# Install documentation
+	install -D -m 0644 packaging/config/README.Debian $(CURDIR)/debian/corevpn-server/usr/share/doc/corevpn-server/README.Debian
+
+override_dh_auto_test:
+	# Skip tests during package build (run separately in CI)
+	@echo "Skipping tests during package build"
+
+override_dh_auto_clean:
+	cargo clean || true
+	rm -rf $(CARGO_HOME)
+
+override_dh_installsystemd:
+	dh_installsystemd --name=corevpn-server --no-enable --no-start
+	dh_installsystemd --name=corevpn-web --no-enable --no-start

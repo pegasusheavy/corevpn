@@ -1,0 +1,35 @@
+---
+# Ingress for web UI (HTTPS)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: corevpn-web
+  namespace: corevpn
+  labels:
+    app.kubernetes.io/name: corevpn
+    app.kubernetes.io/component: web
+  annotations:
+    # nginx ingress
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # cert-manager
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Traefik
+    # traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - vpn-admin.example.com
+      secretName: corevpn-web-tls
+  rules:
+    - host: vpn-admin.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: corevpn-web
+                port:
+                  name: http

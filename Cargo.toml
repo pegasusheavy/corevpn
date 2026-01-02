@@ -1,0 +1,130 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/corevpn-crypto",
+    "crates/corevpn-core",
+    "crates/corevpn-protocol",
+    "crates/corevpn-auth",
+    "crates/corevpn-config",
+    "crates/corevpn-server",
+    "crates/corevpn-cli",
+    "crates/corevpn-ui",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/PegasusHeavyIndustries/corevpn"
+authors = ["Pegasus Heavy Industries"]
+
+[workspace.dependencies]
+# Internal crates
+corevpn-crypto = { path = "crates/corevpn-crypto" }
+corevpn-core = { path = "crates/corevpn-core" }
+corevpn-protocol = { path = "crates/corevpn-protocol" }
+corevpn-auth = { path = "crates/corevpn-auth" }
+corevpn-config = { path = "crates/corevpn-config" }
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Cryptography - using audited, pure-Rust implementations
+ring = "0.17"
+rustls = "0.23"
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+ed25519-dalek = { version = "2", features = ["rand_core", "pem"] }
+chacha20poly1305 = "0.10"
+aes-gcm = "0.10"
+argon2 = "0.5"
+sha2 = "0.10"
+hmac = "0.12"
+hkdf = "0.12"
+rand = "0.8"
+rand_core = "0.6"
+
+# Secure memory handling
+zeroize = { version = "1", features = ["derive"] }
+secrecy = "0.8"
+
+# Certificates
+x509-cert = "0.2"
+rcgen = "0.13"
+pem = "3"
+
+# Networking
+socket2 = "0.5"
+tokio-rustls = "0.26"
+webpki-roots = "0.26"
+
+# TUN device
+tun = "0.6"
+
+# OAuth2/OIDC
+openidconnect = "3"
+oauth2 = "4"
+
+# HTTP client/server
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+base64 = "0.22"
+
+# CLI
+clap = { version = "4", features = ["derive", "env"] }
+dialoguer = "0.11"
+indicatif = "0.17"
+console = "0.15"
+ratatui = "0.28"
+
+# Logging & tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Database (for state/sessions)
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Async utilities
+futures = "0.3"
+async-trait = "0.1"
+parking_lot = "0.12"
+
+# UUID for session IDs
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# IP network handling
+ipnet = { version = "2", features = ["serde"] }
+
+# Constant-time comparison
+subtle = "2"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.release.build-override]
+opt-level = 3
+
+# Benchmarking
+[workspace.dependencies.criterion]
+version = "0.5"
+features = ["html_reports"]
+
+[profile.bench]
+lto = true
+codegen-units = 1

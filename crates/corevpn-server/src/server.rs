@@ -1,0 +1,581 @@
+//! VPN Server Implementation
+//!
+//! Handles OpenVPN-compatible connections with TLS and OAuth2 authentication.
+
+use std::collections::HashMap;
+use std::net::SocketAddr;
+use std::sync::Arc;
+use std::time::{Duration, Instant};
+
+use anyhow::Result;
+use bytes::Bytes;
+use parking_lot::RwLock;
+use tokio::net::UdpSocket;
+use tracing::{info, warn, error, debug, trace};
+
+use corevpn_config::{ConnectionLogMode, ServerConfig};
+use corevpn_core::{SessionManager, AddressPool};
+use corevpn_crypto::CipherSuite;
+use corevpn_protocol::{
+    OpCode, Packet, ProtocolSession, ProtocolState, ProcessedPacket,
+    TlsHandler, create_server_config, load_certs_from_pem, load_key_from_pem,
+};
+
+use crate::connection_log::{
+    ConnectionLogger, ConnectionEvent, ConnectionEventBuilder, ConnectionId,
+    AuthMethod, DisconnectReason, TransferStats, Anonymizer, create_logger,
+};
+
+/// Active connection state
+struct Connection {
+    /// Protocol session
+    protocol: ProtocolSession,
+    /// TLS handler
+    tls: Option<TlsHandler>,
+    /// Last activity time
+    last_activity: Instant,
+    /// Connection start time
+    connected_at: Instant,
+    /// Peer address
+    peer_addr: SocketAddr,
+    /// Assigned VPN IP (if authenticated)
+    vpn_ip: Option<std::net::Ipv4Addr>,
+    /// Connection ID for logging
+    connection_id: ConnectionId,
+    /// Username (if authenticated)
+    username: Option<String>,
+    /// Authentication method used
+    auth_method: AuthMethod,
+    /// Transfer statistics
+    stats: TransferStats,
+}
+
+impl Connection {
+    fn new(peer_addr: SocketAddr, cipher_suite: CipherSuite, connection_id: ConnectionId) -> Self {
+        Self {
+            protocol: ProtocolSession::new_server(cipher_suite),
+            tls: None,
+            last_activity: Instant::now(),
+            connected_at: Instant::now(),
+            peer_addr,
+            vpn_ip: None,
+            connection_id,
+            username: None,
+            auth_method: AuthMethod::Unknown,
+            stats: TransferStats::default(),
+        }
+    }
+
+    fn touch(&mut self) {
+        self.last_activity = Instant::now();
+    }
+
+    fn is_stale(&self, timeout: Duration) -> bool {
+        self.last_activity.elapsed() > timeout
+    }
+
+    fn duration(&self) -> Duration {
+        self.connected_at.elapsed()
+    }
+
+    fn add_bytes_rx(&mut self, bytes: u64) {
+        self.stats.bytes_rx += bytes;
+        self.stats.packets_rx += 1;
+    }
+
+    fn add_bytes_tx(&mut self, bytes: u64) {
+        self.stats.bytes_tx += bytes;
+        self.stats.packets_tx += 1;
+    }
+}
+
+/// Connection map type
+type ConnectionMap = Arc<RwLock<HashMap<SocketAddr, Connection>>>;
+
+/// Server state
+pub struct VpnServer {
+    config: ServerConfig,
+    session_manager: SessionManager,
+    address_pool: AddressPool,
+    connections: ConnectionMap,
+    tls_config: Option<Arc<rustls::ServerConfig>>,
+    /// Connection logger
+    connection_logger: Arc<dyn ConnectionLogger>,
+    /// Event anonymizer (if configured)
+    anonymizer: Option<parking_lot::Mutex<Anonymizer>>,
+}
+
+impl VpnServer {
+    /// Create a new VPN server
+    pub async fn new(config: ServerConfig) -> Result<Self> {
+        let session_manager = SessionManager::new(
+            config.server.max_clients as usize,
+            chrono::Duration::hours(24),
+        );
+
+        let subnet = config.network.subnet.parse()
+            .map_err(|e| anyhow::anyhow!("Invalid subnet: {}", e))?;
+
+        let address_pool = AddressPool::new(Some(subnet), None);
+
+        // Load TLS configuration
+        let tls_config = Self::load_tls_config(&config)?;
+
+        // Initialize connection logger
+        let connection_logger = create_logger(&config.logging).await?;
+
+        // Log the logging mode for transparency
+        match config.logging.connection_mode {
+            ConnectionLogMode::None => {
+                info!("Connection logging: DISABLED (ghost mode)");
+            }
+            ConnectionLogMode::Memory => {
+                info!("Connection logging: memory only (not persisted)");
+            }
+            ConnectionLogMode::File => {
+                info!("Connection logging: file-based");
+            }
+            ConnectionLogMode::Database => {
+                info!("Connection logging: database-based");
+            }
+            ConnectionLogMode::Both => {
+                info!("Connection logging: file + database");
+            }
+        }
+
+        // Initialize anonymizer if any anonymization is configured
+        let anonymizer = if config.logging.anonymization.hash_client_ips
+            || config.logging.anonymization.truncate_client_ips
+            || config.logging.anonymization.hash_usernames
+            || config.logging.anonymization.round_timestamps
+            || config.logging.anonymization.aggregate_transfer_stats
+        {
+            info!("Connection log anonymization: enabled");
+            Some(parking_lot::Mutex::new(Anonymizer::new(
+                config.logging.anonymization.clone(),
+            )))
+        } else {
+            None
+        };
+
+        Ok(Self {
+            config,
+            session_manager,
+            address_pool,
+            connections: Arc::new(RwLock::new(HashMap::new())),
+            tls_config,
+            connection_logger,
+            anonymizer,
+        })
+    }
+
+    /// Log a connection event, applying anonymization if configured
+    async fn log_event(&self, event: ConnectionEvent) {
+        let event = if let Some(ref anonymizer) = self.anonymizer {
+            anonymizer.lock().anonymize(event)
+        } else {
+            event
+        };
+
+        if let Err(e) = self.connection_logger.log(event).await {
+            warn!("Failed to log connection event: {}", e);
+        }
+    }
+
+    fn load_tls_config(config: &ServerConfig) -> Result<Option<Arc<rustls::ServerConfig>>> {
+        // Check if certificates exist
+        let cert_path = config.server_cert_path();
+        let key_path = config.server_key_path();
+
+        if !cert_path.exists() || !key_path.exists() {
+            warn!("Server certificates not found, TLS disabled");
+            return Ok(None);
+        }
+
+        let cert_pem = std::fs::read_to_string(&cert_path)
+            .map_err(|e| anyhow::anyhow!("Failed to read server cert: {}", e))?;
+        let key_pem = std::fs::read_to_string(&key_path)
+            .map_err(|e| anyhow::anyhow!("Failed to read server key: {}", e))?;
+
+        let certs = load_certs_from_pem(&cert_pem)
+            .map_err(|e| anyhow::anyhow!("Failed to parse server cert: {}", e))?;
+        let key = load_key_from_pem(&key_pem)
+            .map_err(|e| anyhow::anyhow!("Failed to parse server key: {}", e))?;
+
+        let tls_config = create_server_config(certs, key, None)
+            .map_err(|e| anyhow::anyhow!("Failed to create TLS config: {}", e))?;
+
+        Ok(Some(tls_config))
+    }
+
+    /// Get cipher suite from config
+    fn get_cipher_suite(&self) -> CipherSuite {
+        if self.config.security.cipher.contains("chacha") {
+            CipherSuite::ChaCha20Poly1305
+        } else {
+            CipherSuite::Aes256Gcm
+        }
+    }
+}
+
+/// Run the VPN server
+pub async fn run_server(config: ServerConfig) -> Result<()> {
+    info!("CoreVPN Server starting...");
+    info!("Listening on: {}", config.server.listen_addr);
+    info!("Public host: {}", config.server.public_host);
+    info!("VPN subnet: {}", config.network.subnet);
+
+    let server = Arc::new(VpnServer::new(config.clone()).await?);
+
+    // Bind UDP socket
+    let socket = UdpSocket::bind(&config.server.listen_addr).await?;
+    let socket = Arc::new(socket);
+
+    info!("Server ready, waiting for connections...");
+
+    // Spawn cleanup task
+    let server_cleanup = server.clone();
+    tokio::spawn(async move {
+        let mut interval = tokio::time::interval(Duration::from_secs(60));
+        loop {
+            interval.tick().await;
+            cleanup_stale_connections(&server_cleanup, Duration::from_secs(300)).await;
+        }
+    });
+
+    // Spawn log cleanup task
+    let logger = server.connection_logger.clone();
+    tokio::spawn(async move {
+        let mut interval = tokio::time::interval(Duration::from_secs(3600)); // Hourly
+        loop {
+            interval.tick().await;
+            if let Err(e) = logger.cleanup().await {
+                warn!("Log cleanup failed: {}", e);
+            }
+        }
+    });
+
+    // Main receive loop
+    let mut buf = vec![0u8; 65535];
+
+    loop {
+        let (len, peer_addr) = match socket.recv_from(&mut buf).await {
+            Ok(result) => result,
+            Err(e) => {
+                error!("Receive error: {}", e);
+                continue;
+            }
+        };
+
+        let packet_data = Bytes::copy_from_slice(&buf[..len]);
+        let socket_clone = socket.clone();
+        let server_clone = server.clone();
+
+        // Handle packet - directly without spawning to avoid Send issues
+        // In production, you'd use a message passing channel instead
+        if let Err(e) = handle_packet(&server_clone, &socket_clone, peer_addr, packet_data).await {
+            debug!("Packet handling error from {}: {}", peer_addr, e);
+        }
+    }
+}
+
+/// Cleanup stale connections
+async fn cleanup_stale_connections(server: &VpnServer, timeout: Duration) {
+    let stale_connections: Vec<_> = {
+        let map = server.connections.read();
+        map.iter()
+            .filter(|(_, conn)| conn.is_stale(timeout))
+            .map(|(addr, conn)| (*addr, conn.connection_id, conn.username.clone(), conn.duration(), conn.stats.clone()))
+            .collect()
+    };
+
+    if stale_connections.is_empty() {
+        return;
+    }
+
+    // Log disconnections for stale connections
+    for (addr, connection_id, username, duration, stats) in &stale_connections {
+        let event = ConnectionEventBuilder::with_id(*connection_id).disconnected(
+            *addr,
+            username.clone(),
+            DisconnectReason::IdleTimeout,
+            *duration,
+            Some(stats.clone()),
+        );
+        server.log_event(event).await;
+    }
+
+    // Remove stale connections
+    let mut map = server.connections.write();
+    for (addr, _, _, _, _) in &stale_connections {
+        map.remove(addr);
+    }
+
+    info!("Cleaned up {} stale connections", stale_connections.len());
+}
+
+async fn handle_packet(
+    server: &VpnServer,
+    socket: &UdpSocket,
+    peer_addr: SocketAddr,
+    data: Bytes,
+) -> Result<()> {
+    if data.is_empty() {
+        return Ok(());
+    }
+
+    // Parse packet opcode
+    let opcode = OpCode::from_byte(data[0])?;
+    trace!("Received {} from {}", opcode, peer_addr);
+
+    match opcode {
+        OpCode::HardResetClientV2 | OpCode::HardResetClientV3 => {
+            handle_hard_reset(server, socket, peer_addr, &data).await?;
+        }
+        OpCode::ControlV1 | OpCode::AckV1 | OpCode::SoftResetV1 => {
+            handle_control_packet(server, socket, peer_addr, &data).await?;
+        }
+        OpCode::DataV1 | OpCode::DataV2 => {
+            handle_data_packet(server, socket, peer_addr, &data).await?;
+        }
+        _ => {
+            debug!("Unhandled opcode: {}", opcode);
+        }
+    }
+
+    Ok(())
+}
+
+async fn handle_hard_reset(
+    server: &VpnServer,
+    socket: &UdpSocket,
+    peer_addr: SocketAddr,
+    data: &[u8],
+) -> Result<()> {
+    info!("New connection from {}", peer_addr);
+
+    // Create connection ID for logging
+    let event_builder = ConnectionEventBuilder::new();
+    let connection_id = event_builder.connection_id();
+
+    // Log connection attempt if configured
+    if server.config.logging.connection_events.attempts {
+        let event = event_builder.attempt(peer_addr);
+        server.log_event(event).await;
+    }
+
+    let cipher_suite = server.get_cipher_suite();
+    let mut conn = Connection::new(peer_addr, cipher_suite, connection_id);
+
+    // Process hard reset
+    let _result = conn.protocol.process_packet(data)?;
+
+    // Initialize TLS handler if we have TLS config
+    if let Some(ref tls_config) = server.tls_config {
+        let tls = TlsHandler::new(tls_config.clone())
+            .map_err(|e| anyhow::anyhow!("TLS init failed: {}", e))?;
+        conn.tls = Some(tls);
+    }
+
+    // Send hard reset response
+    let response = conn.protocol.create_hard_reset_response()?;
+    socket.send_to(&response, peer_addr).await?;
+
+    debug!("Sent hard reset response to {}", peer_addr);
+
+    // Store connection
+    server.connections.write().insert(peer_addr, conn);
+
+    Ok(())
+}
+
+async fn handle_control_packet(
+    server: &VpnServer,
+    socket: &UdpSocket,
+    peer_addr: SocketAddr,
+    data: &[u8],
+) -> Result<()> {
+    // Collect data we need to send while holding the lock
+    let packets_to_send: Vec<Bytes>;
+    let mut log_events: Vec<ConnectionEvent> = Vec::new();
+
+    {
+        // Scope for the write lock - release before any awaits
+        let mut connections = server.connections.write();
+        let conn = match connections.get_mut(&peer_addr) {
+            Some(c) => c,
+            None => {
+                debug!("No session for {}", peer_addr);
+                return Ok(());
+            }
+        };
+
+        conn.touch();
+
+        // Process control packet
+        let result = conn.protocol.process_packet(data)?;
+
+        let mut pending_packets = Vec::new();
+
+        match result {
+            ProcessedPacket::TlsData(records) => {
+                // Pass TLS records to TLS handler
+                if let Some(ref mut tls) = conn.tls {
+                    tls.process_tls_records(records)
+                        .map_err(|e| anyhow::anyhow!("TLS processing failed: {}", e))?;
+
+                    // If TLS handler wants to write, get the data
+                    while tls.wants_write() {
+                        if let Some(tls_out) = tls.get_outgoing()
+                            .map_err(|e| anyhow::anyhow!("TLS outgoing failed: {}", e))?
+                        {
+                            // Wrap TLS data in control packet
+                            let ctrl_packet = conn.protocol.create_control_packet(tls_out)?;
+                            pending_packets.push(ctrl_packet);
+                        } else {
+                            break;
+                        }
+                    }
+
+                    // Check if handshake is complete
+                    if tls.is_handshake_complete() && conn.protocol.state() == ProtocolState::TlsHandshake {
+                        info!("TLS handshake complete with {}", peer_addr);
+                        conn.protocol.set_state(ProtocolState::KeyExchange);
+                        conn.auth_method = AuthMethod::Certificate;
+
+                        // Read any application data (key method v2)
+                        let mut buf = vec![0u8; 4096];
+                        if let Ok(n) = tls.read_plaintext(&mut buf) {
+                            if n > 0 {
+                                debug!("Received {} bytes of post-handshake data", n);
+                            }
+                        }
+
+                        // Log successful authentication if configured
+                        if server.config.logging.connection_events.auth_events {
+                            log_events.push(ConnectionEventBuilder::with_id(conn.connection_id)
+                                .authentication(
+                                    peer_addr,
+                                    conn.username.clone(),
+                                    conn.auth_method.clone(),
+                                    crate::connection_log::AuthResult::Success,
+                                ));
+                        }
+                    }
+                }
+            }
+            ProcessedPacket::HardReset { session_id: _ } => {
+                debug!("Late hard reset from {}", peer_addr);
+            }
+            ProcessedPacket::SoftReset => {
+                info!("Key renegotiation from {}", peer_addr);
+
+                // Log renegotiation if configured
+                if server.config.logging.connection_events.renegotiations {
+                    log_events.push(ConnectionEventBuilder::with_id(conn.connection_id)
+                        .renegotiation(peer_addr, true));
+                }
+            }
+            ProcessedPacket::None => {
+                // ACK or no action needed
+            }
+            _ => {}
+        }
+
+        // Collect ACKs
+        if conn.protocol.should_send_ack() {
+            if let Some(ack) = conn.protocol.create_ack_packet() {
+                pending_packets.push(ack);
+            }
+        }
+
+        // Collect retransmits
+        for retransmit in conn.protocol.get_retransmits() {
+            pending_packets.push(retransmit);
+        }
+
+        packets_to_send = pending_packets;
+    } // Lock released here
+
+    // Log any events
+    for event in log_events {
+        server.log_event(event).await;
+    }
+
+    // Now send all collected packets without holding the lock
+    for packet in packets_to_send {
+        socket.send_to(&packet, peer_addr).await?;
+    }
+
+    Ok(())
+}
+
+async fn handle_data_packet(
+    server: &VpnServer,
+    _socket: &UdpSocket,
+    peer_addr: SocketAddr,
+    data: &[u8],
+) -> Result<()> {
+    // Get existing connection
+    let mut connections = server.connections.write();
+    let conn = match connections.get_mut(&peer_addr) {
+        Some(c) => c,
+        None => {
+            debug!("No session for data packet from {}", peer_addr);
+            return Ok(());
+        }
+    };
+
+    conn.touch();
+
+    // Only process data if established
+    if conn.protocol.state() != ProtocolState::Established {
+        debug!("Data packet before established from {}", peer_addr);
+        return Ok(());
+    }
+
+    // Track incoming bytes
+    conn.add_bytes_rx(data.len() as u64);
+
+    // Process data packet
+    let result = conn.protocol.process_packet(data)?;
+
+    if let ProcessedPacket::Data(ip_packet) = result {
+        trace!("Received {} bytes of tunnel data from {}", ip_packet.len(), peer_addr);
+    }
+
+    Ok(())
+}
+
+/// Statistics for the server
+#[derive(Debug, Clone, Default)]
+pub struct ServerStats {
+    /// Total connections received
+    pub connections: u64,
+    /// Active sessions
+    pub active_sessions: u64,
+    /// Bytes received
+    pub bytes_rx: u64,
+    /// Bytes sent
+    pub bytes_tx: u64,
+    /// Packets received
+    pub packets_rx: u64,
+    /// Packets sent
+    pub packets_tx: u64,
+}
+
+impl ServerStats {
+    /// Get current stats from server
+    pub fn from_server(server: &VpnServer) -> Self {
+        let connections = server.connections.read();
+        let active = connections.values()
+            .filter(|c| c.protocol.is_established())
+            .count();
+
+        Self {
+            connections: connections.len() as u64,
+            active_sessions: active as u64,
+            ..Default::default()
+        }
+    }
+}

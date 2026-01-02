@@ -1,0 +1,47 @@
+# Docker Compose for CoreVPN - Ghost Mode
+# Zero logging deployment
+
+version: '3.8'
+
+services:
+  corevpn-server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: corevpn:latest
+    container_name: corevpn-ghost
+    restart: unless-stopped
+
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+
+    sysctls:
+      - net.ipv4.ip_forward=1
+
+    ports:
+      - "1194:1194/udp"
+
+    environment:
+      - RUST_LOG=warn  # Minimal logging
+
+    volumes:
+      - ./config:/etc/corevpn:ro
+      - corevpn-pki:/var/lib/corevpn:ro
+      # No log volume - nothing to persist
+
+    # Ghost mode flag
+    command: ["run", "--ghost", "--config", "/etc/corevpn/config.toml"]
+
+    # Minimal healthcheck - no logging
+    healthcheck:
+      test: ["CMD", "pgrep", "corevpn-server"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  corevpn-pki:
+    # PKI data is the only persistent volume

@@ -1,0 +1,20 @@
+# Ghost Mode Values
+# Use this for deployments that require ZERO logging
+
+server:
+  # Enable ghost mode - no connection data stored
+  ghostMode: true
+
+logging:
+  # No connection logging whatsoever
+  connectionMode: "none"
+
+  # Events are disabled anyway, but explicit
+  events:
+    attempts: false
+    connects: false
+    disconnects: false
+    authEvents: false
+    transferStats: false
+    ipChanges: false
+    renegotiations: false

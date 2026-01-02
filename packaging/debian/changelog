@@ -1,0 +1,11 @@
+corevpn (0.1.0-1) unstable; urgency=medium
+
+  * Initial release.
+  * OpenVPN-compatible protocol support
+  * OAuth2/OIDC/SAML authentication
+  * TLS 1.3 with modern cipher suites
+  * Ghost mode for zero-logging operation
+  * Web-based administration interface
+  * Systemd service integration
+
+ -- Pegasus Heavy Industries <support@pegasusheavyindustries.com>  Fri, 02 Jan 2026 00:00:00 +0000
