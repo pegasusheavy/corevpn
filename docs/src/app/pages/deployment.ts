@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SidebarComponent, SidebarSection } from '../components/sidebar';
 import { CodeBlockComponent } from '../components/code-block';
 import { CalloutComponent } from '../components/callout';
+import { SeoService } from '../services/seo.service';
 
 @Component({
   selector: 'app-deployment',
@@ -153,7 +154,46 @@ import { CalloutComponent } from '../components/callout';
     </div>
   `,
 })
-export class DeploymentComponent {
+export class DeploymentComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.updateMeta({
+      title: 'Deployment Guide',
+      description:
+        'Deploy CoreVPN anywhere with Docker, Kubernetes, or native packages. Production-ready deployment guides with Helm charts, Docker Compose, and systemd.',
+      keywords: [
+        'CoreVPN deployment',
+        'Docker VPN',
+        'Kubernetes VPN',
+        'Helm chart',
+        'VPN server deployment',
+        'systemd',
+        'production VPN',
+      ],
+      canonicalUrl: 'https://docs.corevpn.dev/deployment',
+      ogType: 'article',
+      section: 'Deployment',
+    });
+
+    this.seo.addBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Deployment', url: '/deployment' },
+    ]);
+
+    this.seo.addHowToSchema(
+      'How to Deploy CoreVPN on Kubernetes',
+      'Production-grade Kubernetes deployment using Helm charts.',
+      [
+        { name: 'Add Helm repository', text: 'helm repo add corevpn https://charts.pegasusheavy.com && helm repo update' },
+        { name: 'Install with Helm', text: 'helm install corevpn corevpn/corevpn -n corevpn --create-namespace' },
+        { name: 'Configure values', text: 'Customize values.yaml for your environment including ghost mode, authentication, and resources' },
+        { name: 'Verify deployment', text: 'kubectl get pods -n corevpn to verify all pods are running' },
+      ],
+      'PT10M'
+    );
+  }
+
   sidebarSections: SidebarSection[] = [
     {
       title: 'Deployment',

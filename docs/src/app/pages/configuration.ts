@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SidebarComponent, SidebarSection } from '../components/sidebar';
 import { CodeBlockComponent } from '../components/code-block';
 import { CalloutComponent } from '../components/callout';
+import { SeoService } from '../services/seo.service';
 
 @Component({
   selector: 'app-configuration',
@@ -137,7 +138,34 @@ import { CalloutComponent } from '../components/callout';
     </div>
   `,
 })
-export class ConfigurationComponent {
+export class ConfigurationComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.updateMeta({
+      title: 'Configuration Reference',
+      description:
+        'Complete configuration reference for CoreVPN server. Learn about server settings, network configuration, security options, authentication (OAuth2/SAML), and logging.',
+      keywords: [
+        'CoreVPN configuration',
+        'VPN config',
+        'TOML config',
+        'OAuth2 VPN',
+        'SAML VPN',
+        'server settings',
+        'TLS configuration',
+      ],
+      canonicalUrl: 'https://docs.corevpn.dev/configuration',
+      ogType: 'article',
+      section: 'Configuration',
+    });
+
+    this.seo.addBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Configuration', url: '/configuration' },
+    ]);
+  }
+
   sidebarSections: SidebarSection[] = [
     {
       title: 'Configuration',

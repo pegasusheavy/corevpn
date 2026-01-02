@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SeoService } from '../services/seo.service';
 
 @Component({
   selector: 'app-home',
@@ -87,10 +88,10 @@ import { RouterLink } from '@angular/router';
       </section>
 
       <!-- Features Section -->
-      <section class="py-24 relative">
+      <section class="py-24 relative" aria-labelledby="features-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 id="features-heading" class="text-3xl sm:text-4xl font-bold text-white mb-4">
               Everything You Need for Secure Connectivity
             </h2>
             <p class="text-lg text-slate-400 max-w-2xl mx-auto">
@@ -100,26 +101,26 @@ import { RouterLink } from '@angular/router';
 
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @for (feature of features; track feature.title) {
-              <div class="card card-hover group">
+              <article class="card card-hover group">
                 <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-4 group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-colors">
-                  <span class="text-2xl">{{ feature.icon }}</span>
+                  <span class="text-2xl" role="img" [attr.aria-label]="feature.title">{{ feature.icon }}</span>
                 </div>
                 <h3 class="text-lg font-semibold text-white mb-2">{{ feature.title }}</h3>
                 <p class="text-slate-400 text-sm">{{ feature.description }}</p>
-              </div>
+              </article>
             }
           </div>
         </div>
       </section>
 
       <!-- Ghost Mode Section -->
-      <section class="py-24 relative overflow-hidden">
+      <section class="py-24 relative overflow-hidden" aria-labelledby="ghost-mode-heading">
         <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <span class="badge badge-purple mb-4">Privacy First</span>
-              <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+              <h2 id="ghost-mode-heading" class="text-3xl sm:text-4xl font-bold text-white mb-6">
                 👻 Ghost Mode
               </h2>
               <p class="text-lg text-slate-400 mb-6">
@@ -129,7 +130,7 @@ import { RouterLink } from '@angular/router';
               <ul class="space-y-3 mb-8">
                 @for (item of ghostFeatures; track item) {
                   <li class="flex items-center gap-3 text-slate-300">
-                    <svg class="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                     {{ item }}
@@ -138,7 +139,7 @@ import { RouterLink } from '@angular/router';
               </ul>
               <a routerLink="/configuration/ghost-mode" class="btn btn-secondary">
                 Learn about Ghost Mode
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
               </a>
@@ -163,10 +164,10 @@ round_timestamps = "1h"</code></pre>
       </section>
 
       <!-- Deployment Options -->
-      <section class="py-24">
+      <section class="py-24" aria-labelledby="deployment-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 id="deployment-heading" class="text-3xl sm:text-4xl font-bold text-white mb-4">
               Deploy Anywhere
             </h2>
             <p class="text-lg text-slate-400 max-w-2xl mx-auto">
@@ -178,7 +179,7 @@ round_timestamps = "1h"</code></pre>
             @for (option of deploymentOptions; track option.title) {
               <a [routerLink]="option.link" class="card card-hover group text-center">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto mb-4 group-hover:from-slate-600 group-hover:to-slate-700 transition-colors">
-                  <span class="text-3xl">{{ option.icon }}</span>
+                  <span class="text-3xl" role="img" [attr.aria-label]="option.title">{{ option.icon }}</span>
                 </div>
                 <h3 class="text-lg font-semibold text-white mb-2">{{ option.title }}</h3>
                 <p class="text-slate-400 text-sm">{{ option.description }}</p>
@@ -188,11 +189,41 @@ round_timestamps = "1h"</code></pre>
         </div>
       </section>
 
+      <!-- FAQ Section for AEO -->
+      <section class="py-24 bg-slate-900/50" aria-labelledby="faq-heading">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <h2 id="faq-heading" class="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p class="text-lg text-slate-400">
+              Quick answers to common questions about CoreVPN.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            @for (faq of faqs; track faq.question) {
+              <details class="group card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="flex items-center justify-between cursor-pointer list-none">
+                  <h3 class="text-lg font-medium text-white pr-4" itemprop="name">{{ faq.question }}</h3>
+                  <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div class="mt-4 text-slate-400" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text">{{ faq.answer }}</p>
+                </div>
+              </details>
+            }
+          </div>
+        </div>
+      </section>
+
       <!-- CTA Section -->
-      <section class="py-24 relative overflow-hidden">
+      <section class="py-24 relative overflow-hidden" aria-labelledby="cta-heading">
         <div class="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent pointer-events-none"></div>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+          <h2 id="cta-heading" class="text-3xl sm:text-4xl font-bold text-white mb-6">
             Ready to Get Started?
           </h2>
           <p class="text-lg text-slate-400 mb-10 max-w-2xl mx-auto">
@@ -212,7 +243,9 @@ round_timestamps = "1h"</code></pre>
     </div>
   `,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
   features = [
     {
       icon: '🔐',
@@ -274,4 +307,63 @@ export class HomeComponent {
       link: '/deployment/packages',
     },
   ];
+
+  faqs = [
+    {
+      question: 'What is CoreVPN?',
+      answer: 'CoreVPN is an OpenVPN-compatible VPN server written in Rust. It features OAuth2/SAML authentication, ghost mode for zero-logging privacy, modern TLS 1.3 encryption, and easy deployment with Docker or Kubernetes.',
+    },
+    {
+      question: 'Is CoreVPN compatible with OpenVPN clients?',
+      answer: 'Yes, CoreVPN is fully compatible with standard OpenVPN clients. You can use OpenVPN Connect on Windows, macOS, Linux, iOS, and Android to connect using the generated .ovpn configuration files.',
+    },
+    {
+      question: 'What is Ghost Mode?',
+      answer: "Ghost Mode is CoreVPN's zero-logging feature. When enabled, the server discards all connection events immediately, maintains no history, and writes nothing to disk. It's ideal for privacy-conscious deployments.",
+    },
+    {
+      question: 'How do I deploy CoreVPN?',
+      answer: 'CoreVPN can be deployed using Docker, Kubernetes with Helm, or native packages (DEB/RPM). The quickest way is: docker run -d -p 1194:1194/udp ghcr.io/pegasusheavy/corevpn:latest',
+    },
+    {
+      question: 'Does CoreVPN support OAuth2 and SAML?',
+      answer: 'Yes, CoreVPN supports OAuth2/OIDC with providers like Google, GitHub, and any OIDC-compliant IdP. It also supports enterprise SAML authentication for single sign-on integration.',
+    },
+    {
+      question: 'Is CoreVPN free and open source?',
+      answer: 'Yes, CoreVPN is completely free and open source under the MIT license. You can use it for personal or commercial purposes, modify the code, and contribute to the project on GitHub.',
+    },
+  ];
+
+  ngOnInit(): void {
+    this.seo.updateMeta({
+      title: 'CoreVPN Documentation',
+      description:
+        'CoreVPN is an OpenVPN-compatible server with OAuth2/SAML authentication, ghost mode for zero-logging, and modern TLS. Deploy anywhere with Docker or Kubernetes.',
+      keywords: [
+        'VPN',
+        'OpenVPN',
+        'CoreVPN',
+        'ghost mode',
+        'zero logging',
+        'OAuth2',
+        'SAML',
+        'Docker',
+        'Kubernetes',
+        'privacy',
+        'security',
+        'TLS',
+        'Rust',
+      ],
+      canonicalUrl: 'https://docs.corevpn.dev/',
+      ogType: 'website',
+    });
+
+    // Add FAQ schema for AEO
+    this.seo.addFAQSchema(this.faqs);
+
+    // Add software and documentation schemas
+    this.seo.addSoftwareSchema();
+    this.seo.addDocumentationSchema();
+  }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { SidebarComponent, SidebarSection } from '../components/sidebar';
 import { CodeBlockComponent } from '../components/code-block';
 import { CalloutComponent } from '../components/callout';
+import { SeoService } from '../services/seo.service';
 
 @Component({
   selector: 'app-api',
@@ -219,7 +220,33 @@ import { CalloutComponent } from '../components/callout';
     </div>
   `,
 })
-export class ApiComponent {
+export class ApiComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.updateMeta({
+      title: 'API Reference',
+      description:
+        'CoreVPN REST API documentation. Manage VPN clients, connections, and configuration programmatically with full API reference and examples.',
+      keywords: [
+        'CoreVPN API',
+        'REST API',
+        'VPN API',
+        'client management',
+        'API reference',
+        'JSON API',
+      ],
+      canonicalUrl: 'https://docs.corevpn.dev/api',
+      ogType: 'article',
+      section: 'API',
+    });
+
+    this.seo.addBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'API Reference', url: '/api' },
+    ]);
+  }
+
   sidebarSections: SidebarSection[] = [
     {
       title: 'API Reference',

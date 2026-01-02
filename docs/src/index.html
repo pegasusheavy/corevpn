@@ -7,31 +7,224 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="/">
 
-  <!-- Favicon -->
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="CoreVPN Documentation - Secure VPN Server with Ghost Mode">
+  <meta name="author" content="Pegasus Heavy Industries">
+  <meta name="keywords" content="VPN, OpenVPN, CoreVPN, ghost mode, zero logging, OAuth2, SAML, Docker, Kubernetes, privacy, security, TLS 1.3">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://docs.corevpn.dev/">
+
+  <!-- Favicon & Icons -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
 
   <!-- Preconnect to font CDNs -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+  <!-- DNS Prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://github.com">
+  <link rel="dns-prefetch" href="https://api.github.com">
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="CoreVPN Documentation">
-  <meta property="og:description" content="Secure VPN Server with Ghost Mode - Zero-logging, OAuth2/SAML, and modern TLS">
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://docs.corevpn.dev">
+  <meta property="og:url" content="https://docs.corevpn.dev/">
+  <meta property="og:title" content="CoreVPN Documentation - Secure VPN Server with Ghost Mode">
+  <meta property="og:description" content="OpenVPN-compatible server with OAuth2/SAML authentication, ghost mode for zero-logging, and modern TLS. Deploy with Docker or Kubernetes.">
+  <meta property="og:image" content="https://docs.corevpn.dev/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CoreVPN - Secure VPN Server">
+  <meta property="og:site_name" content="CoreVPN Documentation">
+  <meta property="og:locale" content="en_US">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CoreVPN Documentation">
-  <meta name="twitter:description" content="Secure VPN Server with Ghost Mode - Zero-logging, OAuth2/SAML, and modern TLS">
+  <meta name="twitter:site" content="@pegasusheavy">
+  <meta name="twitter:creator" content="@pegasusheavy">
+  <meta name="twitter:title" content="CoreVPN Documentation - Secure VPN Server with Ghost Mode">
+  <meta name="twitter:description" content="OpenVPN-compatible server with OAuth2/SAML authentication, ghost mode for zero-logging, and modern TLS.">
+  <meta name="twitter:image" content="https://docs.corevpn.dev/assets/og-image.png">
 
-  <!-- Theme color -->
+  <!-- Additional SEO -->
   <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CoreVPN Docs">
+  <meta name="application-name" content="CoreVPN Documentation">
+  <meta name="msapplication-TileColor" content="#0f172a">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Geo & Language -->
+  <meta name="geo.region" content="US">
+  <meta name="language" content="English">
+  <meta http-equiv="content-language" content="en">
+
+  <!-- Security -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- Structured Data - Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Pegasus Heavy Industries",
+    "url": "https://github.com/pegasusheavy",
+    "logo": "https://docs.corevpn.dev/assets/logo.png",
+    "sameAs": [
+      "https://github.com/pegasusheavy",
+      "https://twitter.com/pegasusheavy",
+      "https://www.patreon.com/c/PegasusHeavyIndustries"
+    ]
+  }
+  </script>
+
+  <!-- Structured Data - SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CoreVPN",
+    "applicationCategory": "NetworkApplication",
+    "applicationSubCategory": "VPN Server",
+    "operatingSystem": "Linux, Windows, macOS, Docker, Kubernetes",
+    "description": "OpenVPN-compatible VPN server with OAuth2/SAML authentication, ghost mode for zero-logging, and modern TLS 1.3 encryption.",
+    "url": "https://github.com/pegasusheavy/corevpn",
+    "downloadUrl": "https://github.com/pegasusheavy/corevpn/releases",
+    "softwareVersion": "0.1.0",
+    "releaseNotes": "https://github.com/pegasusheavy/corevpn/releases",
+    "author": {
+      "@type": "Organization",
+      "name": "Pegasus Heavy Industries"
+    },
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "OpenVPN protocol compatibility",
+      "OAuth2 and SAML authentication",
+      "Ghost mode - zero logging",
+      "TLS 1.3 encryption",
+      "Docker and Kubernetes support",
+      "Admin web interface",
+      "Client configuration generation"
+    ]
+  }
+  </script>
+
+  <!-- Structured Data - WebSite with SearchAction -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CoreVPN Documentation",
+    "url": "https://docs.corevpn.dev",
+    "description": "Official documentation for CoreVPN - a secure, OpenVPN-compatible VPN server with ghost mode for zero-logging.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Pegasus Heavy Industries"
+    },
+    "inLanguage": "en-US",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://docs.corevpn.dev/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Structured Data - BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Documentation",
+        "item": "https://docs.corevpn.dev"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Structured Data - FAQ (Common Questions) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is CoreVPN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CoreVPN is an OpenVPN-compatible VPN server written in Rust. It features OAuth2/SAML authentication, ghost mode for zero-logging privacy, modern TLS 1.3 encryption, and easy deployment with Docker or Kubernetes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Ghost Mode in CoreVPN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ghost Mode is CoreVPN's zero-logging feature. When enabled, the server uses a NullConnectionLogger that discards all connection events immediately, maintains no in-memory history, writes nothing to disk or database, and provides no audit trail. This is ideal for privacy-conscious deployments."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I deploy CoreVPN with Docker?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can deploy CoreVPN with Docker using: docker run -d --name corevpn -p 1194:1194/udp -p 8443:8443 -e COREVPN_GHOST_MODE=true ghcr.io/pegasusheavy/corevpn:latest. This starts the VPN server on port 1194 and admin interface on port 8443."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does CoreVPN support OAuth2 authentication?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, CoreVPN supports OAuth2/OIDC authentication. You can integrate with identity providers like Google, GitHub, or any OIDC-compliant provider. It also supports enterprise SAML authentication for single sign-on."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is CoreVPN compatible with existing OpenVPN clients?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, CoreVPN is fully compatible with standard OpenVPN clients. You can use OpenVPN Connect on Windows, macOS, Linux, iOS, and Android to connect to a CoreVPN server using the generated .ovpn configuration files."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <app-root></app-root>
+
+  <!-- Noscript fallback for SEO -->
+  <noscript>
+    <div style="padding: 20px; text-align: center; background: #1e293b; color: #f1f5f9;">
+      <h1>CoreVPN Documentation</h1>
+      <p>JavaScript is required to view this documentation site.</p>
+      <p>Please enable JavaScript or visit our <a href="https://github.com/pegasusheavy/corevpn" style="color: #22d3ee;">GitHub repository</a> for documentation.</p>
+    </div>
+  </noscript>
 </body>
 </html>

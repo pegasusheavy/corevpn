@@ -1,0 +1,46 @@
+# CoreVPN Documentation - robots.txt
+# https://docs.corevpn.dev
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://docs.corevpn.dev/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
+
+# Disallow admin/internal paths
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /*.js.map$
+
+# Allow important resources
+Allow: /assets/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.svg$
+Allow: /*.png$
+Allow: /*.jpg$
+
+# GPTBot and AI crawlers - allow for AEO
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Perplexity-AI
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
