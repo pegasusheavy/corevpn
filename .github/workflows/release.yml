@@ -78,7 +78,7 @@ jobs:
           cd dist && tar czf ../${{ matrix.artifact }}.tar.gz *
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.artifact }}
           path: ${{ matrix.artifact }}.tar.gz
@@ -155,14 +155,14 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v} ./packaging/scripts/build-rpm.sh || echo "RPM build skipped"
 
       - name: Upload DEB artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: corevpn-deb
           path: build/deb/*.deb
         continue-on-error: true
 
       - name: Upload RPM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: corevpn-rpm
           path: build/rpm/RPMS/**/*.rpm
@@ -190,7 +190,7 @@ jobs:
           helm package deploy/helm/corevpn -d dist/
 
       - name: Upload Helm chart
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: corevpn-helm
           path: dist/*.tgz
