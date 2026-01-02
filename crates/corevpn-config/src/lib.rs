@@ -12,6 +12,7 @@ pub mod generator;
 pub use server::{
     ServerConfig, LoggingSettings, ConnectionLogMode,
     ConnectionLogEvents, ConnectionLogAnonymization, ConnectionLogRetention,
+    AuditSettings, AuditSinkConfig,
 };
 pub use client::{ClientConfig, ClientConfigBuilder};
 pub use generator::ConfigGenerator;

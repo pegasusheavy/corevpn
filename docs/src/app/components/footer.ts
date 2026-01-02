@@ -63,23 +63,23 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
           </div>
 
           <div class="flex items-center gap-4">
-            <a href="https://github.com/pegasusheavy/corevpn" 
-               target="_blank" 
-               rel="noopener" 
+            <a href="https://github.com/pegasusheavy/corevpn"
+               target="_blank"
+               rel="noopener"
                class="text-slate-400 hover:text-white transition-colors"
                aria-label="GitHub">
               <fa-icon [icon]="['fab', 'github']" class="text-xl"></fa-icon>
             </a>
-            <a href="https://x.com/pegasusheavy" 
-               target="_blank" 
-               rel="noopener" 
+            <a href="https://x.com/pegasusheavy"
+               target="_blank"
+               rel="noopener"
                class="text-slate-400 hover:text-white transition-colors"
                aria-label="X (Twitter)">
               <fa-icon [icon]="['fab', 'x-twitter']" class="text-xl"></fa-icon>
             </a>
-            <a href="https://www.patreon.com/c/PegasusHeavyIndustries" 
-               target="_blank" 
-               rel="noopener" 
+            <a href="https://www.patreon.com/c/PegasusHeavyIndustries"
+               target="_blank"
+               rel="noopener"
                class="text-slate-400 hover:text-white transition-colors"
                aria-label="Patreon">
               <fa-icon [icon]="['fab', 'patreon']" class="text-xl"></fa-icon>

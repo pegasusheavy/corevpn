@@ -26,6 +26,9 @@ pub struct ServerConfig {
     /// Admin API settings
     #[serde(default)]
     pub admin: AdminSettings,
+    /// Audit logging settings (SIEM/cloud integration)
+    #[serde(default)]
+    pub audit: AuditSettings,
 }
 
 /// Server network settings
@@ -401,6 +404,220 @@ impl Default for AdminSettings {
     }
 }
 
+/// Audit logging settings for SIEM and cloud services
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AuditSettings {
+    /// Enable audit logging
+    #[serde(default)]
+    pub enabled: bool,
+
+    /// Event buffer size
+    #[serde(default = "default_audit_buffer")]
+    pub buffer_size: usize,
+
+    /// Include source IP in audit events
+    #[serde(default = "default_true")]
+    pub include_source_ip: bool,
+
+    /// Include user identity in audit events
+    #[serde(default = "default_true")]
+    pub include_user_identity: bool,
+
+    /// Hash sensitive fields for privacy
+    #[serde(default)]
+    pub hash_sensitive_fields: bool,
+
+    /// Audit sinks configuration (inline TOML)
+    #[serde(default)]
+    pub sinks: Vec<AuditSinkConfig>,
+}
+
+fn default_audit_buffer() -> usize { 10000 }
+
+impl Default for AuditSettings {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            buffer_size: 10000,
+            include_source_ip: true,
+            include_user_identity: true,
+            hash_sensitive_fields: false,
+            sinks: Vec::new(),
+        }
+    }
+}
+
+/// Configuration for a single audit sink
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum AuditSinkConfig {
+    /// AWS CloudWatch Logs
+    AwsCloudwatch {
+        region: String,
+        log_group: String,
+        #[serde(default = "default_cloudwatch_stream")]
+        log_stream: String,
+        #[serde(default)]
+        profile: Option<String>,
+        #[serde(default)]
+        role_arn: Option<String>,
+    },
+
+    /// AWS S3 bucket
+    AwsS3 {
+        region: String,
+        bucket: String,
+        #[serde(default = "default_s3_prefix")]
+        prefix: String,
+        #[serde(default)]
+        profile: Option<String>,
+    },
+
+    /// AWS Security Hub
+    AwsSecurityHub {
+        region: String,
+        account_id: String,
+        #[serde(default)]
+        profile: Option<String>,
+    },
+
+    /// AWS EventBridge
+    AwsEventBridge {
+        region: String,
+        #[serde(default = "default_event_bus")]
+        event_bus: String,
+        #[serde(default)]
+        profile: Option<String>,
+    },
+
+    /// Azure Monitor / Log Analytics
+    AzureMonitor {
+        workspace_id: String,
+        shared_key: String,
+        #[serde(default = "default_azure_log_type")]
+        log_type: String,
+    },
+
+    /// Azure Event Hub
+    AzureEventHub {
+        namespace: String,
+        event_hub: String,
+        policy_name: String,
+        policy_key: String,
+    },
+
+    /// Azure Sentinel (via Log Analytics)
+    AzureSentinel {
+        workspace_id: String,
+        shared_key: String,
+        #[serde(default = "default_sentinel_log_type")]
+        log_type: String,
+    },
+
+    /// Oracle Cloud Logging
+    OracleLogging {
+        region: String,
+        log_id: String,
+        tenancy_id: String,
+        user_id: String,
+        fingerprint: String,
+        private_key: String,
+    },
+
+    /// Oracle Cloud Streaming
+    OracleStreaming {
+        region: String,
+        stream_id: String,
+        tenancy_id: String,
+        user_id: String,
+        fingerprint: String,
+        private_key: String,
+    },
+
+    /// Elasticsearch
+    Elasticsearch {
+        urls: Vec<String>,
+        #[serde(default = "default_es_index")]
+        index: String,
+        #[serde(default)]
+        username: Option<String>,
+        #[serde(default)]
+        password: Option<String>,
+        #[serde(default)]
+        api_key: Option<String>,
+    },
+
+    /// Splunk HEC
+    Splunk {
+        url: String,
+        token: String,
+        #[serde(default = "default_splunk_sourcetype")]
+        sourcetype: String,
+        #[serde(default)]
+        index: Option<String>,
+    },
+
+    /// Kafka
+    Kafka {
+        brokers: Vec<String>,
+        topic: String,
+        #[serde(default)]
+        sasl_username: Option<String>,
+        #[serde(default)]
+        sasl_password: Option<String>,
+    },
+
+    /// Syslog (TCP/UDP/TLS)
+    Syslog {
+        address: String,
+        #[serde(default = "default_syslog_port")]
+        port: u16,
+        #[serde(default = "default_syslog_protocol")]
+        protocol: String,
+        #[serde(default)]
+        use_cef: bool,
+        #[serde(default)]
+        use_leef: bool,
+    },
+
+    /// HTTP Webhook
+    Webhook {
+        url: String,
+        #[serde(default)]
+        headers: std::collections::HashMap<String, String>,
+        #[serde(default)]
+        bearer_token: Option<String>,
+        #[serde(default)]
+        api_key_header: Option<String>,
+        #[serde(default)]
+        api_key_value: Option<String>,
+    },
+
+    /// Local file
+    File {
+        path: String,
+        #[serde(default = "default_audit_format")]
+        format: String,
+        #[serde(default = "default_max_size")]
+        max_size_mb: u64,
+        #[serde(default = "default_max_files")]
+        max_files: u32,
+    },
+}
+
+fn default_cloudwatch_stream() -> String { "corevpn-audit-{date}".to_string() }
+fn default_s3_prefix() -> String { "audit-logs/{date}/{hour}/".to_string() }
+fn default_event_bus() -> String { "default".to_string() }
+fn default_azure_log_type() -> String { "CoreVPNAudit".to_string() }
+fn default_sentinel_log_type() -> String { "CoreVPNSecurity".to_string() }
+fn default_es_index() -> String { "corevpn-audit-{date}".to_string() }
+fn default_splunk_sourcetype() -> String { "corevpn:audit".to_string() }
+fn default_syslog_port() -> u16 { 514 }
+fn default_syslog_protocol() -> String { "udp".to_string() }
+fn default_audit_format() -> String { "json".to_string() }
+fn default_max_size() -> u64 { 100 }
+fn default_max_files() -> u32 { 10 }
+
 impl ServerConfig {
     /// Create a default configuration
     pub fn default_config(public_host: &str) -> Self {
@@ -435,6 +652,7 @@ impl ServerConfig {
             oauth: None,
             logging: LoggingSettings::default(),
             admin: AdminSettings::default(),
+            audit: AuditSettings::default(),
         }
     }
 

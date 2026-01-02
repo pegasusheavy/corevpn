@@ -66,3 +66,8 @@ rustls = { workspace = true }
 
 # UUID
 uuid = { workspace = true }
+
+# Audit logging dependencies
+hostname = "0.4"
+thiserror = { workspace = true }
+log = "0.4"

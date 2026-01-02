@@ -14,6 +14,7 @@ mod setup;
 mod server;
 mod webui;
 mod connection_log;
+pub mod audit;
 
 use corevpn_config::ServerConfig;
 

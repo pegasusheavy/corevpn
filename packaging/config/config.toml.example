@@ -151,3 +151,138 @@ secure_delete = false
 # listen_addr = "127.0.0.1:8443"
 # # Allowed IP addresses for admin API
 # allowed_ips = ["127.0.0.1"]
+
+# === Audit Logging (SIEM/Cloud Integration) ===
+# Send audit logs to external SIEM or cloud services for compliance and security monitoring
+
+# [audit]
+# enabled = true
+# buffer_size = 10000
+# include_source_ip = true
+# include_user_identity = true
+# hash_sensitive_fields = false
+
+# --- AWS CloudWatch Logs ---
+# [[audit.sinks]]
+# type = "aws_cloudwatch"
+# region = "us-east-1"
+# log_group = "/corevpn/audit"
+# log_stream = "corevpn-audit-{date}"
+# profile = "default"  # Optional: AWS profile name
+# role_arn = "arn:aws:iam::123456789012:role/CorevpnAudit"  # Optional: assume role
+
+# --- AWS S3 ---
+# [[audit.sinks]]
+# type = "aws_s3"
+# region = "us-east-1"
+# bucket = "my-audit-logs"
+# prefix = "corevpn/audit/{date}/{hour}/"
+# profile = "default"
+
+# --- AWS Security Hub ---
+# [[audit.sinks]]
+# type = "aws_security_hub"
+# region = "us-east-1"
+# account_id = "123456789012"
+
+# --- AWS EventBridge ---
+# [[audit.sinks]]
+# type = "aws_eventbridge"
+# region = "us-east-1"
+# event_bus = "default"
+
+# --- Azure Monitor / Log Analytics ---
+# [[audit.sinks]]
+# type = "azure_monitor"
+# workspace_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+# shared_key = "your-shared-key"
+# log_type = "CoreVPNAudit"
+
+# --- Azure Event Hub ---
+# [[audit.sinks]]
+# type = "azure_event_hub"
+# namespace = "mynamespace"
+# event_hub = "audit-events"
+# policy_name = "corevpn-sender"
+# policy_key = "your-sas-key"
+
+# --- Azure Sentinel (via Log Analytics) ---
+# [[audit.sinks]]
+# type = "azure_sentinel"
+# workspace_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+# shared_key = "your-shared-key"
+# log_type = "CoreVPNSecurity"
+
+# --- Oracle Cloud Logging ---
+# [[audit.sinks]]
+# type = "oracle_logging"
+# region = "us-ashburn-1"
+# log_id = "ocid1.log.oc1.iad.xxx"
+# tenancy_id = "ocid1.tenancy.oc1..xxx"
+# user_id = "ocid1.user.oc1..xxx"
+# fingerprint = "xx:xx:xx:xx"
+# private_key = "/path/to/oci_api_key.pem"
+
+# --- Oracle Cloud Streaming ---
+# [[audit.sinks]]
+# type = "oracle_streaming"
+# region = "us-ashburn-1"
+# stream_id = "ocid1.stream.oc1.iad.xxx"
+# tenancy_id = "ocid1.tenancy.oc1..xxx"
+# user_id = "ocid1.user.oc1..xxx"
+# fingerprint = "xx:xx:xx:xx"
+# private_key = "/path/to/oci_api_key.pem"
+
+# --- Elasticsearch ---
+# [[audit.sinks]]
+# type = "elasticsearch"
+# urls = ["https://es.example.com:9200"]
+# index = "corevpn-audit-{date}"
+# username = "elastic"
+# password = "changeme"
+# # Or use API key
+# # api_key = "your-api-key"
+
+# --- Splunk HEC ---
+# [[audit.sinks]]
+# type = "splunk"
+# url = "https://splunk.example.com:8088"
+# token = "your-hec-token"
+# sourcetype = "corevpn:audit"
+# index = "security"
+
+# --- Kafka ---
+# [[audit.sinks]]
+# type = "kafka"
+# brokers = ["kafka1:9092", "kafka2:9092"]
+# topic = "corevpn-audit"
+# sasl_username = "corevpn"
+# sasl_password = "secret"
+
+# --- Syslog (CEF/LEEF support for most SIEMs) ---
+# [[audit.sinks]]
+# type = "syslog"
+# address = "siem.example.com"
+# port = 514
+# protocol = "tcp"  # udp, tcp, or tls
+# use_cef = true    # Enable CEF format for ArcSight, etc.
+# use_leef = false  # Enable LEEF format for IBM QRadar
+
+# --- HTTP Webhook (custom integrations) ---
+# [[audit.sinks]]
+# type = "webhook"
+# url = "https://api.example.com/webhooks/audit"
+# bearer_token = "your-bearer-token"
+# # Or use API key header
+# # api_key_header = "X-API-Key"
+# # api_key_value = "your-api-key"
+# [audit.sinks.headers]
+# Content-Type = "application/json"
+
+# --- Local File (for compliance archives) ---
+# [[audit.sinks]]
+# type = "file"
+# path = "/var/log/corevpn/audit-{date}.json"
+# format = "json"  # json, cef, leef, or syslog
+# max_size_mb = 100
+# max_files = 30
