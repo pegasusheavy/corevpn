@@ -198,19 +198,19 @@ export class DeploymentComponent implements OnInit {
     {
       title: 'Deployment',
       items: [
-        { label: 'Overview', path: '/deployment', icon: '🚀' },
-        { label: 'Docker', path: '/deployment/docker', icon: '🐳' },
-        { label: 'Kubernetes', path: '/deployment/kubernetes', icon: '☸️' },
-        { label: 'Packages', path: '/deployment/packages', icon: '📦' },
+        { label: 'Overview', path: '/deployment', icon: ['fas', 'rocket'] },
+        { label: 'Docker', path: '/deployment/docker', icon: ['fab', 'docker'] },
+        { label: 'Kubernetes', path: '/deployment/kubernetes', icon: ['fas', 'cube'] },
+        { label: 'Packages', path: '/deployment/packages', icon: ['fas', 'cube'] },
       ],
     },
     {
       title: 'Operations',
       items: [
-        { label: 'Monitoring', path: '/deployment/monitoring', icon: '📊' },
-        { label: 'Backup', path: '/deployment/backup', icon: '💾' },
-        { label: 'Upgrades', path: '/deployment/upgrades', icon: '⬆️' },
-        { label: 'High Availability', path: '/deployment/ha', icon: '🔄' },
+        { label: 'Monitoring', path: '/deployment/monitoring', icon: ['fas', 'sliders'] },
+        { label: 'Backup', path: '/deployment/backup', icon: ['fas', 'database'] },
+        { label: 'Upgrades', path: '/deployment/upgrades', icon: ['fas', 'rocket'] },
+        { label: 'High Availability', path: '/deployment/ha', icon: ['fas', 'server'] },
       ],
     },
   ];

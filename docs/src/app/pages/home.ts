@@ -1,11 +1,26 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
 import { SeoService } from '../services/seo.service';
+
+interface Feature {
+  icon: [IconPrefix, IconName];
+  title: string;
+  description: string;
+}
+
+interface DeploymentOption {
+  icon: [IconPrefix, IconName];
+  title: string;
+  description: string;
+  link: string;
+}
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FaIconComponent],
   template: `
     <div class="min-h-screen">
       <!-- Hero Section -->
@@ -45,14 +60,10 @@ import { SeoService } from '../services/seo.service';
             <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style="animation-delay: 0.3s">
               <a routerLink="/getting-started" class="btn btn-primary text-lg px-8 py-3">
                 Get Started
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                <fa-icon [icon]="['fas', 'arrow-right']" class="ml-2"></fa-icon>
               </a>
               <a href="https://github.com/pegasusheavy/corevpn" target="_blank" rel="noopener" class="btn btn-secondary text-lg px-8 py-3">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
+                <fa-icon [icon]="['fab', 'github']" class="mr-2"></fa-icon>
                 View on GitHub
               </a>
             </div>
@@ -67,7 +78,8 @@ import { SeoService } from '../services/seo.service';
                   <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div class="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <span class="text-sm text-slate-500 ml-2">terminal</span>
+                <fa-icon [icon]="['fas', 'terminal']" class="text-slate-500 ml-2"></fa-icon>
+                <span class="text-sm text-slate-500">terminal</span>
               </div>
               <div class="p-6 font-mono text-sm leading-relaxed">
                 <div class="text-slate-500"># Quick start with Docker</div>
@@ -78,9 +90,18 @@ import { SeoService } from '../services/seo.service';
                 <div class="pl-4 text-white">-p 1194:1194/udp -p 8443:8443 \\</div>
                 <div class="pl-4 text-white">-e COREVPN_GHOST_MODE=true \\</div>
                 <div class="pl-4 text-white">ghcr.io/pegasusheavy/corevpn:latest</div>
-                <div class="mt-4 text-emerald-400">✓ CoreVPN server started on port 1194</div>
-                <div class="text-emerald-400">✓ Admin UI available at https://localhost:8443</div>
-                <div class="text-purple-400">👻 Ghost mode enabled - zero logging active</div>
+                <div class="mt-4 text-emerald-400">
+                  <fa-icon [icon]="['fas', 'check']" class="mr-1"></fa-icon>
+                  CoreVPN server started on port 1194
+                </div>
+                <div class="text-emerald-400">
+                  <fa-icon [icon]="['fas', 'check']" class="mr-1"></fa-icon>
+                  Admin UI available at https://localhost:8443
+                </div>
+                <div class="text-purple-400">
+                  <fa-icon [icon]="['fas', 'ghost']" class="mr-1"></fa-icon>
+                  Ghost mode enabled - zero logging active
+                </div>
               </div>
             </div>
           </div>
@@ -103,7 +124,7 @@ import { SeoService } from '../services/seo.service';
             @for (feature of features; track feature.title) {
               <article class="card card-hover group">
                 <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-4 group-hover:from-cyan-500/30 group-hover:to-blue-500/30 transition-colors">
-                  <span class="text-2xl" role="img" [attr.aria-label]="feature.title">{{ feature.icon }}</span>
+                  <fa-icon [icon]="feature.icon" class="text-2xl text-cyan-400"></fa-icon>
                 </div>
                 <h3 class="text-lg font-semibold text-white mb-2">{{ feature.title }}</h3>
                 <p class="text-slate-400 text-sm">{{ feature.description }}</p>
@@ -121,7 +142,8 @@ import { SeoService } from '../services/seo.service';
             <div>
               <span class="badge badge-purple mb-4">Privacy First</span>
               <h2 id="ghost-mode-heading" class="text-3xl sm:text-4xl font-bold text-white mb-6">
-                👻 Ghost Mode
+                <fa-icon [icon]="['fas', 'ghost']" class="mr-3 text-purple-400"></fa-icon>
+                Ghost Mode
               </h2>
               <p class="text-lg text-slate-400 mb-6">
                 When privacy is paramount, Ghost Mode ensures absolutely zero connection logging.
@@ -130,18 +152,14 @@ import { SeoService } from '../services/seo.service';
               <ul class="space-y-3 mb-8">
                 @for (item of ghostFeatures; track item) {
                   <li class="flex items-center gap-3 text-slate-300">
-                    <svg class="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <fa-icon [icon]="['fas', 'check']" class="text-purple-400 shrink-0"></fa-icon>
                     {{ item }}
                   </li>
                 }
               </ul>
               <a routerLink="/configuration/ghost-mode" class="btn btn-secondary">
                 Learn about Ghost Mode
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
+                <fa-icon [icon]="['fas', 'chevron-right']" class="ml-2"></fa-icon>
               </a>
             </div>
             <div class="glass rounded-2xl p-6 glow-purple ghost-mode">
@@ -179,7 +197,7 @@ round_timestamps = "1h"</code></pre>
             @for (option of deploymentOptions; track option.title) {
               <a [routerLink]="option.link" class="card card-hover group text-center">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto mb-4 group-hover:from-slate-600 group-hover:to-slate-700 transition-colors">
-                  <span class="text-3xl" role="img" [attr.aria-label]="option.title">{{ option.icon }}</span>
+                  <fa-icon [icon]="option.icon" class="text-3xl text-cyan-400"></fa-icon>
                 </div>
                 <h3 class="text-lg font-semibold text-white mb-2">{{ option.title }}</h3>
                 <p class="text-slate-400 text-sm">{{ option.description }}</p>
@@ -206,9 +224,7 @@ round_timestamps = "1h"</code></pre>
               <details class="group card" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                 <summary class="flex items-center justify-between cursor-pointer list-none">
                   <h3 class="text-lg font-medium text-white pr-4" itemprop="name">{{ faq.question }}</h3>
-                  <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <fa-icon [icon]="['fas', 'chevron-down']" class="text-slate-400 group-open:rotate-180 transition-transform"></fa-icon>
                 </summary>
                 <div class="mt-4 text-slate-400" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                   <p itemprop="text">{{ faq.answer }}</p>
@@ -232,9 +248,11 @@ round_timestamps = "1h"</code></pre>
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a routerLink="/getting-started" class="btn btn-primary text-lg px-8 py-3">
+              <fa-icon [icon]="['fas', 'book-open']" class="mr-2"></fa-icon>
               Read the Docs
             </a>
             <a href="https://github.com/pegasusheavy/corevpn/releases" target="_blank" rel="noopener" class="btn btn-secondary text-lg px-8 py-3">
+              <fa-icon [icon]="['fas', 'download']" class="mr-2"></fa-icon>
               Download Latest
             </a>
           </div>
@@ -246,34 +264,34 @@ round_timestamps = "1h"</code></pre>
 export class HomeComponent implements OnInit {
   private readonly seo = inject(SeoService);
 
-  features = [
+  features: Feature[] = [
     {
-      icon: '🔐',
+      icon: ['fas', 'key'],
       title: 'OAuth2 & SAML Authentication',
       description: 'Integrate with your existing identity provider. Support for OIDC, Google, GitHub, and enterprise SAML.',
     },
     {
-      icon: '👻',
+      icon: ['fas', 'ghost'],
       title: 'Ghost Mode',
       description: 'Zero-logging mode for maximum privacy. No connection logs, no traces, no compromises.',
     },
     {
-      icon: '🔒',
+      icon: ['fas', 'lock'],
       title: 'Modern TLS',
       description: 'TLS 1.3 with strong ciphers. AES-256-GCM encryption for data channel security.',
     },
     {
-      icon: '☸️',
+      icon: ['fas', 'cube'],
       title: 'Kubernetes Ready',
       description: 'Helm charts, network policies, and pod disruption budgets for production deployments.',
     },
     {
-      icon: '🐳',
+      icon: ['fab', 'docker'],
       title: 'Container Native',
       description: 'Hardened Alpine-based images with minimal attack surface and Tini init.',
     },
     {
-      icon: '📊',
+      icon: ['fas', 'sliders'],
       title: 'Admin Dashboard',
       description: 'Web-based management interface for client configuration and monitoring.',
     },
@@ -287,21 +305,21 @@ export class HomeComponent implements OnInit {
     'Kubernetes values-ghost.yaml preset',
   ];
 
-  deploymentOptions = [
+  deploymentOptions: DeploymentOption[] = [
     {
-      icon: '🐳',
+      icon: ['fab', 'docker'],
       title: 'Docker',
       description: 'Single command deployment with docker-compose',
       link: '/deployment/docker',
     },
     {
-      icon: '☸️',
+      icon: ['fas', 'cube'],
       title: 'Kubernetes',
       description: 'Production-grade Helm charts and manifests',
       link: '/deployment/kubernetes',
     },
     {
-      icon: '📦',
+      icon: ['fas', 'cube'],
       title: 'Packages',
       description: 'DEB and RPM packages with systemd/OpenRC',
       link: '/deployment/packages',

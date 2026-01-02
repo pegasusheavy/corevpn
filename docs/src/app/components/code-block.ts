@@ -1,8 +1,10 @@
 import { Component, input, signal } from '@angular/core';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-code-block',
   standalone: true,
+  imports: [FaIconComponent],
   template: `
     <div class="relative group my-4">
       <!-- Language badge -->
@@ -18,13 +20,9 @@ import { Component, input, signal } from '@angular/core';
         class="absolute top-2 right-2 p-2 text-slate-500 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200"
         [title]="copied() ? 'Copied!' : 'Copy code'">
         @if (copied()) {
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
+          <fa-icon [icon]="['fas', 'check']" class="text-emerald-400"></fa-icon>
         } @else {
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
+          <fa-icon [icon]="['far', 'copy']"></fa-icon>
         }
       </button>
 

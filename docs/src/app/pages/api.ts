@@ -251,19 +251,19 @@ export class ApiComponent implements OnInit {
     {
       title: 'API Reference',
       items: [
-        { label: 'Overview', path: '/api', icon: '📖' },
-        { label: 'Authentication', path: '/api/authentication', icon: '🔐' },
-        { label: 'Rate Limits', path: '/api/rate-limits', icon: '⏱️' },
+        { label: 'Overview', path: '/api', icon: ['fas', 'book'] },
+        { label: 'Authentication', path: '/api/authentication', icon: ['fas', 'key'] },
+        { label: 'Rate Limits', path: '/api/rate-limits', icon: ['fas', 'clock'] },
       ],
     },
     {
       title: 'Endpoints',
       items: [
-        { label: 'Health', path: '/api/health', icon: '❤️' },
-        { label: 'Status', path: '/api/status', icon: '📊' },
-        { label: 'Clients', path: '/api/clients', icon: '👥' },
-        { label: 'Connections', path: '/api/connections', icon: '🔌' },
-        { label: 'Configuration', path: '/api/configuration', icon: '⚙️' },
+        { label: 'Health', path: '/api/health', icon: ['fas', 'heart'] },
+        { label: 'Status', path: '/api/status', icon: ['fas', 'sliders'] },
+        { label: 'Clients', path: '/api/clients', icon: ['fas', 'user'] },
+        { label: 'Connections', path: '/api/connections', icon: ['fas', 'plug'] },
+        { label: 'Configuration', path: '/api/configuration', icon: ['fas', 'cog'] },
       ],
     },
   ];

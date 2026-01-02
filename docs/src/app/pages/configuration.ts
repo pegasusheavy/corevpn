@@ -170,27 +170,27 @@ export class ConfigurationComponent implements OnInit {
     {
       title: 'Configuration',
       items: [
-        { label: 'Overview', path: '/configuration', icon: '⚙️' },
-        { label: 'Server Settings', path: '/configuration/server', icon: '🖥️' },
-        { label: 'Network', path: '/configuration/network', icon: '🌐' },
-        { label: 'Security', path: '/configuration/security', icon: '🔒' },
+        { label: 'Overview', path: '/configuration', icon: ['fas', 'cog'] },
+        { label: 'Server Settings', path: '/configuration/server', icon: ['fas', 'server'] },
+        { label: 'Network', path: '/configuration/network', icon: ['fas', 'globe'] },
+        { label: 'Security', path: '/configuration/security', icon: ['fas', 'lock'] },
       ],
     },
     {
       title: 'Authentication',
       items: [
-        { label: 'Overview', path: '/configuration/authentication', icon: '🔐' },
-        { label: 'OAuth2 / OIDC', path: '/configuration/oauth2', icon: '🪪' },
-        { label: 'SAML', path: '/configuration/saml', icon: '📜' },
-        { label: 'Certificates', path: '/configuration/certificates', icon: '📄' },
+        { label: 'Overview', path: '/configuration/authentication', icon: ['fas', 'key'] },
+        { label: 'OAuth2 / OIDC', path: '/configuration/oauth2', icon: ['fas', 'user-shield'] },
+        { label: 'SAML', path: '/configuration/saml', icon: ['fas', 'file-lines'] },
+        { label: 'Certificates', path: '/configuration/certificates', icon: ['fas', 'file'] },
       ],
     },
     {
       title: 'Privacy',
       items: [
-        { label: 'Ghost Mode', path: '/configuration/ghost-mode', icon: '👻', badge: 'NEW' },
-        { label: 'Logging', path: '/configuration/logging', icon: '📝' },
-        { label: 'Anonymization', path: '/configuration/anonymization', icon: '🎭' },
+        { label: 'Ghost Mode', path: '/configuration/ghost-mode', icon: ['fas', 'ghost'], badge: 'NEW' },
+        { label: 'Logging', path: '/configuration/logging', icon: ['fas', 'file-lines'] },
+        { label: 'Anonymization', path: '/configuration/anonymization', icon: ['fas', 'user-secret'] },
       ],
     },
   ];

@@ -195,17 +195,17 @@ export class GettingStartedComponent implements OnInit {
     {
       title: 'Getting Started',
       items: [
-        { label: 'Quick Start', path: '/getting-started', icon: '🚀' },
-        { label: 'Installation', path: '/getting-started/installation', icon: '📦' },
-        { label: 'First Connection', path: '/getting-started/first-connection', icon: '🔌' },
+        { label: 'Quick Start', path: '/getting-started', icon: ['fas', 'rocket'] },
+        { label: 'Installation', path: '/getting-started/installation', icon: ['fas', 'cube'] },
+        { label: 'First Connection', path: '/getting-started/first-connection', icon: ['fas', 'plug'] },
       ],
     },
     {
       title: 'Basics',
       items: [
-        { label: 'Architecture', path: '/getting-started/architecture', icon: '🏗️' },
-        { label: 'Client Setup', path: '/getting-started/client-setup', icon: '💻' },
-        { label: 'Troubleshooting', path: '/getting-started/troubleshooting', icon: '🔧' },
+        { label: 'Architecture', path: '/getting-started/architecture', icon: ['fas', 'server'] },
+        { label: 'Client Setup', path: '/getting-started/client-setup', icon: ['fas', 'laptop'] },
+        { label: 'Troubleshooting', path: '/getting-started/troubleshooting', icon: ['fas', 'wrench'] },
       ],
     },
   ];

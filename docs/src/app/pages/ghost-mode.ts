@@ -265,16 +265,16 @@ export class GhostModeComponent implements OnInit {
     {
       title: 'Privacy',
       items: [
-        { label: 'Ghost Mode', path: '/configuration/ghost-mode', icon: '👻', badge: 'NEW' },
-        { label: 'Logging', path: '/configuration/logging', icon: '📝' },
-        { label: 'Anonymization', path: '/configuration/anonymization', icon: '🎭' },
+        { label: 'Ghost Mode', path: '/configuration/ghost-mode', icon: ['fas', 'ghost'], badge: 'NEW' },
+        { label: 'Logging', path: '/configuration/logging', icon: ['fas', 'file-lines'] },
+        { label: 'Anonymization', path: '/configuration/anonymization', icon: ['fas', 'user-secret'] },
       ],
     },
     {
       title: 'Related',
       items: [
-        { label: 'Configuration', path: '/configuration', icon: '⚙️' },
-        { label: 'Security', path: '/configuration/security', icon: '🔒' },
+        { label: 'Configuration', path: '/configuration', icon: ['fas', 'cog'] },
+        { label: 'Security', path: '/configuration/security', icon: ['fas', 'lock'] },
       ],
     },
   ];
