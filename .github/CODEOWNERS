@@ -2,39 +2,39 @@
 # These users/teams will be automatically requested for review on PRs
 
 # Default owners for everything
-* @PegasusHeavyIndustries/corevpn-maintainers
+* @pegasusheavy/corevpn-maintainers
 
 # Core VPN components
-/crates/corevpn-server/ @PegasusHeavyIndustries/corevpn-core
-/crates/corevpn-core/ @PegasusHeavyIndustries/corevpn-core
-/crates/corevpn-protocol/ @PegasusHeavyIndustries/corevpn-core
+/crates/corevpn-server/ @pegasusheavy/corevpn-core
+/crates/corevpn-core/ @pegasusheavy/corevpn-core
+/crates/corevpn-protocol/ @pegasusheavy/corevpn-core
 
 # Cryptography - requires security review
-/crates/corevpn-crypto/ @PegasusHeavyIndustries/security-team
+/crates/corevpn-crypto/ @pegasusheavy/security-team
 
 # Authentication
-/crates/corevpn-auth/ @PegasusHeavyIndustries/corevpn-core @PegasusHeavyIndustries/security-team
+/crates/corevpn-auth/ @pegasusheavy/corevpn-core @pegasusheavy/security-team
 
 # Configuration
-/crates/corevpn-config/ @PegasusHeavyIndustries/corevpn-maintainers
+/crates/corevpn-config/ @pegasusheavy/corevpn-maintainers
 
 # CLI
-/crates/corevpn-cli/ @PegasusHeavyIndustries/corevpn-maintainers
+/crates/corevpn-cli/ @pegasusheavy/corevpn-maintainers
 
 # UI
-/crates/corevpn-ui/ @PegasusHeavyIndustries/corevpn-maintainers
+/crates/corevpn-ui/ @pegasusheavy/corevpn-maintainers
 
 # Deployment and packaging
-/deploy/ @PegasusHeavyIndustries/devops
-/packaging/ @PegasusHeavyIndustries/devops
-/Dockerfile @PegasusHeavyIndustries/devops
+/deploy/ @pegasusheavy/devops
+/packaging/ @pegasusheavy/devops
+/Dockerfile @pegasusheavy/devops
 
 # CI/CD workflows
-/.github/workflows/ @PegasusHeavyIndustries/devops
+/.github/workflows/ @pegasusheavy/devops
 
 # Documentation
-*.md @PegasusHeavyIndustries/corevpn-maintainers
+*.md @pegasusheavy/corevpn-maintainers
 
 # Security-sensitive files
-/SECURITY.md @PegasusHeavyIndustries/security-team
-/.github/ISSUE_TEMPLATE/security_vulnerability.yml @PegasusHeavyIndustries/security-team
+/SECURITY.md @pegasusheavy/security-team
+/.github/ISSUE_TEMPLATE/security_vulnerability.yml @pegasusheavy/security-team

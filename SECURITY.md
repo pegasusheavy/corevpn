@@ -31,7 +31,7 @@ Include:
 
 ### For Non-Critical Issues
 
-For lower-severity security issues that can be discussed publicly, you may use our [Security Issue Template](https://github.com/PegasusHeavyIndustries/corevpn/issues/new?template=security_vulnerability.yml).
+For lower-severity security issues that can be discussed publicly, you may use our [Security Issue Template](https://github.com/pegasusheavy/corevpn/issues/new?template=security_vulnerability.yml).
 
 ## Security Best Practices
 

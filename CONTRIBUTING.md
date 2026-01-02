@@ -222,9 +222,9 @@ When contributing:
 
 ## Getting Help
 
-- Check existing [issues](https://github.com/PegasusHeavyIndustries/corevpn/issues)
-- Start a [discussion](https://github.com/PegasusHeavyIndustries/corevpn/discussions)
-- Read the [documentation](https://github.com/PegasusHeavyIndustries/corevpn/wiki)
+- Check existing [issues](https://github.com/pegasusheavy/corevpn/issues)
+- Start a [discussion](https://github.com/pegasusheavy/corevpn/discussions)
+- Read the [documentation](https://github.com/pegasusheavy/corevpn/wiki)
 
 ## Recognition
 

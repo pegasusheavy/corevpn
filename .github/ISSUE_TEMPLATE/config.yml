@@ -4,8 +4,8 @@ contact_links:
     url: mailto:security@pegasusheavyindustries.com
     about: For critical security issues, please email us directly
   - name: Community Discussions
-    url: https://github.com/PegasusHeavyIndustries/corevpn/discussions
+    url: https://github.com/pegasusheavy/corevpn/discussions
     about: Ask questions and discuss features
   - name: Documentation
-    url: https://github.com/PegasusHeavyIndustries/corevpn/wiki
+    url: https://github.com/pegasusheavy/corevpn/wiki
     about: Check our documentation first

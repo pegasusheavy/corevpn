@@ -5,9 +5,9 @@ type: application
 version: 0.1.0
 appVersion: "0.1.0"
 
-home: https://github.com/PegasusHeavyIndustries/corevpn
+home: https://github.com/pegasusheavy/corevpn
 sources:
-  - https://github.com/PegasusHeavyIndustries/corevpn
+  - https://github.com/pegasusheavy/corevpn
 
 maintainers:
   - name: Pegasus Heavy Industries
