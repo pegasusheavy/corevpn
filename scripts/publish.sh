@@ -18,6 +18,7 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Check if we're doing a dry run
@@ -36,6 +37,34 @@ if [[ -z "$DRY_RUN" ]]; then
     fi
 fi
 
+# Function to get crate version from Cargo.toml
+get_crate_version() {
+    local crate=$1
+    local toml_path="crates/${crate}/Cargo.toml"
+    
+    if [[ -f "$toml_path" ]]; then
+        grep '^version' "$toml_path" | head -1 | sed 's/.*"\(.*\)".*/\1/'
+    else
+        echo ""
+    fi
+}
+
+# Function to check if a crate version is already published
+is_published() {
+    local crate=$1
+    local version=$2
+    
+    # Query crates.io API
+    local response=$(curl -s "https://crates.io/api/v1/crates/${crate}/${version}" 2>/dev/null)
+    
+    # Check if version exists (response contains "version" field, not "errors")
+    if echo "$response" | grep -q '"version"' && ! echo "$response" | grep -q '"errors"'; then
+        return 0  # Already published
+    else
+        return 1  # Not published
+    fi
+}
+
 # Crates to publish in order
 CRATES=(
     "corevpn-crypto"
@@ -50,11 +79,32 @@ CRATES=(
 echo "Publishing CoreVPN crates to crates.io..."
 echo ""
 
-for crate in "${CRATES[@]}"; do
-    echo -e "${YELLOW}Publishing ${crate}...${NC}"
+PUBLISHED=()
+SKIPPED=()
 
+for crate in "${CRATES[@]}"; do
+    version=$(get_crate_version "$crate")
+    
+    if [[ -z "$version" ]]; then
+        echo -e "${RED}✗ Could not determine version for ${crate}${NC}"
+        exit 1
+    fi
+    
+    echo -e "${YELLOW}Checking ${crate} v${version}...${NC}"
+    
+    # Check if already published (skip check in dry-run mode)
+    if [[ -z "$DRY_RUN" ]] && is_published "$crate" "$version"; then
+        echo -e "${BLUE}⊘ ${crate} v${version} already published, skipping${NC}"
+        SKIPPED+=("$crate")
+        echo ""
+        continue
+    fi
+    
+    echo -e "${YELLOW}Publishing ${crate} v${version}...${NC}"
+    
     if cargo publish -p "$crate" $DRY_RUN; then
-        echo -e "${GREEN}✓ ${crate} published successfully${NC}"
+        echo -e "${GREEN}✓ ${crate} v${version} published successfully${NC}"
+        PUBLISHED+=("$crate")
     else
         echo -e "${RED}✗ Failed to publish ${crate}${NC}"
         exit 1
@@ -69,9 +119,20 @@ for crate in "${CRATES[@]}"; do
     echo ""
 done
 
-echo -e "${GREEN}All crates published successfully!${NC}"
+echo -e "${GREEN}Publishing complete!${NC}"
 echo ""
-echo "Published crates:"
-for crate in "${CRATES[@]}"; do
-    echo "  - https://crates.io/crates/${crate}"
-done
+
+if [[ ${#PUBLISHED[@]} -gt 0 ]]; then
+    echo "Published crates:"
+    for crate in "${PUBLISHED[@]}"; do
+        echo -e "  ${GREEN}✓${NC} https://crates.io/crates/${crate}"
+    done
+fi
+
+if [[ ${#SKIPPED[@]} -gt 0 ]]; then
+    echo ""
+    echo "Skipped (already published):"
+    for crate in "${SKIPPED[@]}"; do
+        echo -e "  ${BLUE}⊘${NC} https://crates.io/crates/${crate}"
+    done
+fi
