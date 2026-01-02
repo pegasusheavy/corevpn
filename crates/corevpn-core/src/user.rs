@@ -49,11 +49,12 @@ impl From<&str> for UserId {
 }
 
 /// User role for access control
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum UserRole {
     /// Full access to all networks
     Admin,
     /// Standard VPN access
+    #[default]
     User,
     /// Limited access (specific routes only)
     Limited,
@@ -61,12 +62,6 @@ pub enum UserRole {
     ReadOnly,
     /// Custom role with specific permissions
     Custom(String),
-}
-
-impl Default for UserRole {
-    fn default() -> Self {
-        Self::User
-    }
 }
 
 /// VPN User

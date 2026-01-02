@@ -6,7 +6,7 @@
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 use subtle::ConstantTimeEq;
-use zeroize::{Zeroize, ZeroizeOnDrop};
+use zeroize::ZeroizeOnDrop;
 
 use crate::{CryptoError, Result};
 
@@ -218,7 +218,7 @@ impl TlsCryptKey {
         mac.update(ciphertext);
         let computed = mac.finalize().into_bytes();
 
-        if !bool::from(computed.ct_eq(hmac.into())) {
+        if !bool::from(computed.ct_eq(hmac)) {
             return Err(CryptoError::HmacVerificationFailed);
         }
 

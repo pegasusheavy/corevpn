@@ -1,7 +1,6 @@
 //! Authentication Session Management
 
 use std::collections::HashMap;
-use std::sync::Arc;
 use std::time::Duration;
 
 use chrono::{DateTime, Utc};

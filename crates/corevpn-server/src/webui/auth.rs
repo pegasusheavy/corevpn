@@ -7,7 +7,6 @@ use axum::{
     body::Body,
     http::{Request, Response, StatusCode, header},
     middleware::Next,
-    response::IntoResponse,
 };
 use base64::Engine;
 

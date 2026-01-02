@@ -17,7 +17,6 @@ pub use server::{
 pub use client::{ClientConfig, ClientConfigBuilder};
 pub use generator::ConfigGenerator;
 
-use std::path::Path;
 use thiserror::Error;
 
 /// Configuration error

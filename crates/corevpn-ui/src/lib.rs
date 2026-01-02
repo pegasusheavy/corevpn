@@ -26,10 +26,10 @@
 #![warn(missing_docs, rust_2018_idioms)]
 
 pub mod app;
+pub mod config;
 pub mod state;
 pub mod views;
-pub mod config;
 
 pub use app::CoreVpnApp;
-pub use state::{AppState, ConnectionState, AuthState};
 pub use config::UiConfig;
+pub use state::{AppState, AuthState, ConnectionState};

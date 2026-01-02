@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# Set up directories with proper permissions
+chown -R corevpn:corevpn /var/lib/corevpn
+chown -R corevpn:corevpn /var/log/corevpn
+chown root:corevpn /etc/corevpn
+chmod 750 /etc/corevpn
+
+# Create default config if missing
+if [ ! -f /etc/corevpn/config.toml ]; then
+    cp /etc/corevpn/config.toml.example /etc/corevpn/config.toml
+    chmod 640 /etc/corevpn/config.toml
+    chown root:corevpn /etc/corevpn/config.toml
+fi
+
+# Load TUN module
+modprobe tun 2>/dev/null || true
+
+# Add tun to modules to load at boot
+if ! grep -q "^tun$" /etc/modules 2>/dev/null; then
+    echo "tun" >> /etc/modules
+fi
+
+cat << 'EOF'
+
+===========================================
+CoreVPN Server installed successfully!
+===========================================
+
+Quick start:
+  1. Edit /etc/corevpn/config.toml
+  2. Run: sudo corevpn-server setup --data-dir /var/lib/corevpn
+  3. Set admin password in /etc/corevpn/environment
+  4. Enable and start:
+     - OpenRC: rc-update add corevpn-server && rc-service corevpn-server start
+
+For ghost mode (zero logging), add --ghost flag or set:
+  [logging]
+  connection_log_mode = "none"
+
+Documentation: https://pegasusheavy.github.io/corevpn/
+
+EOF
+
+exit 0

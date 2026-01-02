@@ -233,12 +233,14 @@ impl SessionManager {
 
     /// Update a session
     pub fn update_session(&self, session: Session) -> Result<()> {
+        use std::collections::hash_map::Entry;
         let mut sessions = self.sessions.write();
-        if sessions.contains_key(&session.id) {
-            sessions.insert(session.id, session);
-            Ok(())
-        } else {
-            Err(CoreError::SessionNotFound(session.id.to_string()))
+        match sessions.entry(session.id) {
+            Entry::Occupied(mut e) => {
+                e.insert(session);
+                Ok(())
+            }
+            Entry::Vacant(_) => Err(CoreError::SessionNotFound(session.id.to_string())),
         }
     }
 

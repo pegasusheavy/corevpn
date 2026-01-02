@@ -1,0 +1,6 @@
+# Create CoreVPN directories with proper permissions
+# See tmpfiles.d(5) for syntax
+
+d /var/lib/corevpn 0750 corevpn corevpn -
+d /var/log/corevpn 0750 corevpn corevpn -
+d /run/corevpn 0755 corevpn corevpn -

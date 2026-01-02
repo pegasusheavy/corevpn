@@ -11,7 +11,7 @@ authors.workspace = true
 keywords = ["vpn", "gui", "desktop", "openvpn", "client"]
 categories = ["gui", "network-programming"]
 readme = "README.md"
-# Not publishable - depends on unpublished openkit crate
+# Not published - requires local openkit with VPN widget extensions
 publish = false
 
 [[bin]]
@@ -24,7 +24,7 @@ corevpn-core = { workspace = true }
 corevpn-auth = { workspace = true }
 corevpn-config = { workspace = true }
 
-# UI Framework (local dependency - not on crates.io)
+# UI Framework (local dependency with VPN widget extensions)
 openkit = { path = "../../../openkit" }
 
 # Async runtime

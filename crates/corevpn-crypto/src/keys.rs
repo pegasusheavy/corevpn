@@ -14,7 +14,7 @@ use x25519_dalek::{
     PublicKey as X25519PublicKey,
     SharedSecret as X25519SharedSecret,
 };
-use zeroize::{Zeroize, ZeroizeOnDrop};
+use zeroize::ZeroizeOnDrop;
 use serde::{Serialize, Deserialize};
 
 use crate::{CryptoError, Result};
@@ -166,6 +166,7 @@ impl SigningKey {
     }
 
     /// Get the inner key for certificate signing
+    #[allow(dead_code)]
     pub(crate) fn inner(&self) -> &Ed25519SigningKey {
         &self.inner
     }

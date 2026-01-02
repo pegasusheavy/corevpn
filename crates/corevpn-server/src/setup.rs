@@ -189,7 +189,7 @@ pub async fn run_interactive_setup(data_dir: &Path) -> Result<()> {
 
     print!("  Generating PKI (certificates)... ");
     io::stdout().flush()?;
-    let (ca, ta_key) = initialize_pki(data_dir, &public_host, "CoreVPN")
+    let (_ca, _ta_key) = initialize_pki(data_dir, &public_host, "CoreVPN")
         .context("Failed to initialize PKI")?;
     println!("{}", CHECK);
 
@@ -247,16 +247,13 @@ pub async fn run_interactive_setup(data_dir: &Path) -> Result<()> {
 }
 
 /// Run web-based setup
-pub async fn run_web_setup(data_dir: &Path) -> Result<()> {
+pub async fn run_web_setup(_data_dir: &Path) -> Result<()> {
     use axum::{
         Router,
         routing::{get, post},
-        response::Html,
-        extract::State,
-        Json,
     };
-    use std::sync::Arc;
-    use tokio::sync::RwLock;
+    
+    
 
     println!();
     println!("  {}CoreVPN Web Setup", ROCKET);
@@ -362,7 +359,7 @@ async fn setup_page() -> Html<&'static str> {
 "#)
 }
 
-async fn handle_setup(Json(data): Json<serde_json::Value>) -> Json<serde_json::Value> {
+async fn handle_setup(Json(_data): Json<serde_json::Value>) -> Json<serde_json::Value> {
     // In a real implementation, this would perform the actual setup
     Json(serde_json::json!({"status": "ok"}))
 }

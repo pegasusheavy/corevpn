@@ -84,7 +84,7 @@ impl Anonymizer {
                 username,
                 auth_method,
                 result,
-                details,
+                details: _,
             } => ConnectionEvent::Authentication {
                 connection_id,
                 timestamp: self.anonymize_timestamp(timestamp),
@@ -102,7 +102,7 @@ impl Anonymizer {
                 username,
                 vpn_ip,
                 auth_method,
-                client_info,
+                client_info: _,
             } => ConnectionEvent::Connected {
                 connection_id,
                 timestamp: self.anonymize_timestamp(timestamp),

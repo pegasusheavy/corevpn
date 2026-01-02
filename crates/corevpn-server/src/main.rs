@@ -4,7 +4,6 @@
 
 use std::net::SocketAddr;
 use std::path::PathBuf;
-use std::sync::Arc;
 
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
@@ -172,7 +171,7 @@ fn generate_client_config(
     username: &str,
     output: Option<&std::path::Path>,
 ) -> Result<()> {
-    use corevpn_config::generator::{initialize_pki, ConfigGenerator};
+    use corevpn_config::generator::ConfigGenerator;
     use corevpn_crypto::CertificateAuthority;
 
     println!("Generating client configuration for: {}", username);
@@ -292,7 +291,7 @@ async fn run_web_ui(config: ServerConfig, listen: SocketAddr) -> Result<()> {
     Ok(())
 }
 
-async fn run_doctor(config_path: &std::path::Path, config_result: Result<ServerConfig, corevpn_config::ConfigError>) -> Result<()> {
+async fn run_doctor(_config_path: &std::path::Path, config_result: Result<ServerConfig, corevpn_config::ConfigError>) -> Result<()> {
     use console::{style, Emoji};
 
     static CHECK: Emoji<'_, '_> = Emoji("✅ ", "[OK] ");

@@ -52,20 +52,20 @@ echo ""
 
 for crate in "${CRATES[@]}"; do
     echo -e "${YELLOW}Publishing ${crate}...${NC}"
-    
+
     if cargo publish -p "$crate" $DRY_RUN; then
         echo -e "${GREEN}✓ ${crate} published successfully${NC}"
     else
         echo -e "${RED}✗ Failed to publish ${crate}${NC}"
         exit 1
     fi
-    
+
     # Wait between publishes to let crates.io index
     if [[ -z "$DRY_RUN" ]]; then
         echo "Waiting for crates.io to index..."
         sleep 30
     fi
-    
+
     echo ""
 done
 

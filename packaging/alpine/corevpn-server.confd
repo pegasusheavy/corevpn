@@ -1,0 +1,15 @@
+# Configuration for CoreVPN Server
+
+# Configuration file path
+#COREVPN_CONFIG="/etc/corevpn/config.toml"
+
+# User and group to run as
+#COREVPN_USER="corevpn"
+#COREVPN_GROUP="corevpn"
+
+# Enable ghost mode (no connection logging)
+# Uncomment to enable - useful for privacy-focused deployments
+#COREVPN_GHOST_MODE="yes"
+
+# Additional command line arguments
+#COREVPN_EXTRA_ARGS=""

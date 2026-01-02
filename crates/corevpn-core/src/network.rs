@@ -291,7 +291,7 @@ impl AddressPool {
 
     /// Get the number of available IPv6 addresses
     pub fn available_v6(&self) -> usize {
-        if let Some(net) = &self.ipv6_net {
+        if self.ipv6_net.is_some() {
             // IPv6 pools are effectively unlimited, return large number
             let allocated = self.allocated_v6.read().len();
             65534usize.saturating_sub(allocated)

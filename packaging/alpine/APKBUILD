@@ -1,0 +1,88 @@
+# Contributor: Pegasus Heavy Industries <opensource@pegasusheavy.com>
+# Maintainer: Pegasus Heavy Industries <opensource@pegasusheavy.com>
+pkgname=corevpn
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Secure OpenVPN-compatible VPN server with OAuth2/SAML support"
+url="https://github.com/pegasusheavy/corevpn"
+arch="all"
+license="MIT OR Apache-2.0"
+depends="openssl libgcc"
+makedepends="cargo rust openssl-dev"
+install="$pkgname-server.pre-install $pkgname-server.post-install $pkgname-server.pre-deinstall"
+subpackages="$pkgname-server:server $pkgname-cli:cli $pkgname-server-openrc:server_openrc $pkgname-doc"
+source="$pkgname-$pkgver.tar.gz
+	corevpn-server.initd
+	corevpn-server.confd
+	corevpn-web.initd
+	corevpn-web.confd
+	"
+
+build() {
+	cargo build --release --locked
+}
+
+check() {
+	cargo test --release --locked
+}
+
+package() {
+	# Create directories
+	install -d "$pkgdir"/usr/bin
+	install -d "$pkgdir"/etc/corevpn
+	install -d "$pkgdir"/var/lib/corevpn
+	install -d "$pkgdir"/var/log/corevpn
+	install -d "$pkgdir"/usr/share/doc/$pkgname
+
+	# Install documentation
+	install -Dm644 README.md "$pkgdir"/usr/share/doc/$pkgname/README.md
+	install -Dm644 SECURITY.md "$pkgdir"/usr/share/doc/$pkgname/SECURITY.md
+	install -Dm644 CONTRIBUTING.md "$pkgdir"/usr/share/doc/$pkgname/CONTRIBUTING.md
+}
+
+server() {
+	pkgdesc="CoreVPN Server"
+	depends="$pkgname openssl iproute2 iptables"
+
+	# Install server binary
+	install -Dm755 "$builddir"/target/release/corevpn-server "$subpkgdir"/usr/bin/corevpn-server
+
+	# Install configuration
+	install -Dm644 "$builddir"/packaging/config/config.toml.example \
+		"$subpkgdir"/etc/corevpn/config.toml.example
+	install -Dm600 "$builddir"/packaging/config/environment.example \
+		"$subpkgdir"/etc/corevpn/environment
+
+	# Create directories with proper permissions
+	install -d -m750 "$subpkgdir"/var/lib/corevpn
+	install -d -m750 "$subpkgdir"/var/log/corevpn
+	install -d -m750 "$subpkgdir"/etc/corevpn
+}
+
+cli() {
+	pkgdesc="CoreVPN Command-line Client"
+	depends="$pkgname"
+
+	# Install CLI binary
+	install -Dm755 "$builddir"/target/release/corevpn-cli "$subpkgdir"/usr/bin/corevpn-cli
+}
+
+server_openrc() {
+	pkgdesc="CoreVPN Server (OpenRC init scripts)"
+	depends="$pkgname-server openrc"
+	install_if="openrc $pkgname-server=$pkgver-r$pkgrel"
+
+	# Install OpenRC init scripts
+	install -Dm755 "$srcdir"/corevpn-server.initd "$subpkgdir"/etc/init.d/corevpn-server
+	install -Dm644 "$srcdir"/corevpn-server.confd "$subpkgdir"/etc/conf.d/corevpn-server
+	install -Dm755 "$srcdir"/corevpn-web.initd "$subpkgdir"/etc/init.d/corevpn-web
+	install -Dm644 "$srcdir"/corevpn-web.confd "$subpkgdir"/etc/conf.d/corevpn-web
+}
+
+sha512sums="
+SKIP  corevpn-$pkgver.tar.gz
+SKIP  corevpn-server.initd
+SKIP  corevpn-server.confd
+SKIP  corevpn-web.initd
+SKIP  corevpn-web.confd
+"

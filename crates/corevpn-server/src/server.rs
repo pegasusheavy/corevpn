@@ -17,7 +17,7 @@ use corevpn_config::{ConnectionLogMode, ServerConfig};
 use corevpn_core::{SessionManager, AddressPool};
 use corevpn_crypto::CipherSuite;
 use corevpn_protocol::{
-    OpCode, Packet, ProtocolSession, ProtocolState, ProcessedPacket,
+    OpCode, ProtocolSession, ProtocolState, ProcessedPacket,
     TlsHandler, create_server_config, load_certs_from_pem, load_key_from_pem,
 };
 

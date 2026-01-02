@@ -1,0 +1,94 @@
+# Maintainer: Pegasus Heavy Industries <opensource@pegasusheavy.com>
+pkgbase=corevpn
+pkgname=('corevpn-server' 'corevpn-cli')
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Secure OpenVPN-compatible VPN server with OAuth2/SAML support"
+arch=('x86_64' 'aarch64')
+url="https://github.com/pegasusheavy/corevpn"
+license=('MIT' 'Apache-2.0')
+makedepends=('cargo' 'rust' 'openssl')
+source=("${pkgbase}-${pkgver}.tar.gz"
+        "corevpn-server.service"
+        "corevpn-server@.service"
+        "corevpn-web.service"
+        "corevpn-server.sysusers"
+        "corevpn-server.tmpfiles"
+        "corevpn-server.install")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP')
+install=corevpn-server.install
+
+prepare() {
+    cd "${srcdir}/${pkgbase}-${pkgver}"
+    export RUSTUP_TOOLCHAIN=stable
+    cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+    cd "${srcdir}/${pkgbase}-${pkgver}"
+    export RUSTUP_TOOLCHAIN=stable
+    export CARGO_TARGET_DIR=target
+    cargo build --frozen --release
+}
+
+check() {
+    cd "${srcdir}/${pkgbase}-${pkgver}"
+    export RUSTUP_TOOLCHAIN=stable
+    cargo test --frozen --release
+}
+
+package_corevpn-server() {
+    pkgdesc="CoreVPN Server - Secure OpenVPN-compatible VPN server"
+    depends=('openssl' 'iproute2' 'iptables')
+    optdepends=('corevpn-cli: command-line client')
+    backup=('etc/corevpn/config.toml'
+            'etc/corevpn/environment')
+
+    cd "${srcdir}/${pkgbase}-${pkgver}"
+
+    # Install binary
+    install -Dm755 target/release/corevpn-server "${pkgdir}/usr/bin/corevpn-server"
+
+    # Install systemd units
+    install -Dm644 "${srcdir}/corevpn-server.service" "${pkgdir}/usr/lib/systemd/system/corevpn-server.service"
+    install -Dm644 "${srcdir}/corevpn-server@.service" "${pkgdir}/usr/lib/systemd/system/corevpn-server@.service"
+    install -Dm644 "${srcdir}/corevpn-web.service" "${pkgdir}/usr/lib/systemd/system/corevpn-web.service"
+
+    # Install sysusers and tmpfiles
+    install -Dm644 "${srcdir}/corevpn-server.sysusers" "${pkgdir}/usr/lib/sysusers.d/corevpn.conf"
+    install -Dm644 "${srcdir}/corevpn-server.tmpfiles" "${pkgdir}/usr/lib/tmpfiles.d/corevpn.conf"
+
+    # Install configuration
+    install -Dm644 packaging/config/config.toml.example "${pkgdir}/etc/corevpn/config.toml"
+    install -Dm600 packaging/config/environment.example "${pkgdir}/etc/corevpn/environment"
+
+    # Install documentation
+    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    install -Dm644 SECURITY.md "${pkgdir}/usr/share/doc/${pkgname}/SECURITY.md"
+    install -Dm644 CONTRIBUTING.md "${pkgdir}/usr/share/doc/${pkgname}/CONTRIBUTING.md"
+
+    # Install license files
+    install -Dm644 LICENSE-MIT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE-MIT"
+    install -Dm644 LICENSE-APACHE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE-APACHE"
+}
+
+package_corevpn-cli() {
+    pkgdesc="CoreVPN CLI - Command-line VPN client"
+    depends=('openssl')
+    optdepends=('corevpn-server: VPN server')
+
+    cd "${srcdir}/${pkgbase}-${pkgver}"
+
+    # Install binary
+    install -Dm755 target/release/corevpn-cli "${pkgdir}/usr/bin/corevpn-cli"
+
+    # Install license files
+    install -Dm644 LICENSE-MIT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE-MIT"
+    install -Dm644 LICENSE-APACHE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE-APACHE"
+}

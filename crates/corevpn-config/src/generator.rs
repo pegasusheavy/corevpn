@@ -4,7 +4,7 @@ use std::path::Path;
 
 use corevpn_crypto::{CertificateAuthority, Certificate};
 
-use crate::{ClientConfig, ClientConfigBuilder, ConfigError, Result, ServerConfig};
+use crate::{ClientConfigBuilder, ConfigError, Result, ServerConfig};
 
 /// Client configuration generator
 pub struct ConfigGenerator {

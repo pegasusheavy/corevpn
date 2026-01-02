@@ -5,8 +5,8 @@
 use std::io::{Read, Write, ErrorKind};
 use std::sync::Arc;
 
-use bytes::{Bytes, BytesMut, BufMut};
-use rustls::{ServerConfig, ServerConnection, ConnectionCommon};
+use bytes::{Bytes, BytesMut};
+use rustls::{ServerConfig, ServerConnection};
 use rustls::pki_types::{CertificateDer, PrivateKeyDer};
 
 use crate::{ProtocolError, Result};
@@ -74,7 +74,7 @@ impl TlsHandler {
 
         // Process any TLS state changes
         match self.conn.process_new_packets() {
-            Ok(state) => {
+            Ok(_state) => {
                 if !self.handshake_complete && !self.conn.is_handshaking() {
                     self.handshake_complete = true;
                 }
@@ -166,10 +166,10 @@ pub fn create_server_config(
     key: PrivateKeyDer<'static>,
     client_cert_verifier: Option<Arc<dyn rustls::server::danger::ClientCertVerifier>>,
 ) -> Result<Arc<ServerConfig>> {
-    use rustls::server::WebPkiClientVerifier;
-    use rustls::RootCertStore;
+    
+    
 
-    let mut config = if let Some(verifier) = client_cert_verifier {
+    let config = if let Some(verifier) = client_cert_verifier {
         ServerConfig::builder()
             .with_client_cert_verifier(verifier)
             .with_single_cert(cert_chain, key)

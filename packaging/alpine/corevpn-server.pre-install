@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Create corevpn user and group
+addgroup -S corevpn 2>/dev/null || true
+adduser -S -D -H -h /var/lib/corevpn -s /sbin/nologin -G corevpn -g "CoreVPN Server" corevpn 2>/dev/null || true
+
+exit 0

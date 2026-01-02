@@ -3,7 +3,7 @@
 //! Displays available VPN servers for selection.
 
 use openkit::prelude::*;
-use crate::state::{SharedState, AppView};
+use crate::state::{AppView, SharedState};
 
 /// Build the server list view.
 pub fn build_server_list_view(state: SharedState) -> Column {

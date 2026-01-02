@@ -152,22 +152,23 @@ mod tests {
 
     #[tokio::test]
     async fn test_memory_logger_circular() {
-        let logger = MemoryConnectionLogger::new(5);
+        // Note: MemoryConnectionLogger has a minimum capacity of 100
+        let logger = MemoryConnectionLogger::new(100);
 
         let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 1)), 12345);
 
         // Log more than capacity
-        for _ in 0..10 {
+        for _ in 0..150 {
             let event = ConnectionEventBuilder::new().attempt(addr);
             logger.log(event).await.unwrap();
         }
 
-        // Should only have 5 events
-        let recent = logger.query_recent(100).await.unwrap().unwrap();
-        assert_eq!(recent.len(), 5);
+        // Should only have 100 events (max capacity)
+        let recent = logger.query_recent(200).await.unwrap().unwrap();
+        assert_eq!(recent.len(), 100);
 
-        // But total logged should be 10
+        // But total logged should be 150
         let stats = logger.stats();
-        assert_eq!(stats.events_logged, 10);
+        assert_eq!(stats.events_logged, 150);
     }
 }

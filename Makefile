@@ -1,7 +1,7 @@
 # CoreVPN Makefile
 # Build, test, and package CoreVPN
 
-.PHONY: all build release test clean install uninstall deb rpm
+.PHONY: all build release test clean install uninstall deb rpm alpine arch
 
 VERSION ?= 0.1.0
 PREFIX ?= /usr/local
@@ -61,8 +61,16 @@ deb: release
 rpm: release
 	@VERSION=$(VERSION) packaging/scripts/build-rpm.sh
 
+# Build Alpine APK package
+alpine: release
+	@VERSION=$(VERSION) packaging/scripts/build-alpine.sh
+
+# Build Arch Linux package
+arch: release
+	@VERSION=$(VERSION) packaging/scripts/build-arch.sh
+
 # Build all packages
-packages: deb rpm
+packages: deb rpm alpine arch
 
 # Run the server (development)
 run:
@@ -107,6 +115,8 @@ help:
 	@echo ""
 	@echo "  deb            Build Debian package"
 	@echo "  rpm            Build RPM package"
+	@echo "  alpine         Build Alpine APK package"
+	@echo "  arch           Build Arch Linux package"
 	@echo "  packages       Build all packages"
 	@echo ""
 	@echo "  run            Run server (development)"

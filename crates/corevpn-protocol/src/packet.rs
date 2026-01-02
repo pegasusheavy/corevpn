@@ -5,7 +5,7 @@
 //! - Inlined hot path functions
 //! - Pre-allocated serialization buffers
 
-use bytes::{Buf, BufMut, Bytes, BytesMut};
+use bytes::{BufMut, Bytes, BytesMut};
 
 use crate::{OpCode, KeyId, ProtocolError, Result};
 

@@ -1,6 +1,6 @@
 //! Control Channel Message Types
 
-use bytes::{Bytes, BytesMut, BufMut};
+use bytes::Bytes;
 use serde::{Deserialize, Serialize};
 
 use crate::{ProtocolError, Result};
@@ -109,7 +109,7 @@ impl PushReply {
         }
 
         // DNS
-        for (i, dns) in self.dns.iter().enumerate() {
+        for dns in &self.dns {
             parts.push(format!("dhcp-option DNS {}", dns));
         }
 
@@ -147,7 +147,7 @@ impl PushReply {
             match tokens.next() {
                 Some("topology") => {
                     if let Some(topo) = tokens.next() {
-                        reply.topology = Topology::from_str(topo);
+                        reply.topology = Topology::parse(topo);
                     }
                 }
                 Some("ifconfig") => {
@@ -289,7 +289,7 @@ pub enum Topology {
 
 impl Topology {
     /// Parse from string
-    pub fn from_str(s: &str) -> Self {
+    pub fn parse(s: &str) -> Self {
         match s.to_lowercase().as_str() {
             "net30" => Topology::Net30,
             "p2p" => Topology::P2P,

@@ -16,7 +16,7 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
-use super::{AuditError, AuditEvent, FormatConfig};
+use super::{AuditError, AuditEvent};
 
 pub use aws::*;
 pub use azure::*;

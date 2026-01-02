@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Stop services if running
+if rc-service corevpn-server status >/dev/null 2>&1; then
+    rc-service corevpn-server stop
+fi
+
+if rc-service corevpn-web status >/dev/null 2>&1; then
+    rc-service corevpn-web stop
+fi
+
+# Remove from default runlevel
+rc-update del corevpn-server default 2>/dev/null || true
+rc-update del corevpn-web default 2>/dev/null || true
+
+exit 0

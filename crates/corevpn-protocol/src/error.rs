@@ -18,7 +18,12 @@ pub enum ProtocolError {
 
     /// Packet too short
     #[error("packet too short: expected at least {expected}, got {got}")]
-    PacketTooShort { expected: usize, got: usize },
+    PacketTooShort {
+        /// Expected minimum size
+        expected: usize,
+        /// Actual size received
+        got: usize,
+    },
 
     /// Invalid session ID
     #[error("invalid session ID")]

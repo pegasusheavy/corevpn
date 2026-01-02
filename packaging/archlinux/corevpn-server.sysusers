@@ -1,0 +1,5 @@
+# Create corevpn system user and group
+# See systemd-sysusers(8) for syntax
+
+g corevpn - -
+u corevpn - "CoreVPN Server" /var/lib/corevpn /usr/bin/nologin

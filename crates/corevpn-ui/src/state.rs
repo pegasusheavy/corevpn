@@ -7,7 +7,7 @@ use parking_lot::RwLock;
 use chrono::{DateTime, Utc};
 
 use corevpn_auth::ProviderType;
-use openkit::prelude::{VpnConnectionStatus, VpnServer, ConnectionStats, AuthMethod};
+use openkit::prelude::{AuthMethod, ConnectionStats, VpnConnectionStatus, VpnServer};
 
 /// Authentication state.
 #[derive(Debug, Clone)]

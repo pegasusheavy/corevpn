@@ -1,0 +1,19 @@
+# Configuration for CoreVPN Web Admin Interface
+
+# Configuration file path
+#COREVPN_CONFIG="/etc/corevpn/config.toml"
+
+# User and group to run as
+#COREVPN_USER="corevpn"
+#COREVPN_GROUP="corevpn"
+
+# Web UI listen address
+#COREVPN_WEB_LISTEN="127.0.0.1:8080"
+
+# Admin password - REQUIRED
+# Set this to a strong password
+#COREVPN_ADMIN_PASSWORD=""
+
+# Or source from a separate file for security
+# This file should be mode 0600 owned by root
+#. /etc/corevpn/admin-password

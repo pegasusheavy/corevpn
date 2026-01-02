@@ -1,0 +1,77 @@
+## CoreVPN Server Installation Script for Arch Linux
+
+post_install() {
+    # Reload systemd
+    systemctl daemon-reload
+
+    # Create directories
+    systemd-sysusers
+    systemd-tmpfiles --create
+
+    # Load TUN module
+    modprobe tun 2>/dev/null || true
+
+    # Add tun to modules to load at boot
+    if [ ! -f /etc/modules-load.d/corevpn.conf ]; then
+        echo "tun" > /etc/modules-load.d/corevpn.conf
+    fi
+
+    echo ""
+    echo "==================================================="
+    echo "  CoreVPN Server installed successfully!"
+    echo "==================================================="
+    echo ""
+    echo "Quick start:"
+    echo "  1. Edit /etc/corevpn/config.toml"
+    echo "  2. Run: sudo corevpn-server setup --data-dir /var/lib/corevpn"
+    echo "  3. Set admin password in /etc/corevpn/environment:"
+    echo "     echo 'COREVPN_ADMIN_PASSWORD=your-secure-password' >> /etc/corevpn/environment"
+    echo "  4. Enable and start:"
+    echo "     systemctl enable --now corevpn-server"
+    echo ""
+    echo "For ghost mode (zero logging), add --ghost flag or set:"
+    echo "  [logging]"
+    echo "  connection_log_mode = \"none\""
+    echo ""
+    echo "Documentation: https://pegasusheavy.github.io/corevpn/"
+    echo ""
+}
+
+post_upgrade() {
+    systemctl daemon-reload
+
+    # Restart services if running
+    if systemctl is-active --quiet corevpn-server; then
+        systemctl restart corevpn-server
+    fi
+    if systemctl is-active --quiet corevpn-web; then
+        systemctl restart corevpn-web
+    fi
+
+    echo "CoreVPN Server upgraded. Services restarted if they were running."
+}
+
+pre_remove() {
+    # Stop services
+    systemctl stop corevpn-server 2>/dev/null || true
+    systemctl stop corevpn-web 2>/dev/null || true
+
+    # Disable services
+    systemctl disable corevpn-server 2>/dev/null || true
+    systemctl disable corevpn-web 2>/dev/null || true
+}
+
+post_remove() {
+    systemctl daemon-reload
+
+    echo ""
+    echo "CoreVPN Server removed."
+    echo ""
+    echo "The following directories are preserved:"
+    echo "  /etc/corevpn     - Configuration files"
+    echo "  /var/lib/corevpn - Data (certificates, database)"
+    echo "  /var/log/corevpn - Logs"
+    echo ""
+    echo "Remove them manually if no longer needed."
+    echo ""
+}

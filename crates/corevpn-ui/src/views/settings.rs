@@ -3,7 +3,7 @@
 //! Application settings and preferences.
 
 use openkit::prelude::*;
-use crate::state::{SharedState, AppView};
+use crate::state::{AppView, SharedState};
 
 /// Build the settings view.
 pub fn build_settings_view(state: SharedState) -> Column {

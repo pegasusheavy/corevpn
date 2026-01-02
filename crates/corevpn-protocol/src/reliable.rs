@@ -6,7 +6,6 @@ use std::collections::{BTreeMap, VecDeque};
 use std::time::{Duration, Instant};
 
 use bytes::Bytes;
-use tokio::sync::mpsc;
 
 use crate::{ProtocolError, Result};
 
@@ -135,7 +134,7 @@ impl ReliableTransport {
             self.next_recv_id = self.next_recv_id.wrapping_add(1);
 
             // Check for buffered packets that can now be delivered
-            while let Some(buffered) = self.out_of_order.remove(&self.next_recv_id) {
+            while let Some(_buffered) = self.out_of_order.remove(&self.next_recv_id) {
                 self.next_recv_id = self.next_recv_id.wrapping_add(1);
                 // Note: in a real implementation, we'd queue these for delivery
             }
@@ -247,7 +246,7 @@ impl ReliableTransport {
                 // RTTVAR = (1 - beta) * RTTVAR + beta * |SRTT - R|
                 // SRTT = (1 - alpha) * SRTT + alpha * R
                 // where alpha = 1/8, beta = 1/4
-                let diff = if rtt > srtt { rtt - srtt } else { srtt - rtt };
+                let diff = rtt.abs_diff(srtt);
                 self.rttvar = Duration::from_secs_f64(
                     0.75 * self.rttvar.as_secs_f64() + 0.25 * diff.as_secs_f64(),
                 );

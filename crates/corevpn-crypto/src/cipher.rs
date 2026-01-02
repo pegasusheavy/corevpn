@@ -93,7 +93,7 @@ pub struct Cipher {
 
 enum CipherInner {
     ChaCha(ChaCha20Poly1305),
-    Aes(Aes256Gcm),
+    Aes(Box<Aes256Gcm>),
 }
 
 impl Cipher {
@@ -105,7 +105,7 @@ impl Cipher {
                 CipherInner::ChaCha(ChaCha20Poly1305::new(key.into()))
             }
             CipherSuite::Aes256Gcm => {
-                CipherInner::Aes(Aes256Gcm::new(key.into()))
+                CipherInner::Aes(Box::new(Aes256Gcm::new(key.into())))
             }
         };
         Self { inner, suite }
@@ -385,6 +385,7 @@ impl ReplayWindow {
     }
 
     /// Reset the replay window (e.g., for key renegotiation)
+    #[allow(dead_code)]
     #[inline]
     pub fn reset(&mut self) {
         self.highest = 0;

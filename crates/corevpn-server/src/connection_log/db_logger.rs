@@ -12,7 +12,7 @@ use chrono::{DateTime, Utc};
 use parking_lot::RwLock;
 use sqlx::sqlite::{SqliteConnectOptions, SqlitePool, SqlitePoolOptions};
 use sqlx::Row;
-use tracing::{debug, info};
+use tracing::info;
 
 use super::events::{
     AuthMethod, AuthResult, ConnectionEvent, ConnectionId, DisconnectReason, TransferStats,

@@ -3,7 +3,7 @@
 //! VPN profile management.
 
 use openkit::prelude::*;
-use crate::state::{SharedState, AppView};
+use crate::state::{AppView, SharedState};
 
 /// Build the profiles view.
 pub fn build_profiles_view(state: SharedState) -> Column {

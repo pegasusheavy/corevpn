@@ -1,12 +1,10 @@
 //! Protocol Session Management
 
-use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use bytes::Bytes;
-use tokio::sync::RwLock;
 
-use corevpn_crypto::{CipherSuite, DataChannelKey, KeyMaterial};
+use corevpn_crypto::{CipherSuite, KeyMaterial};
 
 use crate::{
     KeyId, OpCode, Packet, DataPacket, DataChannel,
@@ -224,7 +222,7 @@ impl ProtocolSession {
 
     /// Create a hard reset response packet
     pub fn create_hard_reset_response(&mut self) -> Result<Bytes> {
-        let mut packet = crate::packet::ControlPacketData {
+        let packet = crate::packet::ControlPacketData {
             header: crate::PacketHeader {
                 opcode: OpCode::HardResetServerV2,
                 key_id: KeyId::default(),
@@ -403,7 +401,10 @@ pub enum ProcessedPacket {
     /// No action needed
     None,
     /// Hard reset from client
-    HardReset { session_id: SessionIdBytes },
+    HardReset {
+        /// Session ID for the new connection
+        session_id: SessionIdBytes,
+    },
     /// Hard reset acknowledged
     HardResetAck,
     /// TLS records to process

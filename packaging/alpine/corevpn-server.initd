@@ -1,0 +1,63 @@
+#!/sbin/openrc-run
+# CoreVPN Server - OpenRC init script for Alpine Linux
+
+name="CoreVPN Server"
+description="Secure OpenVPN-compatible VPN server"
+
+command="/usr/bin/corevpn-server"
+command_args="run --config ${COREVPN_CONFIG:-/etc/corevpn/config.toml}"
+command_user="${COREVPN_USER:-corevpn}:${COREVPN_GROUP:-corevpn}"
+command_background=true
+
+pidfile="/run/corevpn/corevpn-server.pid"
+output_log="/var/log/corevpn/server.log"
+error_log="/var/log/corevpn/server.err"
+
+# Additional options
+extra_started_commands="reload"
+
+# Capabilities needed for VPN
+caps="^cap_net_admin,^cap_net_bind_service,^cap_net_raw"
+
+depend() {
+    need net
+    after firewall dns
+    use logger
+}
+
+start_pre() {
+    # Create necessary directories
+    checkpath -d -m 0750 -o ${command_user} /run/corevpn
+    checkpath -d -m 0750 -o ${command_user} /var/lib/corevpn
+    checkpath -d -m 0750 -o ${command_user} /var/log/corevpn
+
+    # Ensure TUN device exists
+    if [ ! -c /dev/net/tun ]; then
+        modprobe tun 2>/dev/null || true
+        if [ ! -c /dev/net/tun ]; then
+            mkdir -p /dev/net
+            mknod /dev/net/tun c 10 200
+            chmod 0666 /dev/net/tun
+        fi
+    fi
+
+    # Validate configuration
+    if [ ! -f "${COREVPN_CONFIG:-/etc/corevpn/config.toml}" ]; then
+        eerror "Configuration file not found: ${COREVPN_CONFIG:-/etc/corevpn/config.toml}"
+        eerror "Run 'corevpn-server setup' to create initial configuration"
+        return 1
+    fi
+
+    return 0
+}
+
+reload() {
+    ebegin "Reloading ${name}"
+    start-stop-daemon --signal HUP --pidfile "${pidfile}"
+    eend $?
+}
+
+stop_post() {
+    # Clean up runtime files
+    rm -f "${pidfile}"
+}
