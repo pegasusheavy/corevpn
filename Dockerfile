@@ -4,7 +4,7 @@
 # =============================================================================
 # Build stage - using Rust with musl for static linking
 # =============================================================================
-FROM rust:1.85-alpine AS builder
+FROM rust:alpine AS builder
 
 WORKDIR /build
 
@@ -25,12 +25,23 @@ ENV OPENSSL_INCLUDE_DIR=/usr/include
 
 # Copy manifests
 COPY Cargo.toml Cargo.lock ./
-COPY crates ./crates
+
+# Copy crates (excluding corevpn-ui which depends on local openkit)
+COPY crates/corevpn-crypto ./crates/corevpn-crypto
+COPY crates/corevpn-core ./crates/corevpn-core
+COPY crates/corevpn-protocol ./crates/corevpn-protocol
+COPY crates/corevpn-auth ./crates/corevpn-auth
+COPY crates/corevpn-config ./crates/corevpn-config
+COPY crates/corevpn-server ./crates/corevpn-server
+COPY crates/corevpn-cli ./crates/corevpn-cli
+
+# Remove corevpn-ui from workspace members (it depends on local openkit)
+RUN sed -i '/"crates\/corevpn-ui"/d' Cargo.toml
 
 # Build release binaries
-RUN cargo build --release --locked \
+RUN cargo build --release -p corevpn-server -p corevpn-cli \
     && strip target/release/corevpn-server \
-    && strip target/release/corevpn-cli
+    && strip target/release/corevpn
 
 # =============================================================================
 # Runtime stage - Hardened Alpine
@@ -73,7 +84,7 @@ RUN addgroup -g 1000 -S corevpn \
 
 # Copy binaries from builder
 COPY --from=builder /build/target/release/corevpn-server /usr/bin/
-COPY --from=builder /build/target/release/corevpn-cli /usr/bin/
+COPY --from=builder /build/target/release/corevpn /usr/bin/corevpn-cli
 
 # Copy default config
 COPY packaging/config/config.toml.example /etc/corevpn/config.toml.example
