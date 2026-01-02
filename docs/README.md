@@ -1,59 +1,72 @@
-# Docs
+# CoreVPN Documentation
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+This is the official documentation website for CoreVPN, built with Angular 21 and Tailwind CSS 4.
 
-## Development server
-
-To start a local development server, run:
+## Development
 
 ```bash
-ng serve
+# Install dependencies
+npm install
+
+# Start development server
+npm run start
+# Visit http://localhost:4200
+
+# Build for production
+npm run build
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Project Structure
 
-## Code scaffolding
+```
+src/
+├── app/
+│   ├── components/     # Reusable UI components
+│   │   ├── header.ts
+│   │   ├── sidebar.ts
+│   │   ├── footer.ts
+│   │   ├── code-block.ts
+│   │   └── callout.ts
+│   ├── pages/          # Documentation pages
+│   │   ├── home.ts
+│   │   ├── getting-started.ts
+│   │   ├── configuration.ts
+│   │   ├── ghost-mode.ts
+│   │   ├── deployment.ts
+│   │   └── api.ts
+│   ├── app.ts          # Root component
+│   └── app.routes.ts   # Route definitions
+├── styles.css          # Global styles with Tailwind
+└── index.html          # HTML entry point
+```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Features
+
+- 🎨 Professional dark theme with Tailwind CSS 4
+- 📱 Fully responsive design
+- 🔍 Syntax-highlighted code blocks with copy functionality
+- 🧭 Sidebar navigation with sections
+- 📖 Multiple documentation pages covering all features
+- 👻 Special Ghost Mode documentation
+- ⚡ Lazy-loaded routes for optimal performance
+
+## Deployment
+
+The built site can be deployed to any static hosting service:
 
 ```bash
-ng generate component component-name
+# Build for production
+npm run build
+
+# Output is in dist/docs/
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Recommended hosting options:
+- GitHub Pages
+- Vercel
+- Netlify
+- Cloudflare Pages
 
-```bash
-ng generate --help
-```
+## Contributing
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+See the main [CONTRIBUTING.md](../CONTRIBUTING.md) for contribution guidelines.

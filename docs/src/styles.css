@@ -1,3 +1,289 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "tailwindcss";
+
+/* ============================================
+   CoreVPN Documentation - Professional Theme
+   ============================================ */
+
+/* Custom Properties */
+:root {
+  /* Primary - Deep Navy */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+  --color-primary-950: #1e1b4b;
+
+  /* Accent - Cyan */
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+
+  /* Neutral */
+  --color-bg: #0f172a;
+  --color-bg-alt: #1e293b;
+  --color-bg-card: #1e293b;
+  --color-border: #334155;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+
+  /* Code */
+  --color-code-bg: #0d1117;
+  --color-code-border: #30363d;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-950 text-slate-100 antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold tracking-tight text-white;
+}
+
+h1 { @apply text-4xl lg:text-5xl; }
+h2 { @apply text-3xl lg:text-4xl; }
+h3 { @apply text-2xl lg:text-3xl; }
+h4 { @apply text-xl lg:text-2xl; }
+
+/* Links */
+a {
+  @apply text-cyan-400 hover:text-cyan-300 transition-colors;
+}
+
+/* Code Blocks */
+pre {
+  @apply bg-slate-900 border border-slate-700 rounded-lg p-4 overflow-x-auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+code {
+  @apply bg-slate-800 text-cyan-300 px-1.5 py-0.5 rounded text-sm;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Tables */
+table {
+  @apply w-full border-collapse;
+}
+
+th {
+  @apply bg-slate-800 text-left px-4 py-3 font-semibold text-sm uppercase tracking-wide text-slate-300 border-b border-slate-700;
+}
+
+td {
+  @apply px-4 py-3 border-b border-slate-700/50;
+}
+
+tr:hover td {
+  @apply bg-slate-800/50;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-600;
+}
+
+/* Selection */
+::selection {
+  @apply bg-cyan-500/30 text-white;
+}
+
+/* Focus Styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-cyan-500 ring-offset-2 ring-offset-slate-950;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent;
+}
+
+/* Glass Effect */
+.glass {
+  @apply bg-slate-800/50 backdrop-blur-xl border border-slate-700/50;
+}
+
+/* Glow Effects */
+.glow-cyan {
+  box-shadow: 0 0 40px -10px rgba(6, 182, 212, 0.5);
+}
+
+.glow-purple {
+  box-shadow: 0 0 40px -10px rgba(139, 92, 246, 0.5);
+}
+
+/* Badge Styles */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-cyan {
+  @apply bg-cyan-500/10 text-cyan-400 border border-cyan-500/20;
+}
+
+.badge-purple {
+  @apply bg-purple-500/10 text-purple-400 border border-purple-500/20;
+}
+
+.badge-green {
+  @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20;
+}
+
+.badge-red {
+  @apply bg-red-500/10 text-red-400 border border-red-500/20;
+}
+
+/* Button Styles */
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:from-cyan-400 hover:to-blue-500 shadow-lg shadow-cyan-500/25;
+}
+
+.btn-secondary {
+  @apply bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 hover:border-slate-600;
+}
+
+.btn-ghost {
+  @apply text-slate-300 hover:text-white hover:bg-slate-800;
+}
+
+/* Card Styles */
+.card {
+  @apply bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 backdrop-blur-sm;
+}
+
+.card-hover {
+  @apply hover:border-slate-600 hover:bg-slate-800/80 transition-all duration-300;
+}
+
+/* Sidebar Navigation */
+.nav-item {
+  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200;
+}
+
+.nav-item.active {
+  @apply text-cyan-400 bg-cyan-500/10 border-l-2 border-cyan-400;
+}
+
+.nav-section {
+  @apply text-xs font-semibold uppercase tracking-wider text-slate-500 px-3 py-2;
+}
+
+/* Content Styles */
+.prose-docs {
+  @apply text-slate-300 leading-relaxed;
+}
+
+.prose-docs h2 {
+  @apply text-2xl font-bold text-white mt-12 mb-4 pb-2 border-b border-slate-700;
+}
+
+.prose-docs h3 {
+  @apply text-xl font-semibold text-white mt-8 mb-3;
+}
+
+.prose-docs p {
+  @apply my-4;
+}
+
+.prose-docs ul {
+  @apply my-4 ml-6 space-y-2;
+}
+
+.prose-docs li {
+  @apply relative pl-6;
+}
+
+.prose-docs li::before {
+  content: '▸';
+  @apply absolute left-0 text-cyan-500;
+}
+
+/* Callout Boxes */
+.callout {
+  @apply my-6 p-4 rounded-lg border-l-4;
+}
+
+.callout-info {
+  @apply bg-blue-500/10 border-blue-500 text-blue-200;
+}
+
+.callout-warning {
+  @apply bg-amber-500/10 border-amber-500 text-amber-200;
+}
+
+.callout-danger {
+  @apply bg-red-500/10 border-red-500 text-red-200;
+}
+
+.callout-success {
+  @apply bg-emerald-500/10 border-emerald-500 text-emerald-200;
+}
+
+/* Ghost Mode Special Styling */
+.ghost-mode {
+  @apply relative overflow-hidden;
+}
+
+.ghost-mode::before {
+  content: '👻';
+  @apply absolute -right-4 -top-4 text-8xl opacity-5 pointer-events-none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { @apply text-3xl; }
+  h2 { @apply text-2xl; }
+  h3 { @apply text-xl; }
+}
