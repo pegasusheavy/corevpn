@@ -410,7 +410,7 @@ errors = true`;
         'anonymous VPN',
         'GDPR VPN',
       ],
-      canonicalUrl: 'https://docs.corevpn.dev/configuration/ghost-mode',
+      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/configuration/ghost-mode',
       ogType: 'article',
       section: 'Privacy',
     });

@@ -6,7 +6,7 @@
 
   <!-- Home -->
   <url>
-    <loc>https://docs.corevpn.dev/</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -14,19 +14,19 @@
 
   <!-- Getting Started -->
   <url>
-    <loc>https://docs.corevpn.dev/getting-started</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/getting-started</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/getting-started/installation</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/getting-started/installation</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/getting-started/first-connection</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/getting-started/first-connection</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -34,43 +34,43 @@
 
   <!-- Configuration -->
   <url>
-    <loc>https://docs.corevpn.dev/configuration</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/configuration/ghost-mode</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration/ghost-mode</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/configuration/authentication</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration/authentication</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/configuration/oauth2</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration/oauth2</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/configuration/saml</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration/saml</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/configuration/logging</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration/logging</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/configuration/anonymization</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/configuration/anonymization</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -78,25 +78,25 @@
 
   <!-- Deployment -->
   <url>
-    <loc>https://docs.corevpn.dev/deployment</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/deployment</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/deployment/docker</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/deployment/docker</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/deployment/kubernetes</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/deployment/kubernetes</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/deployment/packages</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/deployment/packages</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -104,19 +104,19 @@
 
   <!-- API -->
   <url>
-    <loc>https://docs.corevpn.dev/api</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/api</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/api/clients</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/api/clients</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docs.corevpn.dev/api/connections</loc>
+    <loc>https://pegasusheavy.github.io/corevpn/api/connections</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

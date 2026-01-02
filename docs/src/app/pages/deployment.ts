@@ -171,7 +171,7 @@ export class DeploymentComponent implements OnInit {
         'systemd',
         'production VPN',
       ],
-      canonicalUrl: 'https://docs.corevpn.dev/deployment',
+      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/deployment',
       ogType: 'article',
       section: 'Deployment',
     });

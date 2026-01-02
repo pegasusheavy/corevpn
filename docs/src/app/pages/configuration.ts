@@ -155,7 +155,7 @@ export class ConfigurationComponent implements OnInit {
         'server settings',
         'TLS configuration',
       ],
-      canonicalUrl: 'https://docs.corevpn.dev/configuration',
+      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/configuration',
       ogType: 'article',
       section: 'Configuration',
     });

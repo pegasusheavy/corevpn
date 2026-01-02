@@ -34,7 +34,7 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly document = inject(DOCUMENT);
 
-  private readonly baseUrl = 'https://docs.corevpn.dev';
+  private readonly baseUrl = 'https://pegasusheavy.github.io/corevpn';
   private readonly siteName = 'CoreVPN Documentation';
   private readonly defaultImage = '/assets/og-image.png';
   private readonly twitterHandle = '@pegasusheavy';

@@ -264,7 +264,7 @@ open my-laptop.ovpn`;
         'VPN setup',
         'OpenVPN',
       ],
-      canonicalUrl: 'https://docs.corevpn.dev/getting-started',
+      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/getting-started',
       ogType: 'article',
       section: 'Getting Started',
     });

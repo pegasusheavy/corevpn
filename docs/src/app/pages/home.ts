@@ -355,7 +355,7 @@ export class HomeComponent implements OnInit {
         'TLS',
         'Rust',
       ],
-      canonicalUrl: 'https://docs.corevpn.dev/',
+      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/',
       ogType: 'website',
     });
 

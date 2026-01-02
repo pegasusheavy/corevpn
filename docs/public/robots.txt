@@ -1,11 +1,11 @@
 # CoreVPN Documentation - robots.txt
-# https://docs.corevpn.dev
+# https://pegasusheavy.github.io/corevpn/
 
 User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://docs.corevpn.dev/sitemap.xml
+Sitemap: https://pegasusheavy.github.io/corevpn/sitemap.xml
 
 # Crawl-delay for politeness
 Crawl-delay: 1
