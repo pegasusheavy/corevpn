@@ -37,13 +37,24 @@ if [[ -z "$DRY_RUN" ]]; then
     fi
 fi
 
+# Get workspace version from root Cargo.toml
+get_workspace_version() {
+    grep -A5 '\[workspace\.package\]' Cargo.toml | grep '^version' | head -1 | sed 's/.*"\(.*\)".*/\1/'
+}
+
 # Function to get crate version from Cargo.toml
 get_crate_version() {
     local crate=$1
     local toml_path="crates/${crate}/Cargo.toml"
     
     if [[ -f "$toml_path" ]]; then
-        grep '^version' "$toml_path" | head -1 | sed 's/.*"\(.*\)".*/\1/'
+        # Check if using workspace version
+        if grep -q 'version\.workspace\s*=\s*true' "$toml_path" || grep -q 'version.workspace = true' "$toml_path"; then
+            get_workspace_version
+        else
+            # Get version directly from crate's Cargo.toml
+            grep '^version\s*=' "$toml_path" | head -1 | sed 's/.*"\(.*\)".*/\1/'
+        fi
     else
         echo ""
     fi
