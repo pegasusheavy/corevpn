@@ -14,17 +14,22 @@ members = [
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.75"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/pegasusheavy/corevpn"
-authors = ["Pegasus Heavy Industries"]
+homepage = "https://pegasusheavy.github.io/corevpn/"
+documentation = "https://docs.rs/corevpn"
+authors = ["Pegasus Heavy Industries <opensource@pegasusheavy.com>"]
+keywords = ["vpn", "openvpn", "security", "networking", "privacy"]
+categories = ["network-programming", "cryptography", "authentication"]
 
 [workspace.dependencies]
-# Internal crates
-corevpn-crypto = { path = "crates/corevpn-crypto" }
-corevpn-core = { path = "crates/corevpn-core" }
-corevpn-protocol = { path = "crates/corevpn-protocol" }
-corevpn-auth = { path = "crates/corevpn-auth" }
-corevpn-config = { path = "crates/corevpn-config" }
+# Internal crates - version required for publishing, path for local development
+corevpn-crypto = { version = "0.1.0", path = "crates/corevpn-crypto" }
+corevpn-core = { version = "0.1.0", path = "crates/corevpn-core" }
+corevpn-protocol = { version = "0.1.0", path = "crates/corevpn-protocol" }
+corevpn-auth = { version = "0.1.0", path = "crates/corevpn-auth" }
+corevpn-config = { version = "0.1.0", path = "crates/corevpn-config" }
 
 # Async runtime
 tokio = { version = "1", features = ["full"] }

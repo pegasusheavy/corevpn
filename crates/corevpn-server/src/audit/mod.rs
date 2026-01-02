@@ -33,9 +33,9 @@ impl AuditLogger {
     pub async fn new(config: AuditConfig) -> Result<Self, AuditError> {
         let (tx, rx) = mpsc::channel(config.buffer_size);
         let sinks = Self::create_sinks(&config).await?;
-        
+
         let sinks_clone: Vec<Arc<dyn AuditSink>> = sinks.iter().map(Arc::clone).collect();
-        
+
         // Spawn background task to process events
         tokio::spawn(async move {
             Self::process_events(rx, sinks_clone).await;

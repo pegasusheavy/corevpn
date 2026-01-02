@@ -285,7 +285,7 @@ impl AuditSink for OracleStreamingSink {
 // Base64 encode helper
 mod base64 {
     use base64::Engine;
-    
+
     pub fn encode(data: &str) -> String {
         base64::engine::general_purpose::STANDARD.encode(data.as_bytes())
     }

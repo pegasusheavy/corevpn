@@ -135,15 +135,15 @@ impl FormatEncoder {
     fn encode_cef(&self, event: &AuditEvent) -> Result<String, super::AuditError> {
         let severity = event.severity.to_cef_severity();
         let signature_id = format!("{}.{}", event.category.as_str(), event.action);
-        
+
         // Build extension fields
         let mut extensions = Vec::new();
-        
+
         extensions.push(format!("rt={}", event.timestamp.timestamp_millis()));
         extensions.push(format!("msg={}", escape_cef(&event.message)));
         extensions.push(format!("outcome={:?}", event.outcome));
         extensions.push(format!("cat={}", event.category.as_str()));
-        
+
         if let Some(ref actor) = event.actor {
             if let Some(ref name) = actor.name {
                 extensions.push(format!("suser={}", escape_cef(name)));
@@ -155,7 +155,7 @@ impl FormatEncoder {
                 extensions.push(format!("sproc={}", escape_cef(session)));
             }
         }
-        
+
         if let Some(ref target) = event.target {
             if let Some(ref id) = target.id {
                 extensions.push(format!("duid={}", escape_cef(id)));
@@ -164,7 +164,7 @@ impl FormatEncoder {
                 extensions.push(format!("duser={}", escape_cef(name)));
             }
         }
-        
+
         extensions.push(format!("dvchost={}", escape_cef(&event.host)));
         extensions.push(format!("externalId={}", &event.id));
 
@@ -186,14 +186,14 @@ impl FormatEncoder {
     /// Format: LEEF:Version|Vendor|Product|Version|EventID|Extension
     fn encode_leef(&self, event: &AuditEvent) -> Result<String, super::AuditError> {
         let event_id = format!("{}.{}", event.category.as_str(), event.action);
-        
+
         let mut extensions = Vec::new();
-        
+
         extensions.push(format!("devTime={}", event.timestamp.to_rfc3339_opts(SecondsFormat::Millis, true)));
         extensions.push(format!("cat={}", event.category.as_str()));
         extensions.push(format!("sev={}", event.severity.to_cef_severity()));
         extensions.push(format!("msg={}", escape_leef(&event.message)));
-        
+
         if let Some(ref actor) = event.actor {
             if let Some(ref name) = actor.name {
                 extensions.push(format!("usrName={}", escape_leef(name)));
@@ -202,7 +202,7 @@ impl FormatEncoder {
                 extensions.push(format!("src={}", ip));
             }
         }
-        
+
         extensions.push(format!("identHostName={}", escape_leef(&event.host)));
 
         let extension_str = extensions.join("\t");
@@ -222,10 +222,10 @@ impl FormatEncoder {
         let facility = self.config.syslog_facility;
         let severity = event.severity.to_syslog_severity();
         let priority = (facility * 8) + severity;
-        
+
         let timestamp = event.timestamp.to_rfc3339_opts(SecondsFormat::Micros, true);
         let msg_id = format!("{}.{}", event.category.as_str(), event.action);
-        
+
         // Build structured data
         let mut sd = String::new();
         sd.push_str(&format!(
@@ -234,7 +234,7 @@ impl FormatEncoder {
             event.outcome,
             event.category.as_str()
         ));
-        
+
         if let Some(ref actor) = event.actor {
             sd.push_str(&format!(
                 "[actor@32473 type=\"{}\"",
@@ -460,10 +460,10 @@ mod tests {
     fn test_json_encoding() {
         let event = AuditEventBuilder::auth_success("testuser", Some("192.168.1.1".into()), "password")
             .build();
-        
+
         let encoder = FormatEncoder::new(FormatConfig::default());
         let json = encoder.encode(&event).unwrap();
-        
+
         assert!(json.contains("testuser"));
         assert!(json.contains("auth.success"));
     }
@@ -472,13 +472,13 @@ mod tests {
     fn test_cef_encoding() {
         let event = AuditEventBuilder::auth_success("testuser", Some("192.168.1.1".into()), "password")
             .build();
-        
+
         let encoder = FormatEncoder::new(FormatConfig {
             format: AuditFormat::Cef,
             ..Default::default()
         });
         let cef = encoder.encode(&event).unwrap();
-        
+
         assert!(cef.starts_with("CEF:0|"));
         assert!(cef.contains("suser=testuser"));
         assert!(cef.contains("src=192.168.1.1"));
@@ -488,13 +488,13 @@ mod tests {
     fn test_syslog_encoding() {
         let event = AuditEventBuilder::auth_failure("baduser", Some("10.0.0.1".into()), "invalid password")
             .build();
-        
+
         let encoder = FormatEncoder::new(FormatConfig {
             format: AuditFormat::Syslog,
             ..Default::default()
         });
         let syslog = encoder.encode(&event).unwrap();
-        
+
         assert!(syslog.starts_with("<"));
         assert!(syslog.contains("[corevpn@32473"));
     }

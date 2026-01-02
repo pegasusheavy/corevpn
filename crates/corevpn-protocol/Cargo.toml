@@ -1,9 +1,16 @@
 [package]
 name = "corevpn-protocol"
-description = "OpenVPN protocol implementation for CoreVPN"
+description = "OpenVPN-compatible protocol implementation for CoreVPN"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords = ["openvpn", "protocol", "vpn", "networking", "tls"]
+categories = ["network-programming", "cryptography"]
+readme = "README.md"
 
 [dependencies]
 corevpn-crypto = { workspace = true }

@@ -1,9 +1,16 @@
 [package]
 name = "corevpn-auth"
-description = "Authentication and authorization for CoreVPN"
+description = "Authentication and authorization for CoreVPN - OAuth2, OIDC, SAML support"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords = ["authentication", "oauth2", "oidc", "saml", "vpn"]
+categories = ["authentication", "network-programming"]
+readme = "README.md"
 
 [dependencies]
 corevpn-crypto = { workspace = true }

@@ -1,9 +1,16 @@
 [package]
 name = "corevpn-core"
-description = "Core types and utilities for CoreVPN"
+description = "Core types, session management, and utilities for CoreVPN"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords = ["vpn", "networking", "session", "tunnel"]
+categories = ["network-programming"]
+readme = "README.md"
 
 [dependencies]
 corevpn-crypto = { workspace = true }

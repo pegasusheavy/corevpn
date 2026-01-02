@@ -1,9 +1,16 @@
 [package]
 name = "corevpn-server"
-description = "CoreVPN server binary"
+description = "CoreVPN server binary - secure OpenVPN-compatible VPN server with OAuth2 and ghost mode"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords = ["vpn", "server", "openvpn", "oauth2", "security"]
+categories = ["network-programming", "command-line-utilities"]
+readme = "README.md"
 
 [[bin]]
 name = "corevpn-server"
@@ -46,6 +53,7 @@ tracing-subscriber = { workspace = true }
 
 # Error handling
 anyhow = { workspace = true }
+thiserror = { workspace = true }
 
 # Concurrency
 parking_lot = { workspace = true }
@@ -67,7 +75,6 @@ rustls = { workspace = true }
 # UUID
 uuid = { workspace = true }
 
-# Audit logging dependencies
+# Audit logging
 hostname = "0.4"
-thiserror = { workspace = true }
 log = "0.4"

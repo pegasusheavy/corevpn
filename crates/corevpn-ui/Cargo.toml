@@ -1,11 +1,18 @@
 [package]
 name = "corevpn-ui"
+description = "CoreVPN Desktop UI - OpenVPN-style VPN client interface"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
 authors.workspace = true
-description = "CoreVPN Desktop UI - OpenVPN-style VPN client interface"
+keywords = ["vpn", "gui", "desktop", "openvpn", "client"]
+categories = ["gui", "network-programming"]
+readme = "README.md"
+# Not publishable - depends on unpublished openkit crate
+publish = false
 
 [[bin]]
 name = "corevpn-gui"
@@ -13,11 +20,11 @@ path = "src/main.rs"
 
 [dependencies]
 # Internal crates
-corevpn-core = { path = "../corevpn-core" }
-corevpn-auth = { path = "../corevpn-auth" }
-corevpn-config = { path = "../corevpn-config" }
+corevpn-core = { workspace = true }
+corevpn-auth = { workspace = true }
+corevpn-config = { workspace = true }
 
-# UI Framework
+# UI Framework (local dependency - not on crates.io)
 openkit = { path = "../../../openkit" }
 
 # Async runtime

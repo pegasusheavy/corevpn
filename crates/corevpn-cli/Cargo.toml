@@ -1,9 +1,16 @@
 [package]
 name = "corevpn-cli"
-description = "CoreVPN command-line interface"
+description = "CoreVPN command-line interface - VPN client with OAuth2 support"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords = ["vpn", "cli", "openvpn", "client", "networking"]
+categories = ["command-line-utilities", "network-programming"]
+readme = "README.md"
 
 [[bin]]
 name = "corevpn"
