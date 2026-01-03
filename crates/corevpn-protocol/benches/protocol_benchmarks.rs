@@ -2,7 +2,8 @@
 //!
 //! Benchmarks for packet parsing, serialization, and reliable transport.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
+use std::hint::black_box;
 use bytes::{Bytes, BytesMut};
 
 use corevpn_protocol::{

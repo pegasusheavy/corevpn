@@ -3,7 +3,8 @@
 //! Benchmarks for CoreVPN's cryptographic operations to identify bottlenecks
 //! and measure performance improvements.
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
+use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
+use std::hint::black_box;
 use corevpn_crypto::{
     Cipher, CipherSuite, DataChannelKey, PacketCipher,
     StaticSecret, SigningKey, KeyPair,
