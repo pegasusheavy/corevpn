@@ -46,7 +46,7 @@ RUN cargo build --release -p corevpn-server -p corevpn-cli \
 # =============================================================================
 # Runtime stage - Hardened Alpine
 # =============================================================================
-FROM alpine:3.20
+FROM alpine:3.23
 
 # Labels for container metadata
 LABEL org.opencontainers.image.title="CoreVPN Server" \
