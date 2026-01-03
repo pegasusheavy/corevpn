@@ -31,7 +31,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Build
-        run: cargo build --release
+        run: cargo build --release --workspace --exclude corevpn-ui
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
