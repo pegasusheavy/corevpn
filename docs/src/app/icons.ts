@@ -72,7 +72,6 @@ import {
   faDocker as fabDocker,
   faGithub,
   faLinux,
-  faPatreon,
   faRust,
   faTwitter,
   faXTwitter,
@@ -162,7 +161,6 @@ export function initializeIcons(library: FaIconLibrary): void {
     fabDocker,
     faGithub,
     faLinux,
-    faPatreon,
     faRust,
     faTwitter,
     faXTwitter
@@ -239,5 +237,4 @@ export const Icons = {
   linux: ['fab', 'linux'],
   rust: ['fab', 'rust'],
   twitter: ['fab', 'x-twitter'],
-  patreon: ['fab', 'patreon'],
 } as const;
