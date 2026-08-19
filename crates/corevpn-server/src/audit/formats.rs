@@ -72,7 +72,7 @@ pub struct FormatConfig {
     pub syslog_app_name: String,
 }
 
-fn default_vendor() -> String { "PegasusHeavy".to_string() }
+fn default_vendor() -> String { "JosephRQuinn".to_string() }
 fn default_product() -> String { "CoreVPN".to_string() }
 fn default_version() -> String { "1.0".to_string() }
 fn default_facility() -> u8 { 4 } // security/auth
@@ -413,7 +413,7 @@ impl FormatEncoder {
                 version: "1.0.0",
                 product: OcsfProduct {
                     name: "CoreVPN",
-                    vendor_name: "Pegasus Heavy Industries",
+                    vendor_name: "Joseph R. Quinn",
                     version: "0.1.0",
                 },
                 uid: &event.id,

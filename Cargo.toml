@@ -16,10 +16,10 @@ version = "0.3.0"
 edition = "2024"
 rust-version = "1.85"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/pegasusheavy/corevpn"
-homepage = "https://pegasusheavy.github.io/corevpn/"
+repository = "https://github.com/quinnjr/corevpn"
+homepage = "https://quinnjr.github.io/corevpn/"
 documentation = "https://docs.rs/corevpn"
-authors = ["Pegasus Heavy Industries <opensource@pegasusheavy.com>"]
+authors = ["Joseph R. Quinn <quinn.josephr@protonmail.com>"]
 keywords = ["vpn", "openvpn", "security", "networking", "privacy"]
 categories = ["network-programming", "cryptography", "authentication"]
 

@@ -36,10 +36,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
           <div>
             <h4 class="text-sm font-semibold text-white mb-4">Community</h4>
             <ul class="space-y-3">
-              <li><a href="https://github.com/pegasusheavy/corevpn" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">GitHub</a></li>
-              <li><a href="https://github.com/pegasusheavy/corevpn/discussions" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Discussions</a></li>
-              <li><a href="https://github.com/pegasusheavy/corevpn/issues" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Issue Tracker</a></li>
-              <li><a href="https://www.patreon.com/c/PegasusHeavyIndustries" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Patreon</a></li>
+              <li><a href="https://github.com/quinnjr/corevpn" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="https://github.com/quinnjr/corevpn/discussions" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Discussions</a></li>
+              <li><a href="https://github.com/quinnjr/corevpn/issues" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Issue Tracker</a></li>
             </ul>
           </div>
 
@@ -47,9 +46,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
           <div>
             <h4 class="text-sm font-semibold text-white mb-4">Legal</h4>
             <ul class="space-y-3">
-              <li><a href="https://github.com/pegasusheavy/corevpn/blob/main/LICENSE" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">License (MIT)</a></li>
-              <li><a href="https://github.com/pegasusheavy/corevpn/blob/main/SECURITY.md" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Security Policy</a></li>
-              <li><a href="https://github.com/pegasusheavy/corevpn/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Contributing</a></li>
+              <li><a href="https://github.com/quinnjr/corevpn/blob/main/LICENSE" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">License (MIT)</a></li>
+              <li><a href="https://github.com/quinnjr/corevpn/blob/main/SECURITY.md" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Security Policy</a></li>
+              <li><a href="https://github.com/quinnjr/corevpn/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" class="text-sm text-slate-400 hover:text-white transition-colors">Contributing</a></li>
             </ul>
           </div>
         </div>
@@ -59,11 +58,11 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
               <fa-icon [icon]="['fas', 'lock']" class="text-white text-sm"></fa-icon>
             </div>
-            <span class="text-sm text-slate-400">© 2026 Pegasus Heavy Industries. All rights reserved.</span>
+            <span class="text-sm text-slate-400">© 2026 Joseph R. Quinn. All rights reserved.</span>
           </div>
 
           <div class="flex items-center gap-4">
-            <a href="https://github.com/pegasusheavy/corevpn"
+            <a href="https://github.com/quinnjr/corevpn"
                target="_blank"
                rel="noopener"
                class="text-slate-400 hover:text-white transition-colors"
@@ -76,13 +75,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
                class="text-slate-400 hover:text-white transition-colors"
                aria-label="X (Twitter)">
               <fa-icon [icon]="['fab', 'x-twitter']" class="text-xl"></fa-icon>
-            </a>
-            <a href="https://www.patreon.com/c/PegasusHeavyIndustries"
-               target="_blank"
-               rel="noopener"
-               class="text-slate-400 hover:text-white transition-colors"
-               aria-label="Patreon">
-              <fa-icon [icon]="['fab', 'patreon']" class="text-xl"></fa-icon>
             </a>
           </div>
         </div>

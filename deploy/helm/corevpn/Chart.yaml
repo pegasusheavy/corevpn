@@ -5,14 +5,14 @@ type: application
 version: 0.3.0
 appVersion: "0.3.0"
 
-home: https://github.com/pegasusheavy/corevpn
+home: https://github.com/quinnjr/corevpn
 sources:
-  - https://github.com/pegasusheavy/corevpn
+  - https://github.com/quinnjr/corevpn
 
 maintainers:
-  - name: Pegasus Heavy Industries
-    email: support@pegasusheavyindustries.com
-    url: https://pegasusheavyindustries.com
+  - name: Joseph R. Quinn
+    email: quinn.josephr@protonmail.com
+    url: https://github.com/quinnjr
 
 keywords:
   - vpn

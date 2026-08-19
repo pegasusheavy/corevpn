@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-crypto.svg)](https://crates.io/crates/corevpn-crypto)
 [![Documentation](https://docs.rs/corevpn-crypto/badge.svg)](https://docs.rs/corevpn-crypto)
-[![License](https://img.shields.io/crates/l/corevpn-crypto.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-crypto.svg)](https://github.com/quinnjr/corevpn)
 
 Cryptographic primitives for CoreVPN - secure key exchange, encryption, and certificate handling.
 

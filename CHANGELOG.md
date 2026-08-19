@@ -101,5 +101,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Geographic load balancing
 - Advanced traffic analysis protection
 
-[0.1.0]: https://github.com/pegasusheavy/corevpn/releases/tag/v0.1.0
-[Unreleased]: https://github.com/pegasusheavy/corevpn/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/quinnjr/corevpn/releases/tag/v0.1.0
+[Unreleased]: https://github.com/quinnjr/corevpn/compare/v0.1.0...HEAD

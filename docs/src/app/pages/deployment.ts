@@ -171,7 +171,7 @@ export class DeploymentComponent implements OnInit {
         'systemd',
         'production VPN',
       ],
-      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/deployment',
+      canonicalUrl: 'https://quinnjr.github.io/corevpn/deployment',
       ogType: 'article',
       section: 'Deployment',
     });
@@ -229,13 +229,13 @@ export class DeploymentComponent implements OnInit {
   -v corevpn-config:/etc/corevpn \\
   -v corevpn-data:/var/lib/corevpn \\
   -e COREVPN_GHOST_MODE=true \\
-  ghcr.io/pegasusheavy/corevpn:latest`;
+  ghcr.io/quinnjr/corevpn:latest`;
 
   dockerCompose = `version: '3.8'
 
 services:
   corevpn:
-    image: ghcr.io/pegasusheavy/corevpn:latest
+    image: ghcr.io/quinnjr/corevpn:latest
     container_name: corevpn
     restart: unless-stopped
     cap_add:
@@ -282,7 +282,7 @@ kubectl apply -k deploy/kubernetes/overlays/production/`;
 replicaCount: 2
 
 image:
-  repository: ghcr.io/pegasusheavy/corevpn
+  repository: ghcr.io/quinnjr/corevpn
   tag: latest
   pullPolicy: Always
 
@@ -317,7 +317,7 @@ resources:
     memory: 128Mi`;
 
   debInstall = `# Download the package
-wget https://github.com/pegasusheavy/corevpn/releases/latest/download/corevpn_0.1.0_amd64.deb
+wget https://github.com/quinnjr/corevpn/releases/latest/download/corevpn_0.1.0_amd64.deb
 
 # Install
 sudo dpkg -i corevpn_0.1.0_amd64.deb
@@ -326,7 +326,7 @@ sudo dpkg -i corevpn_0.1.0_amd64.deb
 sudo apt install ./corevpn_0.1.0_amd64.deb`;
 
   rpmInstall = `# Download the package
-wget https://github.com/pegasusheavy/corevpn/releases/latest/download/corevpn-0.1.0-1.x86_64.rpm
+wget https://github.com/quinnjr/corevpn/releases/latest/download/corevpn-0.1.0-1.x86_64.rpm
 
 # Install with dnf (Fedora/RHEL 8+)
 sudo dnf install ./corevpn-0.1.0-1.x86_64.rpm
@@ -347,7 +347,7 @@ sudo journalctl -u corevpn-server -f
 sudo systemctl restart corevpn-server`;
 
   buildSource = `# Clone the repository
-git clone https://github.com/pegasusheavy/corevpn.git
+git clone https://github.com/quinnjr/corevpn.git
 cd corevpn
 
 # Build release binaries

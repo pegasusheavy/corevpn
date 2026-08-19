@@ -2,39 +2,39 @@
 # These users/teams will be automatically requested for review on PRs
 
 # Default owners for everything
-* @pegasusheavy/corevpn-maintainers
+* @quinnjr
 
 # Core VPN components
-/crates/corevpn-server/ @pegasusheavy/corevpn-core
-/crates/corevpn-core/ @pegasusheavy/corevpn-core
-/crates/corevpn-protocol/ @pegasusheavy/corevpn-core
+/crates/corevpn-server/ @quinnjr
+/crates/corevpn-core/ @quinnjr
+/crates/corevpn-protocol/ @quinnjr
 
 # Cryptography - requires security review
-/crates/corevpn-crypto/ @pegasusheavy/security-team
+/crates/corevpn-crypto/ @quinnjr
 
 # Authentication
-/crates/corevpn-auth/ @pegasusheavy/corevpn-core @pegasusheavy/security-team
+/crates/corevpn-auth/ @quinnjr
 
 # Configuration
-/crates/corevpn-config/ @pegasusheavy/corevpn-maintainers
+/crates/corevpn-config/ @quinnjr
 
 # CLI
-/crates/corevpn-cli/ @pegasusheavy/corevpn-maintainers
+/crates/corevpn-cli/ @quinnjr
 
 # UI
-/crates/corevpn-ui/ @pegasusheavy/corevpn-maintainers
+/crates/corevpn-ui/ @quinnjr
 
 # Deployment and packaging
-/deploy/ @pegasusheavy/devops
-/packaging/ @pegasusheavy/devops
-/Dockerfile @pegasusheavy/devops
+/deploy/ @quinnjr
+/packaging/ @quinnjr
+/Dockerfile @quinnjr
 
 # CI/CD workflows
-/.github/workflows/ @pegasusheavy/devops
+/.github/workflows/ @quinnjr
 
 # Documentation
-*.md @pegasusheavy/corevpn-maintainers
+*.md @quinnjr
 
 # Security-sensitive files
-/SECURITY.md @pegasusheavy/security-team
-/.github/ISSUE_TEMPLATE/security_vulnerability.yml @pegasusheavy/security-team
+/SECURITY.md @quinnjr
+/.github/ISSUE_TEMPLATE/security_vulnerability.yml @quinnjr

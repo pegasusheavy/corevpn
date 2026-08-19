@@ -48,8 +48,8 @@ FROM public.ecr.aws/docker/library/debian:bookworm-slim
 # Labels for container metadata
 LABEL org.opencontainers.image.title="CoreVPN Server" \
       org.opencontainers.image.description="Secure OpenVPN-compatible VPN server with OAuth2 support" \
-      org.opencontainers.image.vendor="Pegasus Heavy Industries" \
-      org.opencontainers.image.source="https://github.com/PegasusHeavyIndustries/corevpn" \
+      org.opencontainers.image.vendor="Joseph R. Quinn" \
+      org.opencontainers.image.source="https://github.com/quinnjr/corevpn" \
       org.opencontainers.image.licenses="MIT OR Apache-2.0"
 
 # Security: Run security updates and install minimal runtime dependencies

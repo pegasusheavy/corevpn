@@ -79,4 +79,4 @@ Generate certificates:
 === Documentation ===
 
 For more information, visit:
-  https://github.com/pegasusheavy/corevpn
+  https://github.com/quinnjr/corevpn

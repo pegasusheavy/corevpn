@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-protocol.svg)](https://crates.io/crates/corevpn-protocol)
 [![Documentation](https://docs.rs/corevpn-protocol/badge.svg)](https://docs.rs/corevpn-protocol)
-[![License](https://img.shields.io/crates/l/corevpn-protocol.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-protocol.svg)](https://github.com/quinnjr/corevpn)
 
 OpenVPN-compatible protocol implementation for CoreVPN.
 

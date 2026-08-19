@@ -62,7 +62,7 @@ interface DeploymentOption {
                 Get Started
                 <fa-icon [icon]="['fas', 'arrow-right']" class="ml-2"></fa-icon>
               </a>
-              <a href="https://github.com/pegasusheavy/corevpn" target="_blank" rel="noopener" class="btn btn-secondary text-lg px-8 py-3">
+              <a href="https://github.com/quinnjr/corevpn" target="_blank" rel="noopener" class="btn btn-secondary text-lg px-8 py-3">
                 <fa-icon [icon]="['fab', 'github']" class="mr-2"></fa-icon>
                 View on GitHub
               </a>
@@ -89,7 +89,7 @@ interface DeploymentOption {
                 </div>
                 <div class="pl-4 text-white">-p 1194:1194/udp -p 8443:8443 \\</div>
                 <div class="pl-4 text-white">-e COREVPN_GHOST_MODE=true \\</div>
-                <div class="pl-4 text-white">ghcr.io/pegasusheavy/corevpn:latest</div>
+                <div class="pl-4 text-white">ghcr.io/quinnjr/corevpn:latest</div>
                 <div class="mt-4 text-emerald-400">
                   <fa-icon [icon]="['fas', 'check']" class="mr-1"></fa-icon>
                   CoreVPN server started on port 1194
@@ -251,7 +251,7 @@ round_timestamps = "1h"</code></pre>
               <fa-icon [icon]="['fas', 'book-open']" class="mr-2"></fa-icon>
               Read the Docs
             </a>
-            <a href="https://github.com/pegasusheavy/corevpn/releases" target="_blank" rel="noopener" class="btn btn-secondary text-lg px-8 py-3">
+            <a href="https://github.com/quinnjr/corevpn/releases" target="_blank" rel="noopener" class="btn btn-secondary text-lg px-8 py-3">
               <fa-icon [icon]="['fas', 'download']" class="mr-2"></fa-icon>
               Download Latest
             </a>
@@ -341,7 +341,7 @@ export class HomeComponent implements OnInit {
     },
     {
       question: 'How do I deploy CoreVPN?',
-      answer: 'CoreVPN can be deployed using Docker, Kubernetes with Helm, or native packages (DEB/RPM). The quickest way is: docker run -d -p 1194:1194/udp ghcr.io/pegasusheavy/corevpn:latest',
+      answer: 'CoreVPN can be deployed using Docker, Kubernetes with Helm, or native packages (DEB/RPM). The quickest way is: docker run -d -p 1194:1194/udp ghcr.io/quinnjr/corevpn:latest',
     },
     {
       question: 'Does CoreVPN support OAuth2 and SAML?',
@@ -373,7 +373,7 @@ export class HomeComponent implements OnInit {
         'TLS',
         'Rust',
       ],
-      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/',
+      canonicalUrl: 'https://quinnjr.github.io/corevpn/',
       ogType: 'website',
     });
 

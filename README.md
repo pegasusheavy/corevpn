@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pegasusheavy/corevpn/main/.github/assets/logo.svg" alt="CoreVPN" width="400">
+  <img src="https://raw.githubusercontent.com/quinnjr/corevpn/main/.github/assets/logo.svg" alt="CoreVPN" width="400">
 </p>
 
 <h1 align="center">CoreVPN</h1>
@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/pegasusheavy/corevpn/actions/workflows/ci.yml"><img src="https://github.com/pegasusheavy/corevpn/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/pegasusheavy/corevpn/actions/workflows/security.yml"><img src="https://github.com/pegasusheavy/corevpn/actions/workflows/security.yml/badge.svg" alt="Security"></a>
-  <a href="https://github.com/pegasusheavy/corevpn/releases"><img src="https://img.shields.io/github/v/release/pegasusheavy/corevpn" alt="Release"></a>
+  <a href="https://github.com/quinnjr/corevpn/actions/workflows/ci.yml"><img src="https://github.com/quinnjr/corevpn/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/quinnjr/corevpn/actions/workflows/security.yml"><img src="https://github.com/quinnjr/corevpn/actions/workflows/security.yml/badge.svg" alt="Security"></a>
+  <a href="https://github.com/quinnjr/corevpn/releases"><img src="https://img.shields.io/github/v/release/quinnjr/corevpn" alt="Release"></a>
   <a href="LICENSE-MIT"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg" alt="License"></a>
-  <a href="https://github.com/pegasusheavy/corevpn/stargazers"><img src="https://img.shields.io/github/stars/pegasusheavy/corevpn" alt="Stars"></a>
+  <a href="https://github.com/quinnjr/corevpn/stargazers"><img src="https://img.shields.io/github/stars/quinnjr/corevpn" alt="Stars"></a>
 </p>
 
 <p align="center">
@@ -68,7 +68,7 @@ docker run -d \
   -p 1194:1194/udp \
   -p 8080:8080 \
   -e COREVPN_ADMIN_PASSWORD=changeme \
-  ghcr.io/pegasusheavy/corevpn:latest
+  ghcr.io/quinnjr/corevpn:latest
 
 # Access web UI at http://localhost:8080
 ```
@@ -132,7 +132,7 @@ sudo apk add --repository https://pkg.corevpn.io/alpine corevpn-server
 
 ```bash
 # Prerequisites: Rust 1.70+
-git clone https://github.com/pegasusheavy/corevpn.git
+git clone https://github.com/quinnjr/corevpn.git
 cd corevpn
 
 # Build
@@ -146,7 +146,7 @@ sudo make install-openrc # OpenRC
 ### Docker Compose
 
 ```bash
-git clone https://github.com/pegasusheavy/corevpn.git
+git clone https://github.com/quinnjr/corevpn.git
 cd corevpn/deploy
 
 # Standard deployment
@@ -309,23 +309,17 @@ make rpm    # RHEL/Fedora .rpm
 
 ## Documentation
 
-- 📖 [Configuration Reference](https://github.com/pegasusheavy/corevpn/wiki/Configuration)
-- 🚀 [Deployment Guide](https://github.com/pegasusheavy/corevpn/wiki/Deployment)
+- 📖 [Configuration Reference](https://github.com/quinnjr/corevpn/wiki/Configuration)
+- 🚀 [Deployment Guide](https://github.com/quinnjr/corevpn/wiki/Deployment)
 - 🔐 [Security Best Practices](SECURITY.md)
 - 🤝 [Contributing Guidelines](CONTRIBUTING.md)
-- 📋 [Changelog](https://github.com/pegasusheavy/corevpn/releases)
+- 📋 [Changelog](https://github.com/quinnjr/corevpn/releases)
 
 ## Support
 
-- 💬 [GitHub Discussions](https://github.com/pegasusheavy/corevpn/discussions)
-- 🐛 [Issue Tracker](https://github.com/pegasusheavy/corevpn/issues)
-- 📧 Email: support@pegasusheavyindustries.com
-
-## Sponsors
-
-<a href="https://www.patreon.com/c/PegasusHeavyIndustries">
-  <img src="https://img.shields.io/badge/Patreon-Support%20Us-orange?logo=patreon" alt="Patreon">
-</a>
+- 💬 [GitHub Discussions](https://github.com/quinnjr/corevpn/discussions)
+- 🐛 [Issue Tracker](https://github.com/quinnjr/corevpn/issues)
+- 📧 Email: quinn.josephr@protonmail.com
 
 ## License
 
@@ -342,10 +336,10 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## Security
 
-For security vulnerabilities, please see [SECURITY.md](SECURITY.md) or email security@pegasusheavyindustries.com.
+For security vulnerabilities, please see [SECURITY.md](SECURITY.md) or email quinn.josephr@protonmail.com.
 
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://pegasusheavyindustries.com">Pegasus Heavy Industries</a>
+  Made with ❤️ by <a href="https://github.com/quinnjr">Joseph R. Quinn</a>
 </p>

@@ -344,7 +344,7 @@ mode = "none"`;
   dockerGhost = `docker run -d --name corevpn \\
   -p 1194:1194/udp \\
   -e COREVPN_GHOST_MODE=true \\
-  ghcr.io/pegasusheavy/corevpn:latest`;
+  ghcr.io/quinnjr/corevpn:latest`;
 
   k8sGhost = `# Using the ghost mode values file
 helm install corevpn ./deploy/helm/corevpn \\
@@ -410,7 +410,7 @@ errors = true`;
         'anonymous VPN',
         'GDPR VPN',
       ],
-      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/configuration/ghost-mode',
+      canonicalUrl: 'https://quinnjr.github.io/corevpn/configuration/ghost-mode',
       ogType: 'article',
       section: 'Privacy',
     });

@@ -1,11 +1,11 @@
-# Maintainer: Pegasus Heavy Industries <opensource@pegasusheavy.com>
+# Maintainer: Joseph R. Quinn <quinn.josephr@protonmail.com>
 pkgbase=corevpn
 pkgname=('corevpn-server' 'corevpn-cli')
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="Secure OpenVPN-compatible VPN server with OAuth2/SAML support"
 arch=('x86_64' 'aarch64')
-url="https://github.com/pegasusheavy/corevpn"
+url="https://github.com/quinnjr/corevpn"
 license=('MIT' 'Apache-2.0')
 makedepends=('cargo' 'rust' 'openssl')
 source=("${pkgbase}-${pkgver}.tar.gz"

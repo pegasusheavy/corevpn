@@ -236,7 +236,7 @@ export class ApiComponent implements OnInit {
         'API reference',
         'JSON API',
       ],
-      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/api',
+      canonicalUrl: 'https://quinnjr.github.io/corevpn/api',
       ogType: 'article',
       section: 'API',
     });

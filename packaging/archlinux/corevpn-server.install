@@ -33,7 +33,7 @@ post_install() {
     echo "  [logging]"
     echo "  connection_log_mode = \"none\""
     echo ""
-    echo "Documentation: https://pegasusheavy.github.io/corevpn/"
+    echo "Documentation: https://quinnjr.github.io/corevpn/"
     echo ""
 }
 

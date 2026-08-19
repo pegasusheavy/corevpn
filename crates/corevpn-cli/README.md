@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-cli.svg)](https://crates.io/crates/corevpn-cli)
 [![Documentation](https://docs.rs/corevpn-cli/badge.svg)](https://docs.rs/corevpn-cli)
-[![License](https://img.shields.io/crates/l/corevpn-cli.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-cli.svg)](https://github.com/quinnjr/corevpn)
 
 CoreVPN command-line interface - VPN client with OAuth2 support.
 

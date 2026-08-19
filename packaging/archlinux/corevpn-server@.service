@@ -1,6 +1,6 @@
 [Unit]
 Description=CoreVPN Server - Instance %i
-Documentation=https://github.com/pegasusheavy/corevpn
+Documentation=https://github.com/quinnjr/corevpn
 After=network-online.target
 Wants=network-online.target
 After=nss-lookup.target

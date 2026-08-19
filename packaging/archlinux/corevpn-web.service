@@ -1,6 +1,6 @@
 [Unit]
 Description=CoreVPN Web Admin Interface
-Documentation=https://github.com/pegasusheavy/corevpn
+Documentation=https://github.com/quinnjr/corevpn
 After=network-online.target corevpn-server.service
 Wants=network-online.target
 BindsTo=corevpn-server.service

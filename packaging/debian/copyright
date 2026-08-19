@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: corevpn
-Upstream-Contact: Pegasus Heavy Industries <support@pegasusheavyindustries.com>
-Source: https://github.com/PegasusHeavyIndustries/corevpn
+Upstream-Contact: Joseph R. Quinn <quinn.josephr@protonmail.com>
+Source: https://github.com/quinnjr/corevpn
 
 Files: *
-Copyright: 2024-2026 Pegasus Heavy Industries
+Copyright: 2024-2026 Joseph R. Quinn
 License: MIT or Apache-2.0
 
 License: MIT

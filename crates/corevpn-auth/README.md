@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-auth.svg)](https://crates.io/crates/corevpn-auth)
 [![Documentation](https://docs.rs/corevpn-auth/badge.svg)](https://docs.rs/corevpn-auth)
-[![License](https://img.shields.io/crates/l/corevpn-auth.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-auth.svg)](https://github.com/quinnjr/corevpn)
 
 Authentication and authorization for CoreVPN - OAuth2, OIDC, and SAML support.
 

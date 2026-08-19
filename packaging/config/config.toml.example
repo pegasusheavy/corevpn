@@ -1,5 +1,5 @@
 # CoreVPN Server Configuration
-# See https://github.com/PegasusHeavyIndustries/corevpn for documentation
+# See https://github.com/quinnjr/corevpn for documentation
 
 [server]
 # Address to listen on for VPN connections (UDP)

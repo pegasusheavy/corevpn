@@ -272,7 +272,7 @@ impl AwsSecurityHubSink {
         serde_json::json!({
             "SchemaVersion": "2018-10-08",
             "Id": event.id,
-            "ProductArn": self.config.product_arn.as_deref().unwrap_or("arn:aws:securityhub:::product/pegasusheavy/corevpn"),
+            "ProductArn": self.config.product_arn.as_deref().unwrap_or("arn:aws:securityhub:::product/quinnjr/corevpn"),
             "GeneratorId": "corevpn",
             "AwsAccountId": self.config.account_id,
             "Types": [format!("Software and Configuration Checks/VPN/{}", event.category.as_str())],

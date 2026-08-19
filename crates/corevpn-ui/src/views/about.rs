@@ -73,7 +73,7 @@ pub fn about_view(ui: &mut egui::Ui, state: &mut AppState) {
 
         // Copyright
         ui.label(
-            egui::RichText::new("© 2024 Pegasus Heavy Industries")
+            egui::RichText::new("© 2024 Joseph R. Quinn")
                 .size(12.0)
                 .color(egui::Color32::GRAY),
         );

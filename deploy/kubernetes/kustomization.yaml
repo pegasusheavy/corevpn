@@ -22,7 +22,7 @@ commonLabels:
 
 # Image customization
 images:
-  - name: ghcr.io/pegasusheavyindustries/corevpn
+  - name: ghcr.io/quinnjr/corevpn
     newTag: latest
 
 # Config generation (alternative to manual secret.yaml)

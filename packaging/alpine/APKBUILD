@@ -1,10 +1,10 @@
-# Contributor: Pegasus Heavy Industries <opensource@pegasusheavy.com>
-# Maintainer: Pegasus Heavy Industries <opensource@pegasusheavy.com>
+# Contributor: Joseph R. Quinn <quinn.josephr@protonmail.com>
+# Maintainer: Joseph R. Quinn <quinn.josephr@protonmail.com>
 pkgname=corevpn
 pkgver=0.1.0
 pkgrel=0
 pkgdesc="Secure OpenVPN-compatible VPN server with OAuth2/SAML support"
-url="https://github.com/pegasusheavy/corevpn"
+url="https://github.com/quinnjr/corevpn"
 arch="all"
 license="MIT OR Apache-2.0"
 depends="openssl libgcc"

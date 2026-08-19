@@ -214,13 +214,13 @@ export class GettingStartedComponent implements OnInit {
   -p 1194:1194/udp \\
   -p 8443:8443 \\
   -e COREVPN_GHOST_MODE=true \\
-  ghcr.io/pegasusheavy/corevpn:latest`;
+  ghcr.io/quinnjr/corevpn:latest`;
 
   dockerCompose = `version: '3.8'
 
 services:
   corevpn:
-    image: ghcr.io/pegasusheavy/corevpn:latest
+    image: ghcr.io/quinnjr/corevpn:latest
     container_name: corevpn
     restart: unless-stopped
     ports:
@@ -264,7 +264,7 @@ open my-laptop.ovpn`;
         'VPN setup',
         'OpenVPN',
       ],
-      canonicalUrl: 'https://pegasusheavy.github.io/corevpn/getting-started',
+      canonicalUrl: 'https://quinnjr.github.io/corevpn/getting-started',
       ogType: 'article',
       section: 'Getting Started',
     });
@@ -280,7 +280,7 @@ open my-laptop.ovpn`;
       [
         {
           name: 'Run the Docker container',
-          text: 'Run: docker run -d --name corevpn -p 1194:1194/udp -p 8443:8443 -e COREVPN_GHOST_MODE=true ghcr.io/pegasusheavy/corevpn:latest',
+          text: 'Run: docker run -d --name corevpn -p 1194:1194/udp -p 8443:8443 -e COREVPN_GHOST_MODE=true ghcr.io/quinnjr/corevpn:latest',
         },
         {
           name: 'Access the admin interface',

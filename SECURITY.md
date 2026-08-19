@@ -8,13 +8,13 @@
 
 ## Reporting a Vulnerability
 
-We take security seriously at Pegasus Heavy Industries. If you discover a security vulnerability in CoreVPN, please report it responsibly.
+We take security seriously. If you discover a security vulnerability in CoreVPN, please report it responsibly.
 
 ### For Critical Vulnerabilities
 
 **DO NOT** create a public GitHub issue for critical security vulnerabilities.
 
-Instead, please email: **security@pegasusheavyindustries.com**
+Instead, please email: **quinn.josephr@protonmail.com**
 
 Include:
 - A description of the vulnerability
@@ -31,7 +31,7 @@ Include:
 
 ### For Non-Critical Issues
 
-For lower-severity security issues that can be discussed publicly, you may use our [Security Issue Template](https://github.com/pegasusheavy/corevpn/issues/new?template=security_vulnerability.yml).
+For lower-severity security issues that can be discussed publicly, you may use our [Security Issue Template](https://github.com/quinnjr/corevpn/issues/new?template=security_vulnerability.yml).
 
 ## Security Best Practices
 
@@ -95,6 +95,6 @@ We currently do not have a formal bug bounty program, but we appreciate security
 
 ## Contact
 
-- Security issues: security@pegasusheavyindustries.com
-- General questions: support@pegasusheavyindustries.com
+- Security issues: quinn.josephr@protonmail.com
+- General questions: quinn.josephr@protonmail.com
 - PGP Key: Available upon request

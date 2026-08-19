@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   # -- Image repository
-  repository: ghcr.io/pegasusheavyindustries/corevpn
+  repository: ghcr.io/quinnjr/corevpn
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Image tag (defaults to appVersion)

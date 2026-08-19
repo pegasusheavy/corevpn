@@ -1,16 +1,16 @@
 Source: corevpn
 Section: net
 Priority: optional
-Maintainer: Pegasus Heavy Industries <support@pegasusheavyindustries.com>
+Maintainer: Joseph R. Quinn <quinn.josephr@protonmail.com>
 Build-Depends: debhelper-compat (= 13),
                cargo,
                rustc (>= 1.70),
                libssl-dev,
                pkg-config
 Standards-Version: 4.6.2
-Homepage: https://github.com/PegasusHeavyIndustries/corevpn
-Vcs-Browser: https://github.com/PegasusHeavyIndustries/corevpn
-Vcs-Git: https://github.com/PegasusHeavyIndustries/corevpn.git
+Homepage: https://github.com/quinnjr/corevpn
+Vcs-Browser: https://github.com/quinnjr/corevpn
+Vcs-Git: https://github.com/quinnjr/corevpn.git
 Rules-Requires-Root: no
 
 Package: corevpn-server

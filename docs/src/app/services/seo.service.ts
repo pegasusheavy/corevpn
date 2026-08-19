@@ -34,7 +34,7 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly document = inject(DOCUMENT);
 
-  private readonly baseUrl = 'https://pegasusheavy.github.io/corevpn';
+  private readonly baseUrl = 'https://quinnjr.github.io/corevpn';
   private readonly siteName = 'CoreVPN Documentation';
   private readonly defaultImage = '/assets/og-image.png';
   private readonly twitterHandle = '@pegasusheavy';
@@ -48,7 +48,7 @@ export class SeoService {
     // Basic meta
     this.title.setTitle(fullTitle);
     this.updateTag('description', pageMeta.description);
-    this.updateTag('author', pageMeta.author || 'Pegasus Heavy Industries');
+    this.updateTag('author', pageMeta.author || 'Joseph R. Quinn');
 
     // Keywords
     if (pageMeta.keywords?.length) {
@@ -153,12 +153,12 @@ export class SeoService {
       dateModified: dateModified || datePublished,
       author: {
         '@type': 'Organization',
-        name: 'Pegasus Heavy Industries',
-        url: 'https://github.com/pegasusheavy',
+        name: 'Joseph R. Quinn',
+        url: 'https://github.com/quinnjr',
       },
       publisher: {
         '@type': 'Organization',
-        name: 'Pegasus Heavy Industries',
+        name: 'Joseph R. Quinn',
         logo: {
           '@type': 'ImageObject',
           url: `${this.baseUrl}/assets/logo.png`,
@@ -185,12 +185,12 @@ export class SeoService {
       operatingSystem: 'Linux, Windows, macOS',
       description:
         'OpenVPN-compatible server with OAuth2/SAML authentication, ghost mode for zero-logging, and modern TLS.',
-      url: 'https://github.com/pegasusheavy/corevpn',
-      downloadUrl: 'https://github.com/pegasusheavy/corevpn/releases',
+      url: 'https://github.com/quinnjr/corevpn',
+      downloadUrl: 'https://github.com/quinnjr/corevpn/releases',
       softwareVersion: '0.1.0',
       author: {
         '@type': 'Organization',
-        name: 'Pegasus Heavy Industries',
+        name: 'Joseph R. Quinn',
       },
       license: 'https://opensource.org/licenses/MIT',
       offers: {
@@ -221,7 +221,7 @@ export class SeoService {
         'Official documentation for CoreVPN - a secure, OpenVPN-compatible VPN server with ghost mode.',
       publisher: {
         '@type': 'Organization',
-        name: 'Pegasus Heavy Industries',
+        name: 'Joseph R. Quinn',
       },
       potentialAction: {
         '@type': 'SearchAction',

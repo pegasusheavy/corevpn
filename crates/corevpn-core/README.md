@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-core.svg)](https://crates.io/crates/corevpn-core)
 [![Documentation](https://docs.rs/corevpn-core/badge.svg)](https://docs.rs/corevpn-core)
-[![License](https://img.shields.io/crates/l/corevpn-core.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-core.svg)](https://github.com/quinnjr/corevpn)
 
 Core types, session management, and utilities for CoreVPN.
 

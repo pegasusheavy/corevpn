@@ -49,7 +49,7 @@ spec:
 
       containers:
         - name: corevpn-server
-          image: ghcr.io/pegasusheavyindustries/corevpn:latest
+          image: ghcr.io/quinnjr/corevpn:latest
           imagePullPolicy: IfNotPresent
 
           args:
@@ -173,7 +173,7 @@ spec:
 
       containers:
         - name: corevpn-web
-          image: ghcr.io/pegasusheavyindustries/corevpn:latest
+          image: ghcr.io/quinnjr/corevpn:latest
           imagePullPolicy: IfNotPresent
 
           args:

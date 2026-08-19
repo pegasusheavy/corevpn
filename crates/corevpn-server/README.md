@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-server.svg)](https://crates.io/crates/corevpn-server)
 [![Documentation](https://docs.rs/corevpn-server/badge.svg)](https://docs.rs/corevpn-server)
-[![License](https://img.shields.io/crates/l/corevpn-server.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-server.svg)](https://github.com/quinnjr/corevpn)
 
 CoreVPN server binary - secure OpenVPN-compatible VPN server with OAuth2 and ghost mode.
 
@@ -24,7 +24,7 @@ cargo install corevpn-server
 Or with Docker:
 
 ```bash
-docker run -d -p 1194:1194/udp ghcr.io/pegasusheavy/corevpn:latest
+docker run -d -p 1194:1194/udp ghcr.io/quinnjr/corevpn:latest
 ```
 
 ## Quick Start

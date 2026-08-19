@@ -42,7 +42,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
             <span class="badge badge-cyan hidden sm:inline-flex">v0.1.0</span>
 
             <!-- GitHub link -->
-            <a href="https://github.com/pegasusheavy/corevpn"
+            <a href="https://github.com/quinnjr/corevpn"
                target="_blank"
                rel="noopener noreferrer"
                class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200"

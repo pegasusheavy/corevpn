@@ -38,7 +38,7 @@ For ghost mode (zero logging), add --ghost flag or set:
   [logging]
   connection_log_mode = "none"
 
-Documentation: https://pegasusheavy.github.io/corevpn/
+Documentation: https://quinnjr.github.io/corevpn/
 
 EOF
 

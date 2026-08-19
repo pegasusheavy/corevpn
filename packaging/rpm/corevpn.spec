@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Secure OpenVPN-compatible VPN server with OAuth2 support
 
 License:        MIT OR Apache-2.0
-URL:            https://github.com/PegasusHeavyIndustries/corevpn
+URL:            https://github.com/quinnjr/corevpn
 Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  cargo >= 1.70
@@ -149,7 +149,7 @@ echo ""
 %doc %{_docdir}/%{name}/
 
 %changelog
-* Fri Jan 02 2026 Pegasus Heavy Industries <support@pegasusheavyindustries.com> - 0.1.0-1
+* Fri Jan 02 2026 Joseph R. Quinn <quinn.josephr@protonmail.com> - 0.1.0-1
 - Initial release
 - OpenVPN-compatible protocol support
 - OAuth2/OIDC/SAML authentication

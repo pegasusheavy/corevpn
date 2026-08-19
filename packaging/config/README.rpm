@@ -99,4 +99,4 @@ Run diagnostics:
 
    sudo corevpn-server doctor --config /etc/corevpn/config.toml
 
- -- Pegasus Heavy Industries <support@pegasusheavyindustries.com>
+ -- Joseph R. Quinn <quinn.josephr@protonmail.com>

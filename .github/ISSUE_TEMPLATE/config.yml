@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security Vulnerabilities
-    url: mailto:security@pegasusheavyindustries.com
+    url: mailto:quinn.josephr@protonmail.com
     about: For critical security issues, please email us directly
   - name: Community Discussions
-    url: https://github.com/pegasusheavy/corevpn/discussions
+    url: https://github.com/quinnjr/corevpn/discussions
     about: Ask questions and discuss features
   - name: Documentation
-    url: https://github.com/pegasusheavy/corevpn/wiki
+    url: https://github.com/quinnjr/corevpn/wiki
     about: Check our documentation first

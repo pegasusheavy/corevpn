@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/corevpn-config.svg)](https://crates.io/crates/corevpn-config)
 [![Documentation](https://docs.rs/corevpn-config/badge.svg)](https://docs.rs/corevpn-config)
-[![License](https://img.shields.io/crates/l/corevpn-config.svg)](https://github.com/pegasusheavy/corevpn)
+[![License](https://img.shields.io/crates/l/corevpn-config.svg)](https://github.com/quinnjr/corevpn)
 
 Configuration management for CoreVPN - server and client configuration.
 

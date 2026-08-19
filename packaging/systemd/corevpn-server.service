@@ -1,6 +1,6 @@
 [Unit]
 Description=CoreVPN Server - Secure OpenVPN-compatible VPN server
-Documentation=https://github.com/PegasusHeavyIndustries/corevpn
+Documentation=https://github.com/quinnjr/corevpn
 After=network-online.target
 Wants=network-online.target
 # Wait for DNS resolution to be available
